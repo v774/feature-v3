@@ -4,7 +4,7 @@ const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567
 
 const randomCharacter = () => characters[Math.floor(Math.random() * characters.length)] ?? "";
 
-export function useScrambleText(text: string, delay = 0, triggered = true) {
+export function useScrambleText(text: string, delay = 0, triggered = true, revealStep = 0.5) {
   const [displayed, setDisplayed] = useState("");
   const [done, setDone] = useState(false);
 
@@ -21,7 +21,7 @@ export function useScrambleText(text: string, delay = 0, triggered = true) {
 
     const delayId = window.setTimeout(() => {
       intervalId = window.setInterval(() => {
-        revealPosition += 0.5;
+        revealPosition += revealStep;
         const next = text
           .split("")
           .map((character, index) => {
@@ -46,7 +46,7 @@ export function useScrambleText(text: string, delay = 0, triggered = true) {
       window.clearTimeout(delayId);
       if (intervalId !== undefined) window.clearInterval(intervalId);
     };
-  }, [delay, text, triggered]);
+  }, [delay, revealStep, text, triggered]);
 
   return { displayed, done };
 }

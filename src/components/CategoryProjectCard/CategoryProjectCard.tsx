@@ -2,7 +2,9 @@ import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
 import { motion } from 'motion/react'
 import type { Project } from '../../data/projects'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
+import { useScrambleText } from '../../hooks/useScrambleText'
 import { useTranslation } from '../../translations/useTranslation'
+import { premiumEase } from '../../utils/motionConfig'
 import styles from './CategoryProjectCard.module.css'
 
 type ProjectCardProps = {
@@ -15,23 +17,28 @@ export function CategoryProjectCard({ project, index, onWatch }: ProjectCardProp
   const { t } = useTranslation()
   const prefersReducedMotion = useReducedMotion()
   const videoRef = useRef<HTMLVideoElement>(null)
-  const timerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
+  const freezeTimerRef = useRef<number | null>(null)
   const [isDesktop, setIsDesktop] = useState(() => typeof window !== 'undefined' && window.matchMedia('(min-width: 1025px)').matches)
   const [isPreviewing, setIsPreviewing] = useState(false)
-  const [glassEffect, setGlassEffect] = useState(false)
-
-  const clearPreviewTimer = () => {
-    if (timerRef.current) clearTimeout(timerRef.current)
-    timerRef.current = undefined
-  }
+  const [isFrozen, setIsFrozen] = useState(false)
+  const [startTitleAnimation, setStartTitleAnimation] = useState(prefersReducedMotion)
+  const { displayed: titleText, done: titleDone } = useScrambleText(project.title, 0, startTitleAnimation && !prefersReducedMotion)
+  const visibleTitle = prefersReducedMotion ? project.title : titleText
+  const [showTitleCursor, setShowTitleCursor] = useState(true)
+  const [fadeTitleCursor, setFadeTitleCursor] = useState(false)
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(min-width: 1025px)')
     const handleViewportChange = () => {
       setIsDesktop(mediaQuery.matches)
-      if (!glassEffect) setIsPreviewing(false)
+      setIsPreviewing(false)
+      setIsFrozen(false)
+      if (freezeTimerRef.current !== null) {
+        window.clearTimeout(freezeTimerRef.current)
+        freezeTimerRef.current = null
+      }
       const video = videoRef.current
-      if (video && !glassEffect) {
+      if (video) {
         video.pause()
         video.currentTime = 0
       }
@@ -39,32 +46,57 @@ export function CategoryProjectCard({ project, index, onWatch }: ProjectCardProp
 
     mediaQuery.addEventListener('change', handleViewportChange)
     return () => mediaQuery.removeEventListener('change', handleViewportChange)
-  }, [glassEffect])
+  }, [])
 
   useEffect(() => () => {
-    clearPreviewTimer()
+    if (freezeTimerRef.current !== null) window.clearTimeout(freezeTimerRef.current)
     const video = videoRef.current
     if (video) video.pause()
   }, [])
 
+  useEffect(() => {
+    setStartTitleAnimation(prefersReducedMotion)
+    if (prefersReducedMotion) return undefined
+
+    const startTitleId = window.setTimeout(() => setStartTitleAnimation(true), 1040 + index * 120)
+    return () => window.clearTimeout(startTitleId)
+  }, [index, prefersReducedMotion, project.title])
+
+  useEffect(() => {
+    setShowTitleCursor(true)
+    setFadeTitleCursor(false)
+    if (prefersReducedMotion || !titleDone) return undefined
+
+    const fadeCursorId = window.setTimeout(() => setFadeTitleCursor(true), 1000)
+    const hideCursorId = window.setTimeout(() => setShowTitleCursor(false), 1450)
+    return () => {
+      window.clearTimeout(fadeCursorId)
+      window.clearTimeout(hideCursorId)
+    }
+  }, [prefersReducedMotion, project.title, titleDone])
+
   const handleMouseEnter = () => {
-    if (!isDesktop || glassEffect) return
+    if (!isDesktop || isFrozen) return
     const video = videoRef.current
     if (!video) return
-    clearPreviewTimer()
     setIsPreviewing(true)
     video.currentTime = 0
     void video.play().catch(() => undefined)
-    timerRef.current = setTimeout(() => {
+    if (freezeTimerRef.current !== null) window.clearTimeout(freezeTimerRef.current)
+    freezeTimerRef.current = window.setTimeout(() => {
       video.pause()
+      setIsFrozen(true)
       setIsPreviewing(true)
-      setGlassEffect(true)
+      freezeTimerRef.current = null
     }, 3000)
   }
 
   const handleMouseLeave = () => {
-    if (glassEffect) return
-    clearPreviewTimer()
+    if (isFrozen) return
+    if (freezeTimerRef.current !== null) {
+      window.clearTimeout(freezeTimerRef.current)
+      freezeTimerRef.current = null
+    }
     const video = videoRef.current
     if (video && isDesktop) {
       video.pause()
@@ -87,10 +119,10 @@ export function CategoryProjectCard({ project, index, onWatch }: ProjectCardProp
 
   return (
     <motion.div
-      className={`${styles.card} ${isPreviewing ? styles.previewing : ''} ${glassEffect ? styles.glassEffect : ''}`}
-      initial={prefersReducedMotion ? false : { opacity: 0, y: 30, scale: 0.98 }}
+      className={`${styles.card} ${isPreviewing ? styles.previewing : ''} ${isFrozen ? styles.frozen : ''}`}
+      initial={prefersReducedMotion ? false : { opacity: 0, y: 28, scale: 0.98 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ duration: prefersReducedMotion ? 0 : 0.45, delay: prefersReducedMotion ? 0 : index * 0.08, ease: [0.25, 0.1, 0.25, 1] }}
+      transition={{ duration: prefersReducedMotion ? 0 : 0.5, delay: prefersReducedMotion ? 0 : index * 0.08, ease: premiumEase }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onClick={openProject}
@@ -114,7 +146,7 @@ export function CategoryProjectCard({ project, index, onWatch }: ProjectCardProp
           />
         )}
         <span className={styles.shade} aria-hidden="true" />
-        <span className={styles.glassPane} aria-hidden="true" />
+        <span className={styles.watchFull} aria-hidden="true">Watch Full</span>
         <div className={styles.infoLayer}>
           <div className={styles.infoTop}>
             <span className={styles.format}><span className={styles.formatDot} aria-hidden="true" />1920x1080</span>
@@ -122,12 +154,14 @@ export function CategoryProjectCard({ project, index, onWatch }: ProjectCardProp
           </div>
           <div className={styles.infoBottom}>
             <span className={styles.software}>{project.software.replaceAll(', ', ' - ').toUpperCase()}</span>
-            <h2>{project.title}</h2>
+            <h2 aria-label={project.title}>
+              <span aria-hidden="true">{visibleTitle}</span>
+              {!prefersReducedMotion && showTitleCursor && (
+                <span className={`${styles.titleCursor}${titleDone ? ` ${styles.blinking}` : ''}${fadeTitleCursor ? ` ${styles.fading}` : ''}`} aria-hidden="true">|</span>
+              )}
+            </h2>
           </div>
         </div>
-        <span className={styles.watchButton} aria-hidden="true">
-          Watch Full <span aria-hidden="true">↗</span>
-        </span>
       </div>
     </motion.div>
   )

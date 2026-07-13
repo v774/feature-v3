@@ -46,10 +46,14 @@
   opacity: 1;
 }
 
-.glassEffect .video {
+.frozen .video {
   opacity: 1;
-  filter: brightness(.82) blur(1.6px);
-  transform: scale(1.015);
+  filter: blur(5px) brightness(.72) saturate(1.08);
+  transform: scale(1.035);
+}
+
+.frozen .poster {
+  opacity: 0;
 }
 
 .shade {
@@ -59,10 +63,6 @@
   background: linear-gradient(180deg, rgba(0, 0, 0, .08), rgba(0, 0, 0, .42));
   pointer-events: none;
   transition: opacity 350ms ease;
-}
-
-.glassEffect .shade {
-  opacity: .9;
 }
 
 .infoLayer {
@@ -129,69 +129,79 @@
   transition: transform 350ms ease;
 }
 
-.glassPane {
-  position: absolute;
-  inset: 0;
-  z-index: 4;
-  border: 1px solid rgba(255, 255, 255, .1);
-  background: linear-gradient(135deg, rgba(255, 255, 255, .08), rgba(118, 33, 176, .08));
-  opacity: 0;
-  pointer-events: none;
-  transition:
-    opacity 700ms ease-in-out,
-    backdrop-filter 700ms ease,
-    -webkit-backdrop-filter 700ms ease;
-}
-
-.glassEffect .glassPane {
+.titleCursor {
+  display: inline-block;
+  margin-left: 0.04em;
+  color: #ccff00;
+  -webkit-text-fill-color: #ccff00;
+  text-shadow:
+    0 0 10px rgba(204, 255, 0, .45),
+    0 0 18px rgba(139, 92, 246, .18);
   opacity: 1;
-  -webkit-backdrop-filter: blur(8px) saturate(1.12);
-  backdrop-filter: blur(8px) saturate(1.12);
+  will-change: opacity, filter;
 }
 
-.watchButton {
+.titleCursor.blinking {
+  animation: category-card-title-cursor-blink 1.05s ease-in-out infinite;
+}
+
+.titleCursor.fading {
+  animation: none;
+  opacity: 0;
+  filter: drop-shadow(0 0 0 rgba(204, 255, 0, 0));
+  transition:
+    opacity 450ms ease,
+    filter 450ms ease;
+}
+
+@keyframes category-card-title-cursor-blink {
+  0%,
+  100% {
+    opacity: 1;
+    filter: drop-shadow(0 0 8px rgba(204, 255, 0, .5));
+  }
+
+  50% {
+    opacity: .32;
+    filter: drop-shadow(0 0 3px rgba(204, 255, 0, .22));
+  }
+}
+
+.watchFull {
   position: absolute;
   top: 50%;
   left: 50%;
-  z-index: 20;
+  z-index: 8;
   display: inline-flex;
+  min-height: 42px;
   align-items: center;
-  gap: 10px;
-  padding: 11px 22px;
-  border: 1px solid rgba(255, 255, 255, .34);
+  justify-content: center;
+  padding: 0 20px;
+  border: 1px solid rgba(255, 255, 255, .24);
   border-radius: 999px;
   color: #fff;
-  background: rgba(255, 255, 255, .09);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, .18), rgba(255, 255, 255, .06)),
+    rgba(14, 14, 20, .38);
   box-shadow:
-    0 0 20px rgba(118, 33, 176, .18),
-    inset 0 1px 0 rgba(255, 255, 255, .16);
-  -webkit-backdrop-filter: blur(12px) saturate(1.16);
-  backdrop-filter: blur(12px) saturate(1.16);
-  font-size: 12px;
+    0 16px 42px rgba(0, 0, 0, .28),
+    0 0 28px rgba(139, 92, 246, .28),
+    inset 0 1px 0 rgba(255, 255, 255, .22);
+  -webkit-backdrop-filter: blur(14px) saturate(1.25);
+  backdrop-filter: blur(14px) saturate(1.25);
+  font-size: 11px;
   font-weight: 800;
-  letter-spacing: .12em;
+  letter-spacing: .14em;
   line-height: 1;
   text-transform: uppercase;
   opacity: 0;
-  visibility: hidden;
   pointer-events: none;
-  transform: translate(-50%, calc(-50% + 8px)) scale(.94);
+  transform: translate(-50%, -42%) scale(.92);
   transition:
-    opacity 700ms ease-in-out,
-    visibility 700ms ease-in-out,
-    transform 700ms cubic-bezier(.22, 1, .36, 1),
-    border-color 350ms ease,
-    background-color 350ms ease;
-}
-
-.watchButton > span {
-  font-size: 18px;
-}
-
-.glassEffect .watchButton {
-  opacity: 1;
-  visibility: visible;
-  transform: translate(-50%, -50%) scale(1);
+    opacity 420ms ease,
+    border-color 420ms ease,
+    box-shadow 420ms ease,
+    transform 520ms cubic-bezier(.25, .1, .25, 1);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -222,6 +232,17 @@
     opacity: .9;
   }
 
+  .card.frozen:hover .video,
+  .card.frozen:focus-visible .video {
+    filter: blur(5px) brightness(.72) saturate(1.08);
+    transform: scale(1.035);
+  }
+
+  .frozen .watchFull,
+  .frozen:focus-visible .watchFull {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
 }
 
 @media (max-width: 1024px) {
@@ -229,8 +250,7 @@
     display: none;
   }
 
-  .glassPane,
-  .watchButton {
+  .watchFull {
     display: none;
   }
 }

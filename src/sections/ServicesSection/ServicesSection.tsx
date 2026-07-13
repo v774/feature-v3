@@ -1,9 +1,8 @@
 import { motion } from "motion/react";
 import { services } from "../../data/servicesData";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
+import { premiumEase, repeatableViewport } from "../../utils/motionConfig";
 import "./ServicesSection.css";
-
-const premiumEase = [0.25, 0.1, 0.25, 1] as const;
 
 export function ServicesSection() {
   const prefersReducedMotion = useReducedMotion();
@@ -17,7 +16,7 @@ export function ServicesSection() {
           className="services-heading"
           initial={headingInitial}
           whileInView={headingVisible}
-          viewport={{ once: true, amount: 0.45 }}
+          viewport={repeatableViewport}
           transition={{ duration: prefersReducedMotion ? 0 : 0.8, ease: premiumEase }}
         >
           Services
@@ -32,7 +31,7 @@ export function ServicesSection() {
                   className="service-number-motion"
                   initial={prefersReducedMotion ? false : { opacity: 0, x: -40 }}
                   whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, amount: 0.4 }}
+                  viewport={repeatableViewport}
                   transition={{ duration: prefersReducedMotion ? 0 : 0.7, delay, ease: premiumEase }}
                 >
                   <div className="service-number">{service.number}</div>
@@ -41,7 +40,7 @@ export function ServicesSection() {
                   className="service-copy-motion"
                   initial={prefersReducedMotion ? false : { opacity: 0, x: 40 }}
                   whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, amount: 0.4 }}
+                  viewport={repeatableViewport}
                   transition={{ duration: prefersReducedMotion ? 0 : 0.7, delay, ease: premiumEase }}
                 >
                   <div className="service-copy">
@@ -53,7 +52,7 @@ export function ServicesSection() {
                   className="service-divider"
                   initial={prefersReducedMotion ? false : { scaleX: 0 }}
                   whileInView={{ scaleX: 1 }}
-                  viewport={{ once: true, amount: 0.4 }}
+                  viewport={repeatableViewport}
                   transition={{ duration: prefersReducedMotion ? 0 : 0.8, delay: delay + 0.18, ease: premiumEase }}
                 />
               </motion.div>

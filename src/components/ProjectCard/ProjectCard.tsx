@@ -2,6 +2,7 @@ import { motion, type MotionStyle, useScroll, useTransform } from "motion/react"
 import { type KeyboardEvent, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
+import { premiumEase, repeatableViewport } from "../../utils/motionConfig";
 import type { Project } from "../../types/portfolioTypes";
 import "./ProjectCard.css";
 
@@ -56,8 +57,8 @@ export function ProjectCard({ project, index, totalCards }: ProjectCardProps) {
         style={cardStyle}
         initial={prefersReducedMotion ? false : { opacity: 0, y: 70 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.22 }}
-        transition={{ duration: prefersReducedMotion ? 0 : 0.8, delay: cardDelay, ease: [0.25, 0.1, 0.25, 1] }}
+        viewport={repeatableViewport}
+        transition={{ duration: prefersReducedMotion ? 0 : 0.8, delay: cardDelay, ease: premiumEase }}
         whileHover={prefersReducedMotion ? undefined : { y: -4 }}
         role="link"
         tabIndex={0}
@@ -69,8 +70,8 @@ export function ProjectCard({ project, index, totalCards }: ProjectCardProps) {
           className="project-card-surface"
           initial={prefersReducedMotion ? false : { scale: 0.97 }}
           whileInView={{ scale: 1 }}
-          viewport={{ once: true, amount: 0.22 }}
-          transition={{ duration: prefersReducedMotion ? 0 : 0.8, delay: cardDelay, ease: [0.25, 0.1, 0.25, 1] }}
+          viewport={repeatableViewport}
+          transition={{ duration: prefersReducedMotion ? 0 : 0.8, delay: cardDelay, ease: premiumEase }}
         >
           <header className="project-card-header">
             <motion.span

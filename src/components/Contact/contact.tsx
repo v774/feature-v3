@@ -1,5 +1,9 @@
 import './contact.block.css'
 import { type FormEvent, useEffect, useRef, useState } from 'react'
+import { AnimatePresence, motion } from 'motion/react'
+import { useReducedMotion } from '../../hooks/useReducedMotion'
+import { useScrambleText } from '../../hooks/useScrambleText'
+import { premiumEase, repeatableViewport } from '../../utils/motionConfig'
 import { useTranslation } from '../../translations/useTranslation'
 
 declare const process: { env?: { VITE_FORM_KEY?: string } } | undefined
@@ -39,7 +43,10 @@ const sanitizeText = (value: string) =>
 
 export function Contact() {
   const { t } = useTranslation()
+  const prefersReducedMotion = useReducedMotion()
   const copy = t.sections.contact
+  const { displayed: headingText, done: headingDone } = useScrambleText(copy.heading, 150, !prefersReducedMotion)
+  const visibleHeading = prefersReducedMotion ? copy.heading : headingText
   const [formData, setFormData] = useState<ContactFormData>({
     name: '',
     email: '',
@@ -51,6 +58,7 @@ export function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [submitMessage, setSubmitMessage] = useState('')
+  const [isMobileMotion, setIsMobileMotion] = useState(false)
   const messageTextareaRef = useRef<HTMLTextAreaElement>(null)
 
   const resizeMessageTextarea = (textarea: HTMLTextAreaElement) => {
@@ -63,8 +71,16 @@ export function Contact() {
     if (!textarea) return
     const resize = () => resizeMessageTextarea(textarea)
     resize()
-    window.addEventListener("resize", resize)
-    return () => window.removeEventListener("resize", resize)
+    window.addEventListener('resize', resize)
+    return () => window.removeEventListener('resize', resize)
+  }, [])
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 767px)')
+    const updateMotionMode = () => setIsMobileMotion(mediaQuery.matches)
+    updateMotionMode()
+    mediaQuery.addEventListener('change', updateMotionMode)
+    return () => mediaQuery.removeEventListener('change', updateMotionMode)
   }, [])
 
   const selectOption = (type: 'project' | 'budget', value: string) => {
@@ -140,40 +156,66 @@ export function Contact() {
     setIsSubmitted(false)
   }
 
+  const fieldInitial = prefersReducedMotion ? false : { opacity: 0, y: 16 }
+  const fieldVisible = { opacity: 1, y: 0 }
+  const fieldTransition = (index: number) => ({
+    duration: prefersReducedMotion ? 0 : 0.5,
+    delay: prefersReducedMotion ? 0 : index * 0.07,
+    ease: premiumEase,
+  })
+
   const contactForm = (
-    <form id="contact-form" className="contact-section-wrapper__form" action={submitUrl} method="post" onSubmit={handleSubmit}>
-      <label>
+    <motion.form
+      id="contact-form"
+      className="contact-section-wrapper__form"
+      action={submitUrl}
+      method="post"
+      onSubmit={handleSubmit}
+      initial={prefersReducedMotion ? false : { opacity: 0, x: isMobileMotion ? 0 : 50, y: isMobileMotion ? 30 : 0, scale: 0.98 }}
+      whileInView={{ opacity: 1, x: 0, y: 0, scale: 1 }}
+      viewport={repeatableViewport}
+      transition={{ duration: prefersReducedMotion ? 0 : 0.8, delay: prefersReducedMotion ? 0 : 0.12, ease: premiumEase }}
+    >
+      <motion.label initial={fieldInitial} whileInView={fieldVisible} viewport={repeatableViewport} transition={fieldTransition(0)}>
         <span>{copy.name} <b>*</b></span>
         <input type="text" name="name" placeholder={copy.name} autoComplete="name" required value={formData.name} onChange={(event) => setFormData({ ...formData, name: event.target.value })} />
-      </label>
-      <label>
+      </motion.label>
+      <motion.label initial={fieldInitial} whileInView={fieldVisible} viewport={repeatableViewport} transition={fieldTransition(1)}>
         <span>{copy.email} <b>*</b></span>
         <input type="email" name="email" placeholder={copy.email} autoComplete="email" required value={formData.email} onChange={(event) => setFormData({ ...formData, email: event.target.value })} />
-      </label>
-      <div className={`contact-section-wrapper__select-field${openMenu === 'project' ? ' is-open' : ''}`}>
+      </motion.label>
+      <motion.div className={`contact-section-wrapper__select-field${openMenu === 'project' ? ' is-open' : ''}`} initial={fieldInitial} whileInView={fieldVisible} viewport={repeatableViewport} transition={fieldTransition(2)}>
         <span>{copy.projectType}</span>
         <input type="hidden" name="projectType" value={formData.project_type} />
         <button className="contact-section-wrapper__select-trigger" type="button" aria-expanded={openMenu === 'project'} onClick={() => setOpenMenu(openMenu === 'project' ? null : 'project')}>
           {formData.project_type || copy.projectType} <span aria-hidden="true">⌄</span>
         </button>
         {openMenu === 'project' && <div className="contact-section-wrapper__select-menu">{copy.projectTypes.map((option) => <button type="button" key={option} onClick={() => selectOption('project', option)}>{option}</button>)}</div>}
-      </div>
-      <div className={`contact-section-wrapper__select-field${openMenu === 'budget' ? ' is-open' : ''}`}>
+      </motion.div>
+      <motion.div className={`contact-section-wrapper__select-field${openMenu === 'budget' ? ' is-open' : ''}`} initial={fieldInitial} whileInView={fieldVisible} viewport={repeatableViewport} transition={fieldTransition(3)}>
         <span>{copy.budget}</span>
         <input type="hidden" name="budget" value={formData.budget} />
         <button className="contact-section-wrapper__select-trigger" type="button" aria-expanded={openMenu === 'budget'} onClick={() => setOpenMenu(openMenu === 'budget' ? null : 'budget')}>
           {formData.budget || copy.budget} <span aria-hidden="true">⌄</span>
         </button>
         {openMenu === 'budget' && <div className="contact-section-wrapper__select-menu">{copy.budgets.map((option) => <button type="button" key={option} onClick={() => selectOption('budget', option)}>{option}</button>)}</div>}
-      </div>
-      <label>
+      </motion.div>
+      <motion.label initial={fieldInitial} whileInView={fieldVisible} viewport={repeatableViewport} transition={fieldTransition(4)}>
         <span>{copy.message} <b>*</b></span>
         <textarea ref={messageTextareaRef} className="message-textarea" name="message" placeholder={copy.message} autoComplete="off" rows={1} value={formData.message} onChange={(event) => setFormData({ ...formData, message: event.target.value })} onInput={(event) => resizeMessageTextarea(event.currentTarget)} required />
-      </label>
-      <button className="contact-section-wrapper__submit" type="submit" disabled={isSubmitting}>{isSubmitting ? 'Sending…' : copy.send} <span aria-hidden="true">↗</span></button>
+      </motion.label>
+      <motion.button className="contact-section-wrapper__submit" type="submit" disabled={isSubmitting} initial={prefersReducedMotion ? false : { opacity: 0, y: 12, scale: 0.96 }} whileInView={{ opacity: 1, y: 0, scale: 1 }} viewport={repeatableViewport} transition={{ duration: prefersReducedMotion ? 0 : 0.5, delay: prefersReducedMotion ? 0 : 0.42, ease: premiumEase }} whileTap={prefersReducedMotion ? undefined : { scale: 0.98 }}>
+        {isSubmitting ? 'Sending...' : copy.send} <span aria-hidden="true">↗</span>
+      </motion.button>
       <p className="contact-section-wrapper__disclaimer">{copy.disclaimer}</p>
-      {submitMessage && <p role="status">{submitMessage}</p>}
-    </form>
+      <AnimatePresence>
+        {submitMessage && (
+          <motion.p role="status" initial={prefersReducedMotion ? false : { opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={prefersReducedMotion ? undefined : { opacity: 0, y: 8 }} transition={{ duration: prefersReducedMotion ? 0 : 0.28, ease: premiumEase }}>
+            {submitMessage}
+          </motion.p>
+        )}
+      </AnimatePresence>
+    </motion.form>
   )
 
   return (
@@ -181,43 +223,106 @@ export function Contact() {
       <div className="contact-section-wrapper__container">
         <header className="contact-section-wrapper__section-header">
           <p className="contact-section-wrapper__section-eyebrow">{copy.eyebrow}</p>
-          <h2 id="contact-title">{copy.heading}</h2>
-          <p className="contact-section-wrapper__section-description">{copy.description}</p>
+          <motion.h2 id="contact-title" initial={prefersReducedMotion ? false : { opacity: 0, y: 50, scale: 0.97 }} whileInView={{ opacity: 1, y: 0, scale: 1 }} viewport={repeatableViewport} transition={{ duration: prefersReducedMotion ? 0 : 0.8, ease: premiumEase }}>
+            {visibleHeading}
+            {!prefersReducedMotion && (
+              <span className={`contact-section-wrapper__type-cursor${headingDone ? ' is-blinking' : ''}`} aria-hidden="true">|</span>
+            )}
+          </motion.h2>
+          <motion.p className="contact-section-wrapper__section-description" initial={prefersReducedMotion ? false : { opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={repeatableViewport} transition={{ duration: prefersReducedMotion ? 0 : 0.65, delay: prefersReducedMotion ? 0 : 0.1, ease: premiumEase }}>{copy.description}</motion.p>
         </header>
         <div className="contact-section-wrapper__workspace">
           <div className="contact-section-wrapper__content">
-            <aside className="contact-section-wrapper__info-card">
-              <div className="contact-section-wrapper__email-block">
-                <span className="contact-section-wrapper__icon-box" aria-hidden="true">@</span>
+            <motion.aside
+              className="contact-section-wrapper__info-card"
+              initial={prefersReducedMotion ? false : { opacity: 0, x: isMobileMotion ? 0 : -42, y: isMobileMotion ? 28 : 0, scale: 0.98 }}
+              whileInView={{ opacity: 1, x: 0, y: 0, scale: 1 }}
+              viewport={repeatableViewport}
+              transition={{ duration: prefersReducedMotion ? 0 : 0.8, delay: prefersReducedMotion ? 0 : 0.08, ease: premiumEase }}
+            >
+              <motion.div
+                className="contact-section-wrapper__email-block"
+                initial={prefersReducedMotion ? false : { opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={repeatableViewport}
+                transition={{ duration: prefersReducedMotion ? 0 : 0.58, delay: prefersReducedMotion ? 0 : 0.18, ease: premiumEase }}
+              >
+                <motion.span
+                  className="contact-section-wrapper__icon-box"
+                  aria-hidden="true"
+                  initial={prefersReducedMotion ? false : { opacity: 0, rotate: -8, scale: 0.82 }}
+                  whileInView={{ opacity: 1, rotate: 0, scale: 1 }}
+                  viewport={repeatableViewport}
+                  transition={{ duration: prefersReducedMotion ? 0 : 0.52, delay: prefersReducedMotion ? 0 : 0.26, ease: premiumEase }}
+                >
+                  @
+                </motion.span>
                 <div className="contact-section-wrapper__email-copy">
                   <p className="contact-section-wrapper__card-label">{copy.email}</p>
                   <a href="mailto:hello@example.com">hello@example.com</a>
                 </div>
-              </div>
-              <div className="contact-section-wrapper__separator" aria-hidden="true" />
-              <div className="contact-section-wrapper__connect">
-                <p className="contact-section-wrapper__card-label">{copy.connect}</p>
-                <nav className="contact-section-wrapper__social-badges" aria-label={copy.socialLinks}>
-                  {socialLinks.map((link) => (
-                    <a className="contact-section-wrapper__social-badge" href={link.href} key={link.label}>
-                      <span className="contact-section-wrapper__badge-icon" aria-hidden="true">{link.label === 'Behance' ? 'Be' : link.label === 'Instagram' ? 'Ig' : 'Mail'}</span>
+              </motion.div>
+              <motion.div
+                className="contact-section-wrapper__separator"
+                aria-hidden="true"
+                initial={prefersReducedMotion ? false : { scaleX: 0, opacity: 0 }}
+                whileInView={{ scaleX: 1, opacity: 1 }}
+                viewport={repeatableViewport}
+                transition={{ duration: prefersReducedMotion ? 0 : 0.72, delay: prefersReducedMotion ? 0 : 0.34, ease: premiumEase }}
+              />
+              <motion.div
+                className="contact-section-wrapper__connect"
+                initial={prefersReducedMotion ? false : { opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={repeatableViewport}
+                transition={{ duration: prefersReducedMotion ? 0 : 0.58, delay: prefersReducedMotion ? 0 : 0.42, ease: premiumEase }}
+              >
+                <motion.p
+                  className="contact-section-wrapper__card-label"
+                  initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={repeatableViewport}
+                  transition={{ duration: prefersReducedMotion ? 0 : 0.42, delay: prefersReducedMotion ? 0 : 0.5, ease: premiumEase }}
+                >
+                  {copy.connect}
+                </motion.p>
+                <motion.nav className="contact-section-wrapper__social-badges" aria-label={copy.socialLinks}>
+                  {socialLinks.map((link, index) => (
+                    <motion.a
+                      className="contact-section-wrapper__social-badge"
+                      href={link.href}
+                      key={link.label}
+                      initial={prefersReducedMotion ? false : { opacity: 0, y: 16, scale: 0.96 }}
+                      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                      viewport={repeatableViewport}
+                      transition={{ duration: prefersReducedMotion ? 0 : 0.48, delay: prefersReducedMotion ? 0 : 0.58 + index * 0.08, ease: premiumEase }}
+                    >
+                      <motion.span
+                        className="contact-section-wrapper__badge-icon"
+                        aria-hidden="true"
+                        whileHover={prefersReducedMotion ? undefined : { y: -3, scale: 1.06 }}
+                        transition={{ duration: 0.24, ease: premiumEase }}
+                      >
+                        {link.label === 'Behance' ? 'Be' : link.label === 'Instagram' ? 'Ig' : 'Mail'}
+                      </motion.span>
                       <span>{link.label}</span>
-                    </a>
+                    </motion.a>
                   ))}
-                </nav>
-              </div>
-            </aside>
+                </motion.nav>
+              </motion.div>
+            </motion.aside>
           </div>
 
-          {isSubmitted ? (
-            <div className="contact-section-wrapper__form contact-success-wrapper" role="status" aria-live="polite">
-              <div className="contact-success-icon" aria-hidden="true">✓</div>
-              <h3 className="contact-success-title">{copy.successHeading}</h3>
-              <p className="contact-success-message">{copy.successMessage}</p>
-              <button className="contact-success-reset-btn" type="button" onClick={resetContactForm}>{copy.resetButton}</button>
-            </div>
-          ) : contactForm}
-
+          <AnimatePresence mode="wait">
+            {isSubmitted ? (
+              <motion.div className="contact-section-wrapper__form contact-success-wrapper" role="status" aria-live="polite" initial={prefersReducedMotion ? false : { opacity: 0, y: 12, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={prefersReducedMotion ? undefined : { opacity: 0, y: 12, scale: 0.98 }} transition={{ duration: prefersReducedMotion ? 0 : 0.35, ease: premiumEase }}>
+                <div className="contact-success-icon" aria-hidden="true">✓</div>
+                <h3 className="contact-success-title">{copy.successHeading}</h3>
+                <p className="contact-success-message">{copy.successMessage}</p>
+                <button className="contact-success-reset-btn" type="button" onClick={resetContactForm}>{copy.resetButton}</button>
+              </motion.div>
+            ) : contactForm}
+          </AnimatePresence>
         </div>
       </div>
     </section>

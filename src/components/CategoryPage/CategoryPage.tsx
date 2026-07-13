@@ -1,4 +1,4 @@
-import { useState, type MouseEvent } from 'react'
+import { useEffect, useState, type MouseEvent } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { categories } from '../../data/categories'
@@ -11,11 +11,12 @@ import { CategoryProjectCard } from '../CategoryProjectCard/CategoryProjectCard'
 import { ProjectModal } from '../ProjectModal/ProjectModal'
 import { setPendingHomepageSection } from '../../utils/sectionNavigation'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
+import { useScrambleText } from '../../hooks/useScrambleText'
+import { premiumEase, repeatableViewport } from '../../utils/motionConfig'
 import styles from './CategoryPage.module.css'
 import './category-grid.css'
 
 const MotionLink = motion.create(Link)
-const premiumEase = [0.25, 0.1, 0.25, 1] as const
 
 const headerItemVariants = {
   hidden: { opacity: 0, y: 30 },
@@ -36,7 +37,33 @@ export function CategoryPage() {
   const categoryName =
     t.categories[category.slug as keyof typeof t.categories]
     ?? category.slug.split('-').map((word) => word[0]?.toUpperCase() + word.slice(1)).join(' ')
+  const [startCategoryTitle, setStartCategoryTitle] = useState(prefersReducedMotion)
+  const { displayed: categoryTitleText, done: categoryTitleDone } = useScrambleText(categoryName, 0, startCategoryTitle && !prefersReducedMotion)
+  const visibleCategoryTitle = prefersReducedMotion ? categoryName : categoryTitleText
+  const [showCategoryCursor, setShowCategoryCursor] = useState(true)
+  const [fadeCategoryCursor, setFadeCategoryCursor] = useState(false)
   const homePath = localePrefix(locale) || '/'
+
+  useEffect(() => {
+    setStartCategoryTitle(prefersReducedMotion)
+    if (prefersReducedMotion) return undefined
+
+    const startTitleId = window.setTimeout(() => setStartCategoryTitle(true), 820)
+    return () => window.clearTimeout(startTitleId)
+  }, [categoryName, prefersReducedMotion])
+
+  useEffect(() => {
+    setShowCategoryCursor(true)
+    setFadeCategoryCursor(false)
+    if (prefersReducedMotion || !categoryTitleDone) return undefined
+
+    const fadeCursorId = window.setTimeout(() => setFadeCategoryCursor(true), 1000)
+    const hideCursorId = window.setTimeout(() => setShowCategoryCursor(false), 1450)
+    return () => {
+      window.clearTimeout(fadeCursorId)
+      window.clearTimeout(hideCursorId)
+    }
+  }, [categoryName, categoryTitleDone, prefersReducedMotion])
 
   const handleBackToProjects = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault()
@@ -44,25 +71,20 @@ export function CategoryPage() {
     navigate(homePath)
   }
 
-  const handleGlowMove = (event: MouseEvent<HTMLDivElement>) => {
-    if (prefersReducedMotion || window.matchMedia('(pointer: coarse)').matches) return
-    event.currentTarget.style.setProperty('--category-glow-x', `${event.clientX}px`)
-    event.currentTarget.style.setProperty('--category-glow-y', `${event.clientY}px`)
-    event.currentTarget.style.setProperty('--category-glow-opacity', '0.08')
-  }
-
-  const handleGlowLeave = (event: MouseEvent<HTMLDivElement>) => {
-    event.currentTarget.style.setProperty('--category-glow-opacity', '0')
-  }
-
   return (
-    <div className={styles.page} onMouseMove={handleGlowMove} onMouseLeave={handleGlowLeave}>
+    <div className={styles.page}>
+      <div className={styles.ambientBackground} aria-hidden="true">
+        <span className={styles.primaryGlow} />
+        <span className={styles.secondaryGlow} />
+        <span className={styles.gridOverlay} />
+      </div>
       <Header />
       <main className={styles.main}>
         <motion.div
           className={styles.headerGroup}
           initial={prefersReducedMotion ? false : 'hidden'}
-          animate="visible"
+          whileInView="visible"
+          viewport={repeatableViewport}
           variants={{
             hidden: {},
             visible: { transition: { staggerChildren: 0.08 } },
@@ -86,12 +108,32 @@ export function CategoryPage() {
           >
             {t.common.work} <b>›</b> {categoryName}
           </motion.p>
-          <motion.h1
-            variants={headerItemVariants}
-            transition={{ duration: prefersReducedMotion ? 0 : 0.7, ease: premiumEase }}
-          >
-            {categoryName}
-          </motion.h1>
+          <AnimatePresence mode="wait">
+            <motion.div
+              className={styles.titleBlock}
+              key={category.slug}
+              initial={prefersReducedMotion ? false : { opacity: 0, y: 28, filter: 'blur(8px)', letterSpacing: '-0.015em' }}
+              animate={{ opacity: 1, y: 0, filter: 'blur(0px)', letterSpacing: '-0.05em' }}
+              exit={prefersReducedMotion ? undefined : { opacity: 0, y: -12, filter: 'blur(8px)' }}
+              transition={{ duration: prefersReducedMotion ? 0 : 0.65, ease: premiumEase }}
+            >
+              <h1 aria-label={categoryName}>
+                <span aria-hidden="true">{visibleCategoryTitle}</span>
+                {!prefersReducedMotion && showCategoryCursor && (
+                  <span className={`${styles.titleCursor}${categoryTitleDone ? ` ${styles.blinking}` : ''}${fadeCategoryCursor ? ` ${styles.fading}` : ''}`} aria-hidden="true">|</span>
+                )}
+              </h1>
+              <div className={styles.titleMeta}>
+                <motion.span
+                  className={styles.titleAccent}
+                  initial={prefersReducedMotion ? false : { scaleX: 0 }}
+                  animate={{ scaleX: 1 }}
+                  transition={{ duration: prefersReducedMotion ? 0 : 0.7, ease: premiumEase }}
+                />
+                <span>{String(items.length).padStart(2, '0')} PROJECTS</span>
+              </div>
+            </motion.div>
+          </AnimatePresence>
           <motion.div
             className={styles.filters}
             role="tablist"
@@ -130,10 +172,10 @@ export function CategoryPage() {
             className="category-project-grid"
             aria-label={`${categoryName} ${t.common.projects}`}
             key={category.slug}
-            initial={prefersReducedMotion ? false : { opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={prefersReducedMotion ? undefined : { opacity: 0, y: 10 }}
-            transition={{ duration: prefersReducedMotion ? 0 : 0.4, ease: premiumEase }}
+            initial={prefersReducedMotion ? false : { opacity: 0, y: 18, scale: 0.985 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={prefersReducedMotion ? undefined : { opacity: 0, y: -12, scale: 0.99 }}
+            transition={{ duration: prefersReducedMotion ? 0 : 0.45, ease: premiumEase }}
           >
             {items.map((project, index) => (
               <CategoryProjectCard project={project} index={index} onWatch={setSelectedProject} key={project.id} />
@@ -144,7 +186,7 @@ export function CategoryPage() {
       <motion.div
         initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.2 }}
+        viewport={repeatableViewport}
         transition={{ duration: prefersReducedMotion ? 0 : 0.7, ease: premiumEase }}
       >
         <Footer />
