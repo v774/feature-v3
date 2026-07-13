@@ -148,9 +148,7 @@ function AppRoutes() {
         <Route path="/pl/work/:categoryId" element={<CategoryPage />} />
         <Route path="/logo-animation" element={<Navigate to="/work/logo-animation" replace />} />
         <Route path="/icons" element={<Navigate to="/work/icons" replace />} />
-        <Route path="/brand-motion" element={<Navigate to="/work/brand-motion" replace />} />
         <Route path="/lottie-ui" element={<Navigate to="/work/lottie-ui" replace />} />
-        <Route path="/social-content" element={<Navigate to="/work/social-media" replace />} />
         <Route path="/posters" element={<Navigate to="/work/posters" replace />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

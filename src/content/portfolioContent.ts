@@ -273,7 +273,7 @@ export const portfolioProjects: PortfolioProject[] = [
       right: "/images/projects/3.webp",
     },
     featured: false,
-    showInMarquee: true,
+    showInMarquee: false,
     published: true,
     order: 6,
     client: "Onyx",

@@ -1,6 +1,6 @@
 import { useEffect, useState, type MouseEvent } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
 import { categories, portfolioCategories, projects, type CategoryProject as Project } from '../../content/portfolioContent'
 import { siteContent } from '../../content/siteContent'
 import { localePrefix } from '../../translations'
@@ -28,8 +28,9 @@ export function CategoryPage() {
   const navigate = useNavigate()
   const { locale } = useTranslation()
   const prefersReducedMotion = useReducedMotion()
-  const category = categories.find((item) => item.enabled && item.slug === categoryId)
-    ?? categories.find((item) => item.enabled)!
+  const matchedCategory = categories.find((item) => item.enabled && item.slug === categoryId)
+  const fallbackCategory = categories.find((item) => item.enabled)!
+  const category = matchedCategory ?? fallbackCategory
   const items = projects.filter(
     (project) => project.enabled && project.categorySlug === category.slug,
   )
@@ -68,6 +69,10 @@ export function CategoryPage() {
     event.preventDefault()
     setPendingHomepageSection('projects')
     navigate(homePath)
+  }
+
+  if (!matchedCategory) {
+    return <Navigate to={`${localePrefix(locale)}/work/${fallbackCategory.slug}`} replace />
   }
 
   return (
