@@ -27,12 +27,29 @@
 }
 
 .service-item {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(90px, 0.35fr) minmax(0, 1fr);
   gap: 24px;
   align-items: start;
   padding: 32px 0;
-  border-bottom: 1px solid rgba(12, 12, 12, 0.15);
+  overflow-x: clip;
+  transition: background-color 250ms ease;
+}
+
+.service-number-motion,
+.service-copy-motion {
+  min-width: 0;
+}
+
+.service-divider {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  background: rgba(12, 12, 12, 0.15);
+  transform-origin: left center;
 }
 
 .service-number {
@@ -40,6 +57,12 @@
   font-size: clamp(3rem, 10vw, 140px);
   font-weight: 900;
   line-height: 0.9;
+  transform-origin: left center;
+  transition: transform 250ms ease;
+}
+
+.service-copy {
+  transition: transform 250ms ease;
 }
 
 .service-title {
@@ -57,6 +80,7 @@
   font-weight: 300;
   line-height: 1.65;
   opacity: 0.6;
+  transition: opacity 250ms ease;
 }
 
 @media (max-width: 479px) {
@@ -85,5 +109,23 @@
 
   .service-item {
     padding: 48px 0;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .service-item:hover {
+    background-color: rgba(12, 12, 12, 0.018);
+  }
+
+  .service-item:hover .service-copy {
+    transform: translateX(8px);
+  }
+
+  .service-item:hover .service-number {
+    transform: scale(1.03);
+  }
+
+  .service-item:hover .service-description {
+    opacity: 0.85;
   }
 }

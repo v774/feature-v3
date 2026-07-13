@@ -1,5 +1,6 @@
 import { motion } from "motion/react";
 import { BackgroundVideo } from "../../components/BackgroundVideo/BackgroundVideo";
+import { HeroStatus } from "../../components/HeroStatus/HeroStatus";
 import { heroData } from "../../data/heroData";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { useScrambleText } from "../../hooks/useScrambleText";
@@ -23,15 +24,7 @@ export function HeroSection({ onShowreel }: HeroSectionProps) {
       <div className="hero-watermark" aria-hidden="true">
         VL MOTION
       </div>
-      <motion.div
-        className="hero-identity-text"
-        aria-hidden="true"
-        initial={{ opacity: 0, filter: "blur(10px)" }}
-        animate={{ opacity: 1, filter: "blur(0px)" }}
-        transition={{ delay: 1.05, duration: 1.1, ease: [0.215, 0.61, 0.355, 1] }}
-      >
-        im valentyn and i motion designer
-      </motion.div>
+      <HeroStatus />
       <div className="hero-content-layer">
         <div className="hero-spacer" aria-hidden="true" />
         <main id="spade-hero" className="hero-bottom-row">
