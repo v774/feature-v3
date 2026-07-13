@@ -1,18 +1,12 @@
 import './contact.block.css'
 import { type FormEvent, useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
+import { contactContent } from '../../content/contactContent'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
 import { useScrambleText } from '../../hooks/useScrambleText'
 import { premiumEase, repeatableViewport } from '../../utils/motionConfig'
-import { useTranslation } from '../../translations/useTranslation'
 
 declare const process: { env?: { VITE_FORM_KEY?: string } } | undefined
-
-const socialLinks = [
-  { label: 'Behance', href: 'https://behance.net' },
-  { label: 'Instagram', href: 'https://instagram.com' },
-  { label: 'Email', href: 'mailto:hello@example.com' },
-]
 
 const formKey = (
   import.meta.env.VITE_FORM_KEY
@@ -42,9 +36,8 @@ const sanitizeText = (value: string) =>
     .trim()
 
 export function Contact() {
-  const { t } = useTranslation()
   const prefersReducedMotion = useReducedMotion()
-  const copy = t.sections.contact
+  const copy = contactContent
   const { displayed: headingText, done: headingDone } = useScrambleText(copy.heading, 150, !prefersReducedMotion)
   const visibleHeading = prefersReducedMotion ? copy.heading : headingText
   const [formData, setFormData] = useState<ContactFormData>({
@@ -97,7 +90,7 @@ export function Contact() {
 
     if (!formKey) {
       console.error('VITE_FORM_KEY is missing; refusing to submit the contact form.')
-      setSubmitMessage('The contact form is temporarily unavailable. Please email us directly.')
+      setSubmitMessage(copy.unavailableMessage)
       return
     }
 
@@ -112,7 +105,7 @@ export function Contact() {
       }
 
       if (!safeFields.message) {
-        setSubmitMessage('Please enter a message before submitting the form.')
+        setSubmitMessage(copy.emptyMessage)
         return
       }
 
@@ -144,7 +137,7 @@ export function Contact() {
       setIsSubmitted(true)
     } catch (error) {
       console.error('Contact form submission failed:', error)
-      setSubmitMessage('We could not send your message. Please try again or email us directly.')
+      setSubmitMessage(copy.failureMessage)
     } finally {
       setIsSubmitting(false)
     }
@@ -205,7 +198,7 @@ export function Contact() {
         <textarea ref={messageTextareaRef} className="message-textarea" name="message" placeholder={copy.message} autoComplete="off" rows={1} value={formData.message} onChange={(event) => setFormData({ ...formData, message: event.target.value })} onInput={(event) => resizeMessageTextarea(event.currentTarget)} required />
       </motion.label>
       <motion.button className="contact-section-wrapper__submit" type="submit" disabled={isSubmitting} initial={prefersReducedMotion ? false : { opacity: 0, y: 12, scale: 0.96 }} whileInView={{ opacity: 1, y: 0, scale: 1 }} viewport={repeatableViewport} transition={{ duration: prefersReducedMotion ? 0 : 0.5, delay: prefersReducedMotion ? 0 : 0.42, ease: premiumEase }} whileTap={prefersReducedMotion ? undefined : { scale: 0.98 }}>
-        {isSubmitting ? 'Sending...' : copy.send} <span aria-hidden="true">↗</span>
+        {isSubmitting ? copy.sending : copy.send} <span aria-hidden="true">↗</span>
       </motion.button>
       <p className="contact-section-wrapper__disclaimer">{copy.disclaimer}</p>
       <AnimatePresence>
@@ -259,7 +252,7 @@ export function Contact() {
                 </motion.span>
                 <div className="contact-section-wrapper__email-copy">
                   <p className="contact-section-wrapper__card-label">{copy.email}</p>
-                  <a href="mailto:hello@example.com">hello@example.com</a>
+                  <a href={`mailto:${copy.emailAddress}`}>{copy.emailAddress}</a>
                 </div>
               </motion.div>
               <motion.div
@@ -286,8 +279,8 @@ export function Contact() {
                 >
                   {copy.connect}
                 </motion.p>
-                <motion.nav className="contact-section-wrapper__social-badges" aria-label={copy.socialLinks}>
-                  {socialLinks.map((link, index) => (
+                <motion.nav className="contact-section-wrapper__social-badges" aria-label={copy.socialLinksLabel}>
+                  {copy.socialLinks.map((link, index) => (
                     <motion.a
                       className="contact-section-wrapper__social-badge"
                       href={link.href}
@@ -303,7 +296,7 @@ export function Contact() {
                         whileHover={prefersReducedMotion ? undefined : { y: -3, scale: 1.06 }}
                         transition={{ duration: 0.24, ease: premiumEase }}
                       >
-                        {link.label === 'Behance' ? 'Be' : link.label === 'Instagram' ? 'Ig' : 'Mail'}
+                        {link.shortLabel ?? link.label}
                       </motion.span>
                       <span>{link.label}</span>
                     </motion.a>

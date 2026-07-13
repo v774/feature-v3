@@ -1,0 +1,141 @@
+import { siteContent } from "./siteContent";
+
+export interface ServiceContent {
+  number: string;
+  title: string;
+  description: string;
+}
+
+export interface AboutDecorationContent {
+  className: string;
+  src: string;
+  spreadX: number;
+  spreadY: number;
+}
+
+export interface HomepageContent {
+  hero: {
+    brand: string;
+    kicker: string;
+    headline: string;
+    description: string;
+    primaryCta: string;
+    secondaryCta: string;
+    availability: string;
+    location: string;
+    highlights: string[];
+    localVideoSrc: string;
+    fallbackVideoSrc: string;
+    watermark: string;
+    highlightsAriaLabel: string;
+  };
+  marquee: {
+    ariaLabel: string;
+  };
+  about: {
+    heading: string;
+    text: string;
+    decorations: AboutDecorationContent[];
+  };
+  services: {
+    heading: string;
+    items: ServiceContent[];
+  };
+  projects: {
+    heading: string;
+    liveProjectLabel: string;
+  };
+}
+
+export const homepageContent: HomepageContent = {
+  hero: {
+    brand: siteContent.brandName,
+    kicker: "Motion designer",
+    headline: "I bring brands\nto life through motion.",
+    description:
+      "I design premium logo animations and brand motion systems that make businesses unforgettable.",
+    primaryCta: "View my work",
+    secondaryCta: "Watch showreel",
+    availability: "Available for new projects",
+    location: "Worldwide",
+    highlights: ["Logo Animation", "Brand Motion", "Lottie UI"],
+    localVideoSrc: "/videos/hero/neon-llama.mp4",
+    fallbackVideoSrc:
+      "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260622_083515_290e5a10-0b95-41af-a5e2-32b6389baa4d.mp4",
+    watermark: "VL MOTION",
+    highlightsAriaLabel: "Portfolio highlights",
+  },
+  marquee: {
+    ariaLabel: "Selected visual work",
+  },
+  about: {
+    heading: "About me",
+    text:
+      "With more than five years of experience in design, i focus on branding, web design, and user experience, i truly enjoy working with businesses that aim to stand out and present their best image. Let's build something incredible together!",
+    decorations: [
+      {
+        className: "about-decoration about-decoration-top-left",
+        src: "https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/moon_icon.11395d36.png",
+        spreadX: -180,
+        spreadY: -120,
+      },
+      {
+        className: "about-decoration about-decoration-bottom-left",
+        src: "https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/p59_1.4659672e.png",
+        spreadX: -170,
+        spreadY: 130,
+      },
+      {
+        className: "about-decoration about-decoration-top-right",
+        src: "https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/lego_icon-1.703bb594.png",
+        spreadX: 180,
+        spreadY: -120,
+      },
+      {
+        className: "about-decoration about-decoration-bottom-right",
+        src: "https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/Group_134-1.2e04f3ce.png",
+        spreadX: 170,
+        spreadY: 130,
+      },
+    ],
+  },
+  services: {
+    heading: "Services",
+    items: [
+      {
+        number: "01",
+        title: "3D Modeling",
+        description:
+          "Creation of detailed objects, characters, or environments tailored to specific client needs, ideal for games, products, and visualizations.",
+      },
+      {
+        number: "02",
+        title: "Rendering",
+        description:
+          "High-quality, photorealistic renders that showcase designs with custom lighting, textures, and materials to bring concepts to life.",
+      },
+      {
+        number: "03",
+        title: "Motion Design",
+        description:
+          "Dynamic animations and motion graphics that add energy and storytelling to brands, products, and digital experiences.",
+      },
+      {
+        number: "04",
+        title: "Branding",
+        description:
+          "Crafting cohesive visual identities -- from logos to full brand systems -- that communicate a clear and memorable presence.",
+      },
+      {
+        number: "05",
+        title: "Web Design",
+        description:
+          "Designing clean, modern, and conversion-focused websites with attention to layout, typography, and user experience.",
+      },
+    ],
+  },
+  projects: {
+    heading: "Project",
+    liveProjectLabel: "Live Project",
+  },
+};

@@ -1,6 +1,7 @@
 import { motion, type MotionStyle, useScroll, useTransform } from "motion/react";
 import { type KeyboardEvent, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { homepageContent } from "../../content/homepageContent";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { premiumEase, repeatableViewport } from "../../utils/motionConfig";
 import type { Project } from "../../types/portfolioTypes";
@@ -100,7 +101,7 @@ export function ProjectCard({ project, index, totalCards }: ProjectCardProps) {
             viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: prefersReducedMotion ? 0 : 0.7, delay: cardDelay + 0.2, ease: [0.25, 0.1, 0.25, 1] }}
           >
-            <span className="project-card-link-badge">Live Project</span>
+            <span className="project-card-link-badge">{homepageContent.projects.liveProjectLabel}</span>
           </motion.div>
           </header>
 

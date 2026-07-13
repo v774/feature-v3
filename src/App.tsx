@@ -13,23 +13,9 @@ import { ProjectModal } from "./components/ProjectModal/ProjectModal";
 import { ScrollTopButton } from "./components/ScrollTopButton/ScrollTopButton";
 import { ProjectsSection } from "./sections/ProjectsSection/ProjectsSection";
 import { ServicesSection } from "./sections/ServicesSection/ServicesSection";
-import type { Project } from "./data/projects";
+import { portfolioCategories, showreelProject } from "./content/portfolioContent";
+import { seoContent } from "./content/seoContent";
 import { consumePendingHomepageSection, isHomepagePath } from "./utils/sectionNavigation";
-
-const showreelProject: Project = {
-  id: "showreel",
-  title: "Brand motion showreel",
-  categorySlug: "showreel",
-  description: "A selection of logo animation, brand motion systems and visual content.",
-  tags: ["Showreel", "Motion Design"],
-  videoPath: "/videos/showreel/main-showreel.webm",
-  previewImage: "",
-  format: "WEBM",
-  software: "After Effects",
-  delivery: "Digital",
-  duration: "01:28",
-  enabled: true,
-};
 
 function HomePage() {
   const [showreelOpen, setShowreelOpen] = useState(false);
@@ -96,15 +82,61 @@ function ScrollRestoration() {
   return null;
 }
 
+function setMetaAttribute(selector: string, attribute: "content" | "href", value: string) {
+  const element = document.head.querySelector(selector);
+  if (element) {
+    element.setAttribute(attribute, value);
+  }
+}
+
+function SeoManager() {
+  const location = useLocation();
+
+  useEffect(() => {
+    const routePath = location.pathname.replace(/^\/(?:en|ua|pl)(?=\/|$)/, "") || "/";
+    const routeSeo = seoContent.routes[routePath] ?? seoContent.routes["/"];
+    const title = routeSeo.title;
+    const description = routeSeo.description;
+    const canonicalUrl = `${seoContent.canonicalUrl}${routeSeo.canonicalPath === "/" ? "/" : routeSeo.canonicalPath}`;
+    const ogImage = routeSeo.ogImage
+      ? `${seoContent.canonicalUrl}${routeSeo.ogImage}`
+      : seoContent.openGraph.image;
+
+    document.title = title;
+    setMetaAttribute('meta[name="description"]', "content", description);
+    setMetaAttribute('meta[name="keywords"]', "content", seoContent.keywords.join(", "));
+    setMetaAttribute('meta[name="author"]', "content", seoContent.author);
+    setMetaAttribute('meta[name="theme-color"]', "content", seoContent.themeColor);
+    setMetaAttribute('link[rel="canonical"]', "href", canonicalUrl);
+    setMetaAttribute('meta[property="og:title"]', "content", title);
+    setMetaAttribute('meta[property="og:description"]', "content", description);
+    setMetaAttribute('meta[property="og:type"]', "content", seoContent.openGraph.type);
+    setMetaAttribute('meta[property="og:url"]', "content", canonicalUrl);
+    setMetaAttribute('meta[property="og:image"]', "content", ogImage);
+    setMetaAttribute('meta[property="og:image:width"]', "content", seoContent.openGraph.imageWidth);
+    setMetaAttribute('meta[property="og:image:height"]', "content", seoContent.openGraph.imageHeight);
+    setMetaAttribute('meta[property="og:image:alt"]', "content", seoContent.openGraph.imageAlt);
+    setMetaAttribute('meta[property="og:site_name"]', "content", seoContent.siteName);
+    setMetaAttribute('meta[name="twitter:card"]', "content", seoContent.twitter.card);
+    setMetaAttribute('meta[name="twitter:title"]', "content", title);
+    setMetaAttribute('meta[name="twitter:description"]', "content", description);
+    setMetaAttribute('meta[name="twitter:image"]', "content", ogImage);
+  }, [location.pathname]);
+
+  return null;
+}
+
 function AppRoutes() {
   const { pathname } = useLocation();
+  const categoryPattern = portfolioCategories.map((category) => category.slug).join("|");
   const isValidRoute =
-    /^\/(?:$|(?:en|ua|pl)\/?$|(?:(?:en|ua|pl)\/)?work\/[^/]+\/?$|(?:logo-animation|icons|brand-motion|lottie-ui|social-media|posters)\/?$)/.test(
+    new RegExp(`^/(?:$|(?:en|ua|pl)/?$|(?:(?:en|ua|pl)/)?work/[^/]+/?$|(?:${categoryPattern})/?$)`).test(
       pathname,
     );
 
   return (
     <>
+      <SeoManager />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/en" element={<HomePage />} />

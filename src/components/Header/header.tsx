@@ -6,15 +6,8 @@ import {
   scrollToHomepageSection,
   setPendingHomepageSection,
 } from "../../utils/sectionNavigation";
+import { siteContent } from "../../content/siteContent";
 import "./header.block.css";
-
-const navigation = [
-  { id: "home", label: "Home" },
-  { id: "about", label: "About" },
-  { id: "services", label: "Services" },
-  { id: "projects", label: "Work" },
-  { id: "contact", label: "Contact" },
-];
 
 export function Header() {
   const [hidden, setHidden] = useState(false);
@@ -53,13 +46,13 @@ export function Header() {
             className="header-component-wrapper__logo"
             to={homePath}
             onClick={(event) => handleSectionClick(event, "home")}
-            aria-label="VL Motion home"
+            aria-label={siteContent.homeAriaLabel}
           >
-            <b>VL</b>
-            <span>motion</span>
+            <b>{siteContent.brandShortName}</b>
+            <span>{siteContent.brandSuffix}</span>
           </Link>
-          <nav className="header-component-wrapper__navigation" aria-label="Main navigation">
-            {navigation.map((item) => (
+          <nav className="header-component-wrapper__navigation" aria-label={siteContent.navigationAriaLabel}>
+            {siteContent.navigation.map((item) => (
               <Link
                 className="header-component-wrapper__navigation-link"
                 key={item.id}
@@ -76,7 +69,7 @@ export function Header() {
               to={homePath}
               onClick={(event) => handleSectionClick(event, "contact")}
             >
-              Let's talk <span aria-hidden="true">&#8599;</span>
+              {siteContent.contactCta} <span aria-hidden="true">&#8599;</span>
             </Link>
           </div>
         </div>

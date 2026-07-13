@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
 import { motion } from 'motion/react'
-import type { Project } from '../../data/projects'
+import type { CategoryProject as Project } from '../../content/portfolioContent'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
 import { useScrambleText } from '../../hooks/useScrambleText'
-import { useTranslation } from '../../translations/useTranslation'
+import { siteContent } from '../../content/siteContent'
 import { premiumEase } from '../../utils/motionConfig'
 import styles from './CategoryProjectCard.module.css'
 
@@ -14,7 +14,6 @@ type ProjectCardProps = {
 }
 
 export function CategoryProjectCard({ project, index, onWatch }: ProjectCardProps) {
-  const { t } = useTranslation()
   const prefersReducedMotion = useReducedMotion()
   const videoRef = useRef<HTMLVideoElement>(null)
   const freezeTimerRef = useRef<number | null>(null)
@@ -22,7 +21,7 @@ export function CategoryProjectCard({ project, index, onWatch }: ProjectCardProp
   const [isPreviewing, setIsPreviewing] = useState(false)
   const [isFrozen, setIsFrozen] = useState(false)
   const [startTitleAnimation, setStartTitleAnimation] = useState(prefersReducedMotion)
-  const { displayed: titleText, done: titleDone } = useScrambleText(project.title, 0, startTitleAnimation && !prefersReducedMotion)
+  const { displayed: titleText, done: titleDone } = useScrambleText(project.title, 0, startTitleAnimation && !prefersReducedMotion, 0.25)
   const visibleTitle = prefersReducedMotion ? project.title : titleText
   const [showTitleCursor, setShowTitleCursor] = useState(true)
   const [fadeTitleCursor, setFadeTitleCursor] = useState(false)
@@ -68,7 +67,7 @@ export function CategoryProjectCard({ project, index, onWatch }: ProjectCardProp
     if (prefersReducedMotion || !titleDone) return undefined
 
     const fadeCursorId = window.setTimeout(() => setFadeTitleCursor(true), 1000)
-    const hideCursorId = window.setTimeout(() => setShowTitleCursor(false), 1450)
+    const hideCursorId = window.setTimeout(() => setShowTitleCursor(false), 1750)
     return () => {
       window.clearTimeout(fadeCursorId)
       window.clearTimeout(hideCursorId)
@@ -129,7 +128,7 @@ export function CategoryProjectCard({ project, index, onWatch }: ProjectCardProp
       onKeyDown={handleCardKeyDown}
       role="button"
       tabIndex={0}
-      aria-label={`${t.common.watchProject}: ${project.title}`}
+      aria-label={`${siteContent.modalLabels.watchProject}: ${project.title}`}
     >
       <div className={styles.media}>
         <img className={styles.poster} src={project.previewImage} alt="" loading="lazy" decoding="async" />

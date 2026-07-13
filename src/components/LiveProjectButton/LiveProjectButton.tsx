@@ -1,5 +1,6 @@
 import "./LiveProjectButton.css";
 import { Link } from "react-router-dom";
+import { homepageContent } from "../../content/homepageContent";
 
 type LiveProjectButtonProps = {
   href?: string;
@@ -8,7 +9,7 @@ type LiveProjectButtonProps = {
 export function LiveProjectButton({ href = "/" }: LiveProjectButtonProps) {
   return (
     <Link className="live-project-button" to={href}>
-      Live Project
+      {homepageContent.projects.liveProjectLabel}
     </Link>
   );
 }

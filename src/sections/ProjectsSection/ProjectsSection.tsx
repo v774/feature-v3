@@ -1,12 +1,14 @@
 import { motion } from "motion/react";
 import { ProjectCard } from "../../components/ProjectCard/ProjectCard";
-import { projects } from "../../data/projectsData";
+import { homepageContent } from "../../content/homepageContent";
+import { featuredHomepageProjects } from "../../content/portfolioContent";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { premiumEase, repeatableViewport } from "../../utils/motionConfig";
 import "./ProjectsSection.css";
 
 export function ProjectsSection() {
   const prefersReducedMotion = useReducedMotion();
+  const projects = featuredHomepageProjects;
 
   return (
     <section id="projects" className="projects-section">
@@ -18,7 +20,7 @@ export function ProjectsSection() {
           viewport={repeatableViewport}
           transition={{ duration: prefersReducedMotion ? 0 : 0.8, ease: premiumEase }}
         >
-          Project
+          {homepageContent.projects.heading}
         </motion.h2>
         <div className="projects-list">
           {projects.map((project, index) => (

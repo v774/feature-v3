@@ -1,7 +1,7 @@
 import { motion } from "motion/react";
 import { BackgroundVideo } from "../../components/BackgroundVideo/BackgroundVideo";
 import { HeroStatus } from "../../components/HeroStatus/HeroStatus";
-import { heroData } from "../../data/heroData";
+import { homepageContent } from "../../content/homepageContent";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { useScrambleText } from "../../hooks/useScrambleText";
 import { scrollToHomepageSection } from "../../utils/sectionNavigation";
@@ -13,6 +13,7 @@ type HeroSectionProps = {
 
 export function HeroSection({ onShowreel }: HeroSectionProps) {
   const prefersReducedMotion = useReducedMotion();
+  const heroData = homepageContent.hero;
   const { displayed, done } = useScrambleText(heroData.headline, 800, !prefersReducedMotion);
   const headline = prefersReducedMotion ? heroData.headline : displayed;
 
@@ -22,7 +23,7 @@ export function HeroSection({ onShowreel }: HeroSectionProps) {
       <div className="hero-dot-overlay" aria-hidden="true" />
       <div className="hero-vignette" aria-hidden="true" />
       <div className="hero-watermark" aria-hidden="true">
-        VL MOTION
+        {heroData.watermark}
       </div>
       <HeroStatus />
       <div className="hero-content-layer">
@@ -67,7 +68,7 @@ export function HeroSection({ onShowreel }: HeroSectionProps) {
                 {heroData.secondaryCta}
               </button>
             </div>
-            <aside className="hero-meta" aria-label="Portfolio highlights">
+            <aside className="hero-meta" aria-label={heroData.highlightsAriaLabel}>
               <span>{heroData.availability}</span>
               <span>{heroData.location}</span>
               <span>{heroData.highlights.join(" / ")}</span>

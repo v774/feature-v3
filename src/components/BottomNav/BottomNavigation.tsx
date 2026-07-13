@@ -1,5 +1,6 @@
 import { useEffect, useRef, type MouseEvent, type ReactNode } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { siteContent } from '../../content/siteContent'
 import { getHomepagePath, isHomepagePath, scrollToHomepageSection, setPendingHomepageSection } from '../../utils/sectionNavigation'
 import './bottom-navigation.block.css'
 
@@ -48,16 +49,14 @@ export function BottomNavigation() {
     navigate(getHomepagePath(location.pathname))
   }
 
-  const navigationItems: NavigationItem[] = [
-    { id: 'home', label: 'Home', icon: 'home' },
-    { id: 'projects', label: 'Work', icon: 'work' },
-    { id: 'about', label: 'About', icon: 'about' },
-    { id: 'services', label: 'Services', icon: 'process' },
-    { id: 'contact', label: 'Contact', icon: 'contact' },
-  ]
+  const navigationItems: NavigationItem[] = siteContent.bottomNavigation.map((item) => ({
+    id: item.id,
+    label: item.label,
+    icon: item.icon ?? item.id,
+  }))
 
   return (
-    <nav ref={navigationRef} className="bottom-navigation" aria-label="Section navigation">
+    <nav ref={navigationRef} className="bottom-navigation" aria-label={siteContent.sectionNavigationAriaLabel}>
       {navigationItems.map((item) => (
         <a className="bottom-navigation__item" onClick={(event) => handleNavigationClick(event, item.id)} href={getHomepagePath(location.pathname)} key={item.id}>
           <span className="bottom-navigation__icon"><NavigationIcon name={item.icon} /></span>

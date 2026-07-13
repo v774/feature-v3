@@ -1,7 +1,6 @@
-import type { NavigationItem } from "../types/portfolioTypes";
+import { siteContent } from "../content/siteContent";
 
-export const navigationItems: NavigationItem[] = [
-  { label: "About", href: "/" },
-  { label: "Services", href: "/" },
-  { label: "Projects", href: "/" },
-];
+export const navigationItems = siteContent.navigation.map((item) => ({
+  label: item.label,
+  href: "/",
+}));

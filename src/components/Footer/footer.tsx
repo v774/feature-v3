@@ -1,36 +1,23 @@
 import './footer.block.css'
-import { useTranslation } from '../../translations/useTranslation'
-
-type SocialLink = {
-  label: string
-  href: string
-}
-
-const socialLinks: SocialLink[] = [
-  { label: 'Behance', href: 'https://behance.net' },
-  { label: 'Instagram', href: 'https://instagram.com' },
-  { label: 'Email', href: 'mailto:hello@example.com' },
-]
+import { siteContent } from '../../content/siteContent'
 
 export function Footer() {
-  const { t } = useTranslation()
-  const copy = t.sections.footer
   return (
     <footer className="footer-component-wrapper">
       <div className="footer-container">
         <div className="footer-top-row">
           <div className="footer-brand-block">
-            <a className="footer-brand-logo" href="/" aria-label="VL Motion home">
-              <b>VL</b>
-              <span>motion</span>
+            <a className="footer-brand-logo" href="/" aria-label={siteContent.homeAriaLabel}>
+              <b>{siteContent.brandShortName}</b>
+              <span>{siteContent.brandSuffix}</span>
             </a>
-            <p className="footer-brand-subtext">{copy.tagline}</p>
+            <p className="footer-brand-subtext">{siteContent.footerTagline}</p>
           </div>
 
           <div className="footer-right-group">
-            <a className="footer-email-badge" href="mailto:hello@example.com">hello@example.com</a>
-            <nav className="footer-social-links" aria-label={copy.socialLinks}>
-              {socialLinks.map((link) => (
+            <a className="footer-email-badge" href={`mailto:${siteContent.email}`}>{siteContent.email}</a>
+            <nav className="footer-social-links" aria-label={siteContent.footerSocialLabel}>
+              {siteContent.socialLinks.map((link) => (
                 <a href={link.href} key={link.label}>{link.label}</a>
               ))}
             </nav>
@@ -38,7 +25,7 @@ export function Footer() {
         </div>
 
         <div className="footer-bottom-row">
-          <p>{copy.copyright}</p>
+          <p>{siteContent.footerCopyright}</p>
         </div>
       </div>
     </footer>

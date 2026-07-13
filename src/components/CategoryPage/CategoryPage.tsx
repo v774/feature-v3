@@ -1,8 +1,8 @@
 import { useEffect, useState, type MouseEvent } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { categories } from '../../data/categories'
-import { projects, type Project } from '../../data/projects'
+import { categories, portfolioCategories, projects, type CategoryProject as Project } from '../../content/portfolioContent'
+import { siteContent } from '../../content/siteContent'
 import { localePrefix } from '../../translations'
 import { useTranslation } from '../../translations/useTranslation'
 import { Footer } from '../Footer/footer'
@@ -26,7 +26,7 @@ const headerItemVariants = {
 export function CategoryPage() {
   const { categoryId = 'logo-animation' } = useParams()
   const navigate = useNavigate()
-  const { t, locale } = useTranslation()
+  const { locale } = useTranslation()
   const prefersReducedMotion = useReducedMotion()
   const category = categories.find((item) => item.enabled && item.slug === categoryId)
     ?? categories.find((item) => item.enabled)!
@@ -35,10 +35,10 @@ export function CategoryPage() {
   )
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
   const categoryName =
-    t.categories[category.slug as keyof typeof t.categories]
+    portfolioCategories.find((item) => item.slug === category.slug)?.label
     ?? category.slug.split('-').map((word) => word[0]?.toUpperCase() + word.slice(1)).join(' ')
   const [startCategoryTitle, setStartCategoryTitle] = useState(prefersReducedMotion)
-  const { displayed: categoryTitleText, done: categoryTitleDone } = useScrambleText(categoryName, 0, startCategoryTitle && !prefersReducedMotion)
+  const { displayed: categoryTitleText, done: categoryTitleDone } = useScrambleText(categoryName, 0, startCategoryTitle && !prefersReducedMotion, 0.25)
   const visibleCategoryTitle = prefersReducedMotion ? categoryName : categoryTitleText
   const [showCategoryCursor, setShowCategoryCursor] = useState(true)
   const [fadeCategoryCursor, setFadeCategoryCursor] = useState(false)
@@ -58,7 +58,7 @@ export function CategoryPage() {
     if (prefersReducedMotion || !categoryTitleDone) return undefined
 
     const fadeCursorId = window.setTimeout(() => setFadeCategoryCursor(true), 1000)
-    const hideCursorId = window.setTimeout(() => setShowCategoryCursor(false), 1450)
+    const hideCursorId = window.setTimeout(() => setShowCategoryCursor(false), 1750)
     return () => {
       window.clearTimeout(fadeCursorId)
       window.clearTimeout(hideCursorId)
@@ -99,14 +99,14 @@ export function CategoryPage() {
             whileTap={prefersReducedMotion ? undefined : { scale: 0.96 }}
           >
             <span className={styles.backArrow} aria-hidden="true">←</span>
-            <span className={styles.backText}>{t.common.back}</span>
+            <span className={styles.backText}>{siteContent.categoryPage.back}</span>
           </MotionLink>
           <motion.p
             className={styles.breadcrumb}
             variants={headerItemVariants}
             transition={{ duration: prefersReducedMotion ? 0 : 0.7, ease: premiumEase }}
           >
-            {t.common.work} <b>›</b> {categoryName}
+            {siteContent.categoryPage.work} <b>›</b> {categoryName}
           </motion.p>
           <AnimatePresence mode="wait">
             <motion.div
@@ -137,7 +137,7 @@ export function CategoryPage() {
           <motion.div
             className={styles.filters}
             role="tablist"
-            aria-label={t.common.categories}
+            aria-label={siteContent.categoryPage.categoriesAriaLabel}
             variants={headerItemVariants}
             transition={{ duration: prefersReducedMotion ? 0 : 0.7, ease: premiumEase }}
           >
@@ -159,7 +159,7 @@ export function CategoryPage() {
                     />
                   )}
                   <span className={styles.filterLabel}>
-                    {t.categories[filter.slug as keyof typeof t.categories]
+                    {portfolioCategories.find((item) => item.slug === filter.slug)?.label
                       ?? filter.slug.split('-').map((word) => word[0]?.toUpperCase() + word.slice(1)).join(' ')}
                   </span>
                 </Link>
@@ -170,7 +170,7 @@ export function CategoryPage() {
         <AnimatePresence mode="wait">
           <motion.section
             className="category-project-grid"
-            aria-label={`${categoryName} ${t.common.projects}`}
+            aria-label={`${categoryName} ${siteContent.categoryPage.projects}`}
             key={category.slug}
             initial={prefersReducedMotion ? false : { opacity: 0, y: 18, scale: 0.985 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}

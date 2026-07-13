@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type MouseEvent } from 'react'
-import type { Project } from '../../data/projects'
+import type { CategoryProject as Project } from '../../content/portfolioContent'
+import { siteContent } from '../../content/siteContent'
 import styles from './ProjectModal.module.css'
-import { useTranslation } from '../../translations/useTranslation'
 
 type ProjectModalProps = { project: Project | null; onClose: () => void }
 
@@ -12,7 +12,7 @@ function MetaIcon({ type }: { type: 'format' | 'software' | 'delivery' }) {
 }
 
 export function ProjectModal({ project, onClose }: ProjectModalProps) {
-  const { t } = useTranslation()
+  const labels = siteContent.modalLabels
   const videoRef = useRef<HTMLVideoElement>(null)
   const [isPaused, setIsPaused] = useState(false)
   useEffect(() => {
@@ -59,7 +59,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
 
   return <div className={styles.overlay} role="dialog" aria-modal="true" aria-labelledby="project-modal-title" onClick={onClose}>
     <div className={styles.modal} onClick={stopPropagation}>
-      <button className={styles.close} type="button" onClick={onClose} aria-label={t.common.closeProject}><span /><span /></button>
+      <button className={styles.close} type="button" onClick={onClose} aria-label={labels.closeProject}><span /><span /></button>
       <div className={styles.videoContainer}>
         <video ref={videoRef} className={styles.video} src={project.videoPath} controls autoPlay playsInline onError={handleVideoError} />
         <div className={styles.pauseOverlay} onClick={handlePlaybackOverlayClick} role="presentation">
@@ -69,13 +69,13 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
         </div>
       </div>
       <div className={styles.details}>
-        <p className={styles.eyebrow}><span aria-hidden="true">◆</span> {t.common.selectedWork}</p>
+        <p className={styles.eyebrow}><span aria-hidden="true">◆</span> {labels.selectedWork}</p>
         <h2 id="project-modal-title">{project.title}</h2>
         <p className={styles.description}>{project.description}</p>
         <div className={styles.meta}>
-          <span className={styles.metaItem}><b><MetaIcon type="format" />{t.modal.format}</b><strong>{project.format}</strong></span>
-          <span className={styles.metaItem}><b><MetaIcon type="software" />{t.modal.software}</b><strong>{project.software.split(',').map((tool) => <span className={styles.valueLine} key={tool}>{tool.trim()}</span>)}</strong></span>
-          <span className={styles.metaItem}><b><MetaIcon type="delivery" />{t.modal.delivery}</b><strong>{project.delivery}</strong></span>
+          <span className={styles.metaItem}><b><MetaIcon type="format" />{labels.format}</b><strong>{project.format}</strong></span>
+          <span className={styles.metaItem}><b><MetaIcon type="software" />{labels.software}</b><strong>{project.software.split(',').map((tool) => <span className={styles.valueLine} key={tool}>{tool.trim()}</span>)}</strong></span>
+          <span className={styles.metaItem}><b><MetaIcon type="delivery" />{labels.delivery}</b><strong>{project.delivery}</strong></span>
         </div>
       </div>
     </div>

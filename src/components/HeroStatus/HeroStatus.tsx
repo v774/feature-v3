@@ -1,15 +1,10 @@
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
+import { siteContent } from "../../content/siteContent";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 import "./HeroStatus.css";
 
-const statusPhrases = [
-  "VL MOTION",
-  "MOTION DESIGNER",
-  "AVAILABLE WORLDWIDE",
-  "NEW PROJECTS OPEN",
-  "READY_",
-];
+const statusPhrases = siteContent.heroStatusPhrases;
 
 export function HeroStatus() {
   const prefersReducedMotion = useReducedMotion();

@@ -1,11 +1,12 @@
 import { motion } from "motion/react";
-import { services } from "../../data/servicesData";
+import { homepageContent } from "../../content/homepageContent";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { premiumEase, repeatableViewport } from "../../utils/motionConfig";
 import "./ServicesSection.css";
 
 export function ServicesSection() {
   const prefersReducedMotion = useReducedMotion();
+  const services = homepageContent.services.items;
   const headingInitial = prefersReducedMotion ? false : { opacity: 0, y: 50, scale: 0.96 };
   const headingVisible = { opacity: 1, y: 0, scale: 1 };
 
@@ -19,7 +20,7 @@ export function ServicesSection() {
           viewport={repeatableViewport}
           transition={{ duration: prefersReducedMotion ? 0 : 0.8, ease: premiumEase }}
         >
-          Services
+          {homepageContent.services.heading}
         </motion.h2>
         <div className="services-list">
           {services.map((service, index) => {

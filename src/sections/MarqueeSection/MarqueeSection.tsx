@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef } from "react";
 import { Link } from "react-router-dom";
-import { marqueeProjects, type MarqueeProject } from "../../data/marqueeProjects";
+import { homepageContent } from "../../content/homepageContent";
+import { marqueeProjects, type MarqueeProject } from "../../content/portfolioContent";
 import "./MarqueeSection.css";
 
 const repeatCount = 8;
@@ -73,7 +74,7 @@ export function MarqueeSection() {
   }, []);
 
   return (
-    <section className="marquee-section" ref={sectionRef} aria-label="Selected visual work">
+    <section className="marquee-section" ref={sectionRef} aria-label={homepageContent.marquee.ariaLabel}>
       <div className="marquee-rows">
         <div className="marquee-row" ref={firstRowRef}>
           {rows[0].map((project, index) => (

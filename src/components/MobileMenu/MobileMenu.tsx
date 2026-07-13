@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 import { AnimatePresence, motion } from "motion/react";
+import { homepageContent } from "../../content/homepageContent";
+import { siteContent } from "../../content/siteContent";
 import { navigationItems } from "../../data/navigationData";
 import "./MobileMenu.css";
 
@@ -40,14 +42,14 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
         >
-          <nav className="mobile-menu-nav" aria-label="Mobile navigation">
+          <nav className="mobile-menu-nav" aria-label={siteContent.sectionNavigationAriaLabel}>
             {navigationItems.map((item) => (
               <a className="mobile-menu-link" href={item.href} key={item.label} onClick={onClose}>
                 {item.label}
               </a>
             ))}
             <a className="mobile-menu-contact" href="/" onClick={onClose}>
-              View work
+              {homepageContent.hero.primaryCta}
             </a>
           </nav>
         </motion.div>

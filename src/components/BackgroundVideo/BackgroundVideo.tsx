@@ -1,10 +1,11 @@
 import { useRef, useState } from "react";
 import { useVideoScrubbing } from "../../hooks/useVideoScrubbing";
-import { heroData } from "../../data/heroData";
+import { homepageContent } from "../../content/homepageContent";
 import "./BackgroundVideo.css";
 
 export function BackgroundVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const heroData = homepageContent.hero;
   const [videoSrc, setVideoSrc] = useState(heroData.localVideoSrc);
   useVideoScrubbing(videoRef);
 

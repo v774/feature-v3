@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { homepageContent } from "../../content/homepageContent";
+import { siteContent } from "../../content/siteContent";
 import { navigationItems } from "../../data/navigationData";
 import { MobileMenu } from "../MobileMenu/MobileMenu";
 import "./Navbar.css";
@@ -21,12 +23,12 @@ export function Navbar() {
   return (
     <>
       <header className="navbar">
-        <a className="navbar-logo" href="/" aria-label="VL Motion home">
-          <span className="navbar-logo-text">VL Motion</span>
-          <span className="navbar-logo-mark">Motion Designer</span>
+        <a className="navbar-logo" href="/" aria-label={siteContent.homeAriaLabel}>
+          <span className="navbar-logo-text">{siteContent.brandName}</span>
+          <span className="navbar-logo-mark">{homepageContent.hero.kicker}</span>
         </a>
 
-        <nav className="navbar-links" aria-label="Main navigation">
+        <nav className="navbar-links" aria-label={siteContent.navigationAriaLabel}>
           {navigationItems.map((item, index) => (
             <span className="navbar-link-group" key={item.label}>
               <a className="navbar-link" href={item.href}>
@@ -40,7 +42,7 @@ export function Navbar() {
         </nav>
 
         <a className="navbar-contact" href="/">
-          View work
+          {homepageContent.hero.primaryCta}
         </a>
 
         <button

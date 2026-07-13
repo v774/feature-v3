@@ -1,47 +1,16 @@
 import { AnimatedText } from "../../components/AnimatedText/AnimatedText";
 import { ContactButton } from "../../components/ContactButton/ContactButton";
 import { FadeIn } from "../../components/FadeIn/FadeIn";
+import { homepageContent, type AboutDecorationContent } from "../../content/homepageContent";
 import { motion, useScroll, useTransform, type MotionValue } from "motion/react";
 import { useRef } from "react";
 import "./AboutSection.css";
-
-const aboutText =
-  "With more than five years of experience in design, i focus on branding, web design, and user experience, i truly enjoy working with businesses that aim to stand out and present their best image. Let's build something incredible together!";
-
-const decorations = [
-  {
-    className: "about-decoration about-decoration-top-left",
-    src: "https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/moon_icon.11395d36.png",
-    spreadX: -180,
-    spreadY: -120,
-  },
-  {
-    className: "about-decoration about-decoration-bottom-left",
-    src: "https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/p59_1.4659672e.png",
-    spreadX: -170,
-    spreadY: 130,
-  },
-  {
-    className: "about-decoration about-decoration-top-right",
-    src: "https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/lego_icon-1.703bb594.png",
-    spreadX: 180,
-    spreadY: -120,
-  },
-  {
-    className: "about-decoration about-decoration-bottom-right",
-    src: "https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/Group_134-1.2e04f3ce.png",
-    spreadX: 170,
-    spreadY: 130,
-  },
-];
-
-type AboutDecorationData = (typeof decorations)[number];
 
 function AboutDecoration({
   decoration,
   scrollProgress,
 }: {
-  decoration: AboutDecorationData;
+  decoration: AboutDecorationContent;
   scrollProgress: MotionValue<number>;
 }) {
   const x = useTransform(scrollProgress, [0, 0.34, 0.66, 1], [decoration.spreadX, 0, 0, decoration.spreadX]);
@@ -65,7 +34,7 @@ export function AboutSection() {
 
   return (
     <section id="about" className="about-section" ref={sectionRef}>
-      {decorations.map((decoration) => (
+      {homepageContent.about.decorations.map((decoration) => (
         <AboutDecoration
           key={decoration.src}
           decoration={decoration}
@@ -74,9 +43,9 @@ export function AboutSection() {
       ))}
       <div className="about-content">
         <FadeIn>
-          <h2 className="about-heading gradient-heading">About me</h2>
+          <h2 className="about-heading gradient-heading">{homepageContent.about.heading}</h2>
         </FadeIn>
-        <AnimatedText text={aboutText} className="about-text" />
+        <AnimatedText text={homepageContent.about.text} className="about-text" />
         <div className="about-button-row">
           <ContactButton />
         </div>
