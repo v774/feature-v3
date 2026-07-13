@@ -56,7 +56,12 @@ export function useVideoScrubbing(videoRef: RefObject<HTMLVideoElement | null>) 
     };
 
     const playBackward = () => {
+      if (desktopQuery.matches || reducedMotionQuery.matches) return;
       video.pause();
+      video.loop = false;
+      if (Number.isFinite(video.duration) && video.duration > 0) {
+        video.currentTime = clampTime(Math.min(video.currentTime || video.duration, video.duration - 0.03));
+      }
       reversePlayingRef.current = true;
       reversePreviousTimeRef.current = 0;
       reverseFrameRef.current = window.requestAnimationFrame(stepReverse);
@@ -157,8 +162,17 @@ export function useVideoScrubbing(videoRef: RefObject<HTMLVideoElement | null>) 
       playBackward();
     };
 
+    const onTimeUpdate = () => {
+      if (desktopQuery.matches || reducedMotionQuery.matches || reversePlayingRef.current) return;
+      const duration = Number.isFinite(video.duration) ? video.duration : 0;
+      if (duration > 0 && video.currentTime >= duration - 0.04) {
+        playBackward();
+      }
+    };
+
     applyMode();
     video.addEventListener("ended", onEnded);
+    video.addEventListener("timeupdate", onTimeUpdate);
     video.addEventListener("loadedmetadata", applyMode);
     window.addEventListener("mousemove", onMouseMove);
     desktopQuery.addEventListener("change", applyMode);
@@ -166,6 +180,7 @@ export function useVideoScrubbing(videoRef: RefObject<HTMLVideoElement | null>) 
 
     return () => {
       video.removeEventListener("ended", onEnded);
+      video.removeEventListener("timeupdate", onTimeUpdate);
       video.removeEventListener("loadedmetadata", applyMode);
       window.removeEventListener("mousemove", onMouseMove);
       desktopQuery.removeEventListener("change", applyMode);
