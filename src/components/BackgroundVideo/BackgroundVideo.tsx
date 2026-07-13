@@ -16,7 +16,6 @@ export function BackgroundVideo() {
         playsInline
         preload="auto"
         className="background-video-media"
-        loop
         src={heroData.localVideoSrc}
       />
     </div>

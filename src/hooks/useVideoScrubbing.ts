@@ -15,11 +15,11 @@ export function useVideoScrubbing(videoRef: RefObject<HTMLVideoElement | null>) 
     const reversePreviousTimeRef = { current: 0 };
     const reversePlayingRef = { current: false };
     const directionRef = { current: "forward" as "forward" | "backward" };
-    const pingPongHoldTimeoutRef = { current: 0 };
     const hasCursorTargetRef = { current: false };
     const minSeekDelta = 0.018;
     const interpolationStrength = 0.72;
-    const edgeHoldMs = 90;
+    const edgeTime = 0.04;
+    const reverseSpeed = 1;
 
     const clampTime = (time: number) => {
       const duration = Number.isFinite(video.duration) ? video.duration : 0;
@@ -28,10 +28,6 @@ export function useVideoScrubbing(videoRef: RefObject<HTMLVideoElement | null>) 
 
     const stopReversePlayback = () => {
       reversePlayingRef.current = false;
-      if (pingPongHoldTimeoutRef.current) {
-        window.clearTimeout(pingPongHoldTimeoutRef.current);
-        pingPongHoldTimeoutRef.current = 0;
-      }
       if (reverseFrameRef.current) {
         window.cancelAnimationFrame(reverseFrameRef.current);
         reverseFrameRef.current = 0;
@@ -51,13 +47,13 @@ export function useVideoScrubbing(videoRef: RefObject<HTMLVideoElement | null>) 
 
       const elapsedSeconds = (timestamp - reversePreviousTimeRef.current) / 1000;
       reversePreviousTimeRef.current = timestamp;
-      video.currentTime = clampTime((video.currentTime || 0) - elapsedSeconds);
+      video.currentTime = Math.max(edgeTime, (video.currentTime || 0) - elapsedSeconds * reverseSpeed);
 
-      if (video.currentTime <= 0.02) {
-        video.currentTime = 0.02;
+      if (video.currentTime <= edgeTime) {
+        video.currentTime = edgeTime;
         reversePreviousTimeRef.current = 0;
         reversePlayingRef.current = false;
-        pingPongHoldTimeoutRef.current = window.setTimeout(playForward, edgeHoldMs);
+        playForward();
         return;
       }
 
@@ -73,10 +69,7 @@ export function useVideoScrubbing(videoRef: RefObject<HTMLVideoElement | null>) 
       directionRef.current = "backward";
       reversePlayingRef.current = true;
       reversePreviousTimeRef.current = 0;
-      pingPongHoldTimeoutRef.current = window.setTimeout(() => {
-        pingPongHoldTimeoutRef.current = 0;
-        reverseFrameRef.current = window.requestAnimationFrame(stepReverse);
-      }, edgeHoldMs);
+      reverseFrameRef.current = window.requestAnimationFrame(stepReverse);
     };
 
     const stopScrubbing = () => {
@@ -141,7 +134,7 @@ export function useVideoScrubbing(videoRef: RefObject<HTMLVideoElement | null>) 
       } else {
         video.autoplay = true;
         const duration = Number.isFinite(video.duration) ? video.duration : 0;
-        if (duration > 0 && video.currentTime >= duration - 0.02) {
+        if (duration > 0 && video.currentTime >= duration - edgeTime) {
           playBackward();
           return;
         }
@@ -177,8 +170,18 @@ export function useVideoScrubbing(videoRef: RefObject<HTMLVideoElement | null>) 
       playBackward();
     };
 
+    const onTimeUpdate = () => {
+      if (desktopQuery.matches || reducedMotionQuery.matches || directionRef.current !== "forward") return;
+      const duration = Number.isFinite(video.duration) ? video.duration : 0;
+      if (duration > 0 && video.currentTime >= duration - edgeTime) {
+        video.pause();
+        playBackward();
+      }
+    };
+
     applyMode();
     video.addEventListener("ended", onEnded);
+    video.addEventListener("timeupdate", onTimeUpdate);
     video.addEventListener("loadedmetadata", applyMode);
     window.addEventListener("mousemove", onMouseMove);
     desktopQuery.addEventListener("change", applyMode);
@@ -186,6 +189,7 @@ export function useVideoScrubbing(videoRef: RefObject<HTMLVideoElement | null>) 
 
     return () => {
       video.removeEventListener("ended", onEnded);
+      video.removeEventListener("timeupdate", onTimeUpdate);
       video.removeEventListener("loadedmetadata", applyMode);
       window.removeEventListener("mousemove", onMouseMove);
       desktopQuery.removeEventListener("change", applyMode);
