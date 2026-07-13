@@ -37,28 +37,27 @@ export function CategoryPage() {
   const categoryName =
     portfolioCategories.find((item) => item.slug === category.slug)?.label
     ?? category.slug.split('-').map((word) => word[0]?.toUpperCase() + word.slice(1)).join(' ')
-  const [startCategoryTitle, setStartCategoryTitle] = useState(prefersReducedMotion)
+  const [categoryTitleStart, setCategoryTitleStart] = useState({ key: categoryName, started: prefersReducedMotion })
+  const startCategoryTitle = categoryTitleStart.key === categoryName ? categoryTitleStart.started : prefersReducedMotion
   const { displayed: categoryTitleText, done: categoryTitleDone } = useScrambleText(categoryName, 0, startCategoryTitle && !prefersReducedMotion, 0.25)
   const visibleCategoryTitle = prefersReducedMotion ? categoryName : categoryTitleText
-  const [showCategoryCursor, setShowCategoryCursor] = useState(true)
-  const [fadeCategoryCursor, setFadeCategoryCursor] = useState(false)
+  const [categoryCursor, setCategoryCursor] = useState({ key: categoryName, visible: true, fading: false })
+  const showCategoryCursor = categoryCursor.key === categoryName ? categoryCursor.visible : true
+  const fadeCategoryCursor = categoryCursor.key === categoryName ? categoryCursor.fading : false
   const homePath = localePrefix(locale) || '/'
 
   useEffect(() => {
-    setStartCategoryTitle(prefersReducedMotion)
     if (prefersReducedMotion) return undefined
 
-    const startTitleId = window.setTimeout(() => setStartCategoryTitle(true), 820)
+    const startTitleId = window.setTimeout(() => setCategoryTitleStart({ key: categoryName, started: true }), 820)
     return () => window.clearTimeout(startTitleId)
   }, [categoryName, prefersReducedMotion])
 
   useEffect(() => {
-    setShowCategoryCursor(true)
-    setFadeCategoryCursor(false)
     if (prefersReducedMotion || !categoryTitleDone) return undefined
 
-    const fadeCursorId = window.setTimeout(() => setFadeCategoryCursor(true), 1000)
-    const hideCursorId = window.setTimeout(() => setShowCategoryCursor(false), 1750)
+    const fadeCursorId = window.setTimeout(() => setCategoryCursor({ key: categoryName, visible: true, fading: true }), 1000)
+    const hideCursorId = window.setTimeout(() => setCategoryCursor({ key: categoryName, visible: false, fading: true }), 1750)
     return () => {
       window.clearTimeout(fadeCursorId)
       window.clearTimeout(hideCursorId)

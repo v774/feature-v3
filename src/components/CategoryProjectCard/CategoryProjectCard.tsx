@@ -20,11 +20,13 @@ export function CategoryProjectCard({ project, index, onWatch }: ProjectCardProp
   const [isDesktop, setIsDesktop] = useState(() => typeof window !== 'undefined' && window.matchMedia('(min-width: 1025px)').matches)
   const [isPreviewing, setIsPreviewing] = useState(false)
   const [isFrozen, setIsFrozen] = useState(false)
-  const [startTitleAnimation, setStartTitleAnimation] = useState(prefersReducedMotion)
+  const [titleStart, setTitleStart] = useState({ key: project.title, started: prefersReducedMotion })
+  const startTitleAnimation = titleStart.key === project.title ? titleStart.started : prefersReducedMotion
   const { displayed: titleText, done: titleDone } = useScrambleText(project.title, 0, startTitleAnimation && !prefersReducedMotion, 0.25)
   const visibleTitle = prefersReducedMotion ? project.title : titleText
-  const [showTitleCursor, setShowTitleCursor] = useState(true)
-  const [fadeTitleCursor, setFadeTitleCursor] = useState(false)
+  const [titleCursor, setTitleCursor] = useState({ key: project.title, visible: true, fading: false })
+  const showTitleCursor = titleCursor.key === project.title ? titleCursor.visible : true
+  const fadeTitleCursor = titleCursor.key === project.title ? titleCursor.fading : false
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(min-width: 1025px)')
@@ -54,20 +56,17 @@ export function CategoryProjectCard({ project, index, onWatch }: ProjectCardProp
   }, [])
 
   useEffect(() => {
-    setStartTitleAnimation(prefersReducedMotion)
     if (prefersReducedMotion) return undefined
 
-    const startTitleId = window.setTimeout(() => setStartTitleAnimation(true), 1040 + index * 120)
+    const startTitleId = window.setTimeout(() => setTitleStart({ key: project.title, started: true }), 1040 + index * 120)
     return () => window.clearTimeout(startTitleId)
   }, [index, prefersReducedMotion, project.title])
 
   useEffect(() => {
-    setShowTitleCursor(true)
-    setFadeTitleCursor(false)
     if (prefersReducedMotion || !titleDone) return undefined
 
-    const fadeCursorId = window.setTimeout(() => setFadeTitleCursor(true), 1000)
-    const hideCursorId = window.setTimeout(() => setShowTitleCursor(false), 1750)
+    const fadeCursorId = window.setTimeout(() => setTitleCursor({ key: project.title, visible: true, fading: true }), 1000)
+    const hideCursorId = window.setTimeout(() => setTitleCursor({ key: project.title, visible: false, fading: true }), 1750)
     return () => {
       window.clearTimeout(fadeCursorId)
       window.clearTimeout(hideCursorId)

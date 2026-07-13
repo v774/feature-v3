@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { useVideoScrubbing } from "../../hooks/useVideoScrubbing";
 import { homepageContent } from "../../content/homepageContent";
 import "./BackgroundVideo.css";
@@ -6,7 +6,6 @@ import "./BackgroundVideo.css";
 export function BackgroundVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const heroData = homepageContent.hero;
-  const [videoSrc, setVideoSrc] = useState(heroData.localVideoSrc);
   useVideoScrubbing(videoRef);
 
   return (
@@ -18,12 +17,7 @@ export function BackgroundVideo() {
         preload="auto"
         className="background-video-media"
         loop
-        src={videoSrc}
-        onError={() => {
-          if (videoSrc !== heroData.fallbackVideoSrc) {
-            setVideoSrc(heroData.fallbackVideoSrc);
-          }
-        }}
+        src={heroData.localVideoSrc}
       />
     </div>
   );

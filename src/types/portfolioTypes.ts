@@ -22,9 +22,3 @@ export type Project = {
   href: string;
   images: ProjectImages;
 };
-
-export type ServicePillProps = {
-  label: string;
-  active: boolean;
-  onClick: () => void;
-};

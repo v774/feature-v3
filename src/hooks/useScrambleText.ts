@@ -5,13 +5,11 @@ const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567
 const randomCharacter = () => characters[Math.floor(Math.random() * characters.length)] ?? "";
 
 export function useScrambleText(text: string, delay = 0, triggered = true, revealStep = 0.5) {
-  const [displayed, setDisplayed] = useState("");
-  const [done, setDone] = useState(false);
+  const [state, setState] = useState({ text: "", displayed: "", done: false });
+  const displayed = triggered && state.text === text ? state.displayed : "";
+  const done = triggered && state.text === text ? state.done : false;
 
   useEffect(() => {
-    setDisplayed("");
-    setDone(false);
-
     if (!triggered) {
       return undefined;
     }
@@ -20,6 +18,7 @@ export function useScrambleText(text: string, delay = 0, triggered = true, revea
     let revealPosition = 0;
 
     const delayId = window.setTimeout(() => {
+      setState({ text, displayed: "", done: false });
       intervalId = window.setInterval(() => {
         revealPosition += revealStep;
         const next = text
@@ -32,12 +31,11 @@ export function useScrambleText(text: string, delay = 0, triggered = true, revea
           })
           .join("");
 
-        setDisplayed(next);
+        setState({ text, displayed: next, done: false });
 
         if (revealPosition >= text.length) {
           if (intervalId !== undefined) window.clearInterval(intervalId);
-          setDisplayed(text);
-          setDone(true);
+          setState({ text, displayed: text, done: true });
         }
       }, 25);
     }, delay);

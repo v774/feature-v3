@@ -1,5 +1,7 @@
 import { siteContent } from "./siteContent";
 
+const heroVideoSrc = new URL("../assets/videos/hero/neon-llama.mp4", import.meta.url).href;
+
 export interface ServiceContent {
   number: string;
   title: string;
@@ -25,7 +27,6 @@ export interface HomepageContent {
     location: string;
     highlights: string[];
     localVideoSrc: string;
-    fallbackVideoSrc: string;
     watermark: string;
     highlightsAriaLabel: string;
   };
@@ -59,9 +60,7 @@ export const homepageContent: HomepageContent = {
     availability: "Available for new projects",
     location: "Worldwide",
     highlights: ["Logo Animation", "Brand Motion", "Lottie UI"],
-    localVideoSrc: "/videos/hero/neon-llama.mp4",
-    fallbackVideoSrc:
-      "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260622_083515_290e5a10-0b95-41af-a5e2-32b6389baa4d.mp4",
+    localVideoSrc: heroVideoSrc,
     watermark: "VL MOTION",
     highlightsAriaLabel: "Portfolio highlights",
   },

@@ -16,7 +16,6 @@ export function HeroStatus() {
 
   useEffect(() => {
     if (prefersReducedMotion) {
-      setPhraseIndex(0);
       phraseIndexRef.current = 0;
       return undefined;
     }

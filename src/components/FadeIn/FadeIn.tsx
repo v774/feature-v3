@@ -1,9 +1,8 @@
-import { useMemo, type ElementType, type ReactNode } from "react";
+import { type ReactNode } from "react";
 import { motion } from "motion/react";
 import "./FadeIn.css";
 
-type FadeInProps<T extends ElementType = "div"> = {
-  as?: T;
+type FadeInProps = {
   children: ReactNode;
   delay?: number;
   duration?: number;
@@ -12,19 +11,16 @@ type FadeInProps<T extends ElementType = "div"> = {
   className?: string;
 };
 
-export function FadeIn<T extends ElementType = "div">({
-  as,
+export function FadeIn({
   children,
   delay = 0,
   duration = 0.7,
   x = 0,
   y = 30,
   className,
-}: FadeInProps<T>) {
-  const MotionElement = useMemo(() => motion.create(as ?? "div"), [as]);
-
+}: FadeInProps) {
   return (
-    <MotionElement
+    <motion.div
       className={className}
       initial={{ opacity: 0, x, y }}
       whileInView={{ opacity: 1, x: 0, y: 0 }}
@@ -32,6 +28,6 @@ export function FadeIn<T extends ElementType = "div">({
       transition={{ delay, duration, ease: [0.25, 0.1, 0.25, 1] }}
     >
       {children}
-    </MotionElement>
+    </motion.div>
   );
 }
