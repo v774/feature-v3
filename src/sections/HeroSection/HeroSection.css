@@ -201,26 +201,19 @@
 }
 
 .hero-type-cursor.is-blinking {
-  animation: hero-cursor-smooth-blink 1.8s ease-in-out infinite;
+  animation: hero-cursor-blink 1.15s steps(1, end) infinite;
   will-change: opacity;
 }
 
-@keyframes hero-cursor-smooth-blink {
+@keyframes hero-cursor-blink {
   0%,
+  48% {
+    opacity: 1;
+  }
+
+  49%,
   100% {
-    opacity: 1;
-  }
-
-  35% {
-    opacity: 1;
-  }
-
-  65% {
-    opacity: 0.18;
-  }
-
-  82% {
-    opacity: 0.18;
+    opacity: 0;
   }
 }
 
