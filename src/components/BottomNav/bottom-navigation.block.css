@@ -1,0 +1,106 @@
+.bottom-navigation {
+    --bottom-navigation-background: rgb(15 15 20 / 50%);
+    --bottom-navigation-text: #a0a0a0;
+    --bottom-navigation-active-text: #ffffff;
+    --bottom-navigation-border: rgba(255, 255, 255, 0.08);
+    --bottom-navigation-active-background: rgba(54, 3, 192, 0.12);
+    --bottom-navigation-focus: rgba(255, 255, 255, 0.45);
+    --bottom-navigation-shadow: rgba(0, 0, 0, 0.3);
+
+    position: fixed;
+    /* --- ЗМІНЕНО: центрування --- */
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%) translateZ(0);
+    width: fit-content; /* Ширина тепер по контенту */
+    /* -------------------------- */
+    
+    bottom: 6px;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0px;
+    
+    padding: 8px 16px;
+    padding-bottom: calc(6px + env(safe-area-inset-bottom, 0px));
+    
+    border: 1px solid var(--bottom-navigation-border);
+    border-radius: 9999px;
+    background: var(--bottom-navigation-background);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    box-shadow: 0 8px 32px var(--bottom-navigation-shadow);
+}
+
+.bottom-navigation__item {
+    display: flex;
+    min-width: 56px;
+    padding: 7px 10px;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 4px;
+    border-radius: 9999px;
+    color: var(--bottom-navigation-text);
+    background: transparent;
+    cursor: pointer;
+    font: 400 9px/1 ui-sans-serif, system-ui, sans-serif;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.5s ease;
+}
+
+.bottom-navigation__item:focus-visible {
+    outline: 2px solid var(--bottom-navigation-focus);
+    outline-offset: 2px;
+}
+
+.bottom-navigation__item--active {
+    color: var(--bottom-navigation-active-text);
+    background: var(--bottom-navigation-active-background);
+}
+
+.bottom-navigation__icon {
+    display: grid;
+    width: 18px;
+    height: 18px;
+    place-items: center;
+}
+
+.bottom-navigation__icon svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.05;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.bottom-navigation__item--active .bottom-navigation__icon svg {
+    stroke-width: 1.25;
+}
+
+@media (hover: hover) {
+    .bottom-navigation__item:hover {
+        color: var(--bottom-navigation-active-text);
+        background: var(--bottom-navigation-active-background);
+    }
+}
+
+@media (min-width: 992px) {
+    .bottom-navigation {
+        display: none;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .bottom-navigation {
+        justify-content: space-between;
+    }
+
+    .bottom-navigation__item {
+        min-width: 0;
+        flex: 1;
+    }
+}

@@ -1,0 +1,13 @@
+.category-project-grid { display: grid; gap: 24px; width: 100%; }
+
+@media (min-width: 1025px) {
+  .category-project-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .category-project-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 767px) {
+  .category-project-grid { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,14 @@
+.animated-text {
+  position: relative;
+  white-space: normal;
+}
+
+.animated-text-placeholder {
+  visibility: hidden;
+}
+
+.animated-text-characters {
+  position: absolute;
+  inset: 0;
+  white-space: normal;
+}

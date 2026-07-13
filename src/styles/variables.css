@@ -1,0 +1,19 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Kanit:wght@300;400;500;600;700;800;900&display=swap");
+
+:root {
+  --font-interface: "Inter", sans-serif;
+  --font-display: "Kanit", sans-serif;
+
+  --color-dark: #0c0c0c;
+  --color-white: #ffffff;
+  --color-soft-text: #d7e2ea;
+  --color-green-dark: #1c2e1e;
+  --color-green-muted: #5a635a;
+  --color-green-soft: #738273;
+
+  --page-padding-mobile: 20px;
+  --page-padding-small: 32px;
+  --page-padding-desktop: 40px;
+
+  --content-max-width: 1280px;
+}

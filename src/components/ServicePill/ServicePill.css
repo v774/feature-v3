@@ -1,0 +1,40 @@
+.service-pill {
+  display: inline-flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 22px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition:
+    color 200ms ease,
+    background-color 200ms ease,
+    border-color 200ms ease,
+    box-shadow 200ms ease;
+}
+
+.service-pill--inactive {
+  border: 1px solid #f1f3f1;
+  background: #ffffff;
+  color: #1c2e1e;
+}
+
+.service-pill--inactive:hover {
+  background: rgba(241, 243, 241, 0.55);
+}
+
+.service-pill--active {
+  border: 1px solid #1c2e1e;
+  background: #1c2e1e;
+  color: #ffffff;
+  box-shadow: 0 8px 20px rgba(2, 44, 34, 0.05);
+}
+
+.service-pill-icon {
+  display: inline-flex;
+  width: 16px;
+  height: 16px;
+  align-items: center;
+  justify-content: center;
+}

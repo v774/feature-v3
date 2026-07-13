@@ -1,0 +1,90 @@
+:root {
+  --hero-bg: url('/images/hero/dark/hero.png');
+  --about-bg: url('/images/hero/dark/about.png');
+  --contact-bg: none;
+  --faq-bg: url('/images/hero/dark/faq.png');
+  --process-bg: url('/images/hero/dark/process.png');
+  --selected-work-bg: url('/images/hero/dark/selectedWork.png');
+  --testimonials-bg: url('/images/hero/dark/testimonials.png');
+
+  --bg: #0c0c0c;
+  --surface: #11141a;
+  --text-main: #ffffff;
+  --text-main-rgb: 255, 255, 255;
+  --text-sec: #a0a0a0;
+  --accent: #8b5cf6;
+  --surface-darker: #171b23;
+  --card-content-overlay: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+  --divider-color: rgba(255, 255, 255, 0.15);
+
+  --color-background: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface);
+  --color-text-primary: var(--text-main);
+  --color-text-secondary: var(--text-sec);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent);
+  --color-border: var(--divider-color);
+  --color-border-subtle: rgba(244, 247, 243, 0.07);
+  --color-overlay: rgba(0, 0, 0, 0.72);
+  --color-shadow: rgba(0, 0, 0, 0.35);
+
+  --text: var(--color-text-secondary);
+  --text-h: var(--color-text-primary);
+  --border: var(--color-border);
+  --code-bg: var(--color-surface);
+  --accent-bg: color-mix(in srgb, var(--accent) 14%, transparent);
+  --accent-border: color-mix(in srgb, var(--accent) 55%, transparent);
+  --social-bg: var(--color-surface);
+  --shadow: 0 18px 50px var(--color-shadow);
+  --bg-color: var(--color-background);
+  --surface-color: var(--color-surface);
+  --surface-raised: var(--color-surface-raised);
+  --text-primary: var(--color-text-primary);
+  --text-secondary: var(--color-text-secondary);
+  --accent-color: var(--color-accent);
+  --accent-strong: var(--color-accent-strong);
+  --border-color: var(--color-border);
+  --overlay-color: var(--color-overlay);
+  --shadow-color: var(--color-shadow);
+  --watch-button-background: rgba(255, 255, 255, 0.1);
+  --watch-button-border: rgba(255, 255, 255, 0.2);
+  --nav-bg: rgba(15, 15, 20, 0.88);
+  --nav-text: #a0a0a0;
+  --nav-text-active: #ffffff;
+  --nav-border: rgba(255, 255, 255, 0.08);
+  --nav-item-active-bg: rgba(54, 3, 192, 0.12);
+  --nav-focus: rgba(255, 255, 255, 0.45);
+  --contact-panel-bg: rgba(17, 20, 26, 0.72);
+  --contact-panel-text: var(--text-main);
+  color: var(--color-text-primary);
+  background: var(--color-background);
+  color-scheme: dark;
+}
+
+html,
+body,
+#root,
+button,
+input,
+textarea,
+select,
+*::before,
+*::after {
+  transition: color 0.3s ease, background-color 0.3s ease,
+    border-color 0.3s ease, box-shadow 0.3s ease, fill 0.3s ease,
+    stroke 0.3s ease;
+}
+
+html,
+body {
+  color: var(--color-text-primary);
+  background: var(--color-background);
+}
+
+body,
+#root {
+  min-height: 100%;
+  color: var(--text-primary);
+  background-color: var(--bg-color);
+}

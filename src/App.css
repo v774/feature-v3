@@ -1,0 +1,12 @@
+.portfolio-page {
+  width: 100%;
+  overflow-x: clip;
+  background: #0c0c0c;
+  padding-bottom: 92px;
+}
+
+@media (min-width: 992px) {
+  .portfolio-page {
+    padding-bottom: 0;
+  }
+}

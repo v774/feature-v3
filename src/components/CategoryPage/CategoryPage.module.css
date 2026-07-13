@@ -1,0 +1,109 @@
+.page {
+  min-height: 100svh;
+  color: var(--text-primary);
+  background: radial-gradient(circle at 50% 0, rgba(112, 75, 255, .12), transparent 38%), var(--bg-color);
+  font-family: Arial, sans-serif;
+}
+
+.main {
+  width: min(calc(100% - 48px), 1200px);
+  margin: 0 auto;
+  padding: 132px 0 80px;
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border: 1px solid rgba(255, 255, 255, .15);
+  border-radius: 9999px;
+  background: #0D0D0D;
+  color: #FFFFFF;
+  font: inherit;
+  font-size: 13px;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color .18s ease, background .18s ease, transform .18s ease;
+}
+
+.back:hover,
+.back:focus-visible {
+  border-color: rgba(255, 255, 255, .35);
+  background: #171717;
+  transform: translateY(-1px);
+}
+
+.breadcrumb {
+  margin: 32px 0 10px;
+  color: var(--text-primary)8;
+  font-size: 12px;
+}
+
+.breadcrumb b {
+  margin: 0 8px;
+  color: var(--accent-color);
+}
+
+.main h1 {
+  margin: 0 0 28px;
+  color: var(--text-primary);
+  font-size: clamp(42px, 6vw, 76px);
+  font-weight: 400;
+  letter-spacing: -.05em;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 28px;
+  overflow: visible;
+  scrollbar-width: none;
+}
+
+.filters::-webkit-scrollbar {
+  display: none;
+}
+
+.filters a {
+  flex: 0 0 auto;
+  padding: 8px 20px;
+  border: 1px solid rgba(255, 255, 255, .15);
+  border-radius: 20px;
+  background: transparent;
+  color: rgba(255, 255, 255, .8);
+  font-size: 12px;
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background .18s ease, border-color .18s ease, color .18s ease, transform .18s ease;
+}
+
+.filters a:hover,
+.filters a:focus-visible {
+  border-color: rgba(255, 255, 255, .35);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.filters .active {
+  border-color: transparent;
+  background: linear-gradient(135deg, #5D5FEF, #3B3C95);
+  color: #FFFFFF;
+  box-shadow: 0 6px 18px rgba(93, 95, 239, .24);
+}
+
+@media (max-width: 880px) {
+  .filters {
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 600px) {
+  .main {
+    width: calc(100% - 40px);
+    padding-top: 112px;
+  }
+}

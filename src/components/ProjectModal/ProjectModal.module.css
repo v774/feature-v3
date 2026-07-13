@@ -1,0 +1,31 @@
+.overlay { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 24px; overflow: auto; background: rgba(3, 3, 8, .78); backdrop-filter: blur(14px); }
+.modal { position: relative; width: min(100%, 980px); overflow: hidden; border: 1px solid rgba(167, 139, 250, .22); border-radius: 22px; background: #08080b; box-shadow: 0 28px 100px rgba(0, 0, 0, .62), 0 0 60px rgba(92, 53, 190, .16); }
+.close { position: absolute; top: 12px; right: 12px; z-index: 60; display: grid; width: 32px; height: 32px; min-width: 32px; min-height: 32px; padding: 0; place-items: center; border: 1px solid rgba(255,255,255,.14); border-radius: 50%; color: #fff; background: rgba(8,8,11,.82); pointer-events: auto; opacity: .7; cursor: pointer; transition: opacity .2s ease, background .2s ease; }
+.close:hover { opacity: 1; background: rgba(255,255,255,.12); }
+.close span { position: absolute; width: 12px; height: 1px; background: currentColor; transform: rotate(45deg); }
+.close span + span { transform: rotate(-45deg); }
+.videoContainer { position: relative; z-index: 30; cursor: pointer; pointer-events: auto; }
+.video { display: block; width: 100%; aspect-ratio: 16 / 9; max-height: 64vh; background: #f5f5f3; object-fit: contain; }
+.pauseOverlay { position: absolute; inset: 0 0 56px; z-index: 30; pointer-events: auto; cursor: pointer; }
+.pauseIndicator { position: absolute; top: calc(50% + 28px); left: 50%; z-index: 40; display: grid; width: clamp(40px, 8vw, 80px); aspect-ratio: 1; min-width: 0; min-height: 0; padding: 0; place-items: center; border: 1px solid rgba(255,255,255,.15); border-radius: 50%; color: #fff; background: rgba(255,255,255,.08); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); box-shadow: 0 8px 30px rgba(0,0,0,.22); pointer-events: none; opacity: 0; transform: translate(-50%, -50%) scale(.94); transition: opacity .3s ease-in-out, transform .3s ease-in-out; }
+.pauseIndicatorVisible { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+@media (pointer: coarse) {
+  .pauseOverlay { display: none !important; pointer-events: none; }
+}
+@media (max-width: 1024px) {
+  .close { width: 40px; height: 40px; min-width: 40px; min-height: 40px; padding: 4px; }
+  .close span { width: 12px; }
+  .pauseIndicator { top: calc(50% + 28px); font-size: 14px; }
+}
+.details { padding: 30px 36px 34px; }
+.eyebrow { display: flex; align-items: center; gap: 10px; margin: 0 0 14px; color: #a78bfa; font-size: 10px; font-weight: 700; letter-spacing: .24em; }
+.eyebrow span { color: #bda7ff; font-size: 8px; }
+.details h2 { margin: 0; color: #fff; font-size: clamp(28px, 4vw, 42px); font-weight: 700; letter-spacing: -.04em; line-height: 1.1; }
+.description { margin: 13px 0 27px; color: rgba(255,255,255,.62); font-size: 14px; line-height: 1.6; }
+.meta { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; padding-top: 22px; border-top: 1px solid rgba(255,255,255,.1); }
+.metaItem { display: flex; min-width: 0; flex-direction: column; gap: 10px; }
+.metaItem b { display: flex; align-items: center; gap: 9px; color: rgba(255,255,255,.55); font-size: 10px; letter-spacing: .2em; text-transform: uppercase; }
+.metaItem b svg { width: 15px; height: 15px; fill: none; stroke: #7ea5ff; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7; }
+.metaItem strong { display: flex; flex-direction: column; gap: 7px; color: #f5f3ff; font-size: 14px; font-weight: 600; line-height: 1.3; }
+.valueLine { display: block; }
+@media (max-width: 600px) { .overlay { padding: 12px; } .details { padding: 24px 20px 26px; } .meta { gap: 16px; } .metaItem b { font-size: 8px; letter-spacing: .12em; } .metaItem strong { font-size: 12px; } }

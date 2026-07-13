@@ -1,0 +1,37 @@
+.contact-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  padding: 12px 32px;
+  border-radius: 999px;
+  background: linear-gradient(123deg, #18011f 7%, #b600a8 37%, #7621b0 72%, #be4c00 100%);
+  box-shadow:
+    0 4px 4px rgba(181, 1, 167, 0.25),
+    4px 4px 12px #7721b1 inset;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  outline: 2px solid #ffffff;
+  outline-offset: -3px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 200ms ease, filter 200ms ease;
+}
+
+.contact-button:hover {
+  filter: brightness(1.08);
+  transform: translateY(-2px);
+}
+
+@media (min-width: 640px) {
+  .contact-button {
+    padding: 14px 40px;
+  }
+}
+
+@media (min-width: 768px) {
+  .contact-button {
+    padding: 16px 48px;
+  }
+}
