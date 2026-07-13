@@ -64,11 +64,18 @@
 }
 
 .contact-section-wrapper__type-cursor.is-blinking {
-  animation: contact-type-cursor-blink 0.9s steps(2, start) infinite;
+  animation: contact-type-cursor-blink 1.15s steps(1, end) infinite;
+  will-change: opacity;
 }
 
 @keyframes contact-type-cursor-blink {
-  50% {
+  0%,
+  48% {
+    opacity: 1;
+  }
+
+  49%,
+  100% {
     opacity: 0;
   }
 }

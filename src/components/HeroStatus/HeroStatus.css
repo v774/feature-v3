@@ -39,11 +39,18 @@
   text-shadow:
     0 0 5px rgba(255, 65, 88, 0.9),
     0 0 16px rgba(255, 0, 54, 0.55);
-  animation: hero-status-cursor 0.9s steps(2, start) infinite;
+  animation: hero-status-cursor 1.15s steps(1, end) infinite;
+  will-change: opacity;
 }
 
 @keyframes hero-status-cursor {
-  50% {
+  0%,
+  48% {
+    opacity: 1;
+  }
+
+  49%,
+  100% {
     opacity: 0;
   }
 }
