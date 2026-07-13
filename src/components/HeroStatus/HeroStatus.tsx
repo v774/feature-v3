@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "motion/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 import "./HeroStatus.css";
 
@@ -14,19 +14,44 @@ const statusPhrases = [
 export function HeroStatus() {
   const prefersReducedMotion = useReducedMotion();
   const [phraseIndex, setPhraseIndex] = useState(0);
+  const phraseIndexRef = useRef(0);
+  const frameRef = useRef(0);
+  const pointerXRef = useRef(0);
   const phrase = prefersReducedMotion ? statusPhrases[0] : statusPhrases[phraseIndex];
 
   useEffect(() => {
     if (prefersReducedMotion) {
       setPhraseIndex(0);
+      phraseIndexRef.current = 0;
       return undefined;
     }
 
-    const interval = window.setInterval(() => {
-      setPhraseIndex((current) => (current + 1) % statusPhrases.length);
-    }, 1800);
+    const updatePhraseFromPointer = () => {
+      frameRef.current = 0;
+      const progress = Math.min(Math.max(pointerXRef.current / Math.max(window.innerWidth, 1), 0), 1);
+      const nextIndex = Math.min(statusPhrases.length - 1, Math.floor(progress * statusPhrases.length));
 
-    return () => window.clearInterval(interval);
+      if (nextIndex !== phraseIndexRef.current) {
+        phraseIndexRef.current = nextIndex;
+        setPhraseIndex(nextIndex);
+      }
+    };
+
+    const onMouseMove = (event: MouseEvent) => {
+      pointerXRef.current = event.clientX;
+      if (!frameRef.current) {
+        frameRef.current = window.requestAnimationFrame(updatePhraseFromPointer);
+      }
+    };
+
+    window.addEventListener("mousemove", onMouseMove, { passive: true });
+
+    return () => {
+      window.removeEventListener("mousemove", onMouseMove);
+      if (frameRef.current) {
+        window.cancelAnimationFrame(frameRef.current);
+      }
+    };
   }, [prefersReducedMotion]);
 
   return (
