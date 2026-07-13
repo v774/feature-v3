@@ -12,6 +12,7 @@ export function HeroStatus() {
   const phraseIndexRef = useRef(0);
   const frameRef = useRef(0);
   const pointerXRef = useRef(0);
+  const autoCycleRef = useRef(0);
   const phrase = prefersReducedMotion ? statusPhrases[0] : statusPhrases[phraseIndex];
 
   useEffect(() => {
@@ -20,28 +21,61 @@ export function HeroStatus() {
       return undefined;
     }
 
-    const updatePhraseFromPointer = () => {
-      frameRef.current = 0;
-      const progress = Math.min(Math.max(pointerXRef.current / Math.max(window.innerWidth, 1), 0), 1);
-      const nextIndex = Math.min(statusPhrases.length - 1, Math.floor(progress * statusPhrases.length));
+    const mobileQuery = window.matchMedia("(max-width: 1023.98px)");
 
+    const setPhrase = (nextIndex: number) => {
       if (nextIndex !== phraseIndexRef.current) {
         phraseIndexRef.current = nextIndex;
         setPhraseIndex(nextIndex);
       }
     };
 
+    const stopAutoCycle = () => {
+      if (autoCycleRef.current) {
+        window.clearInterval(autoCycleRef.current);
+        autoCycleRef.current = 0;
+      }
+    };
+
+    const startAutoCycle = () => {
+      stopAutoCycle();
+      autoCycleRef.current = window.setInterval(() => {
+        setPhrase((phraseIndexRef.current + 1) % statusPhrases.length);
+      }, 1800);
+    };
+
+    const updatePhraseFromPointer = () => {
+      frameRef.current = 0;
+      const progress = Math.min(Math.max(pointerXRef.current / Math.max(window.innerWidth, 1), 0), 1);
+      const nextIndex = Math.min(statusPhrases.length - 1, Math.floor(progress * statusPhrases.length));
+
+      setPhrase(nextIndex);
+    };
+
     const onMouseMove = (event: MouseEvent) => {
+      if (mobileQuery.matches) return;
       pointerXRef.current = event.clientX;
       if (!frameRef.current) {
         frameRef.current = window.requestAnimationFrame(updatePhraseFromPointer);
       }
     };
 
+    const applyMode = () => {
+      if (mobileQuery.matches) {
+        startAutoCycle();
+      } else {
+        stopAutoCycle();
+      }
+    };
+
+    applyMode();
     window.addEventListener("mousemove", onMouseMove, { passive: true });
+    mobileQuery.addEventListener("change", applyMode);
 
     return () => {
       window.removeEventListener("mousemove", onMouseMove);
+      mobileQuery.removeEventListener("change", applyMode);
+      stopAutoCycle();
       if (frameRef.current) {
         window.cancelAnimationFrame(frameRef.current);
       }
