@@ -1,7 +1,7 @@
 .marquee-section {
   overflow: hidden;
   background: #0c0c0c;
-  padding: 96px 0 40px;
+  padding: 40px 0 40px;
   font-family: var(--font-display);
 }
 
@@ -35,7 +35,7 @@
 
 @media (min-width: 640px) {
   .marquee-section {
-    padding-top: 128px;
+    padding-top: 56px;
   }
 
   .marquee-tile {
@@ -47,6 +47,6 @@
 
 @media (min-width: 768px) {
   .marquee-section {
-    padding-top: 160px;
+    padding-top: 72px;
   }
 }
