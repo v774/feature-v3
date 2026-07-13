@@ -14,9 +14,12 @@ export function useVideoScrubbing(videoRef: RefObject<HTMLVideoElement | null>) 
     const reverseFrameRef = { current: 0 };
     const reversePreviousTimeRef = { current: 0 };
     const reversePlayingRef = { current: false };
+    const directionRef = { current: "forward" as "forward" | "backward" };
+    const pingPongHoldTimeoutRef = { current: 0 };
     const hasCursorTargetRef = { current: false };
     const minSeekDelta = 0.018;
     const interpolationStrength = 0.72;
+    const edgeHoldMs = 90;
 
     const clampTime = (time: number) => {
       const duration = Number.isFinite(video.duration) ? video.duration : 0;
@@ -25,6 +28,10 @@ export function useVideoScrubbing(videoRef: RefObject<HTMLVideoElement | null>) 
 
     const stopReversePlayback = () => {
       reversePlayingRef.current = false;
+      if (pingPongHoldTimeoutRef.current) {
+        window.clearTimeout(pingPongHoldTimeoutRef.current);
+        pingPongHoldTimeoutRef.current = 0;
+      }
       if (reverseFrameRef.current) {
         window.cancelAnimationFrame(reverseFrameRef.current);
         reverseFrameRef.current = 0;
@@ -33,6 +40,7 @@ export function useVideoScrubbing(videoRef: RefObject<HTMLVideoElement | null>) 
 
     const playForward = () => {
       stopReversePlayback();
+      directionRef.current = "forward";
       video.playbackRate = 1;
       video.play().catch(() => {});
     };
@@ -45,10 +53,11 @@ export function useVideoScrubbing(videoRef: RefObject<HTMLVideoElement | null>) 
       reversePreviousTimeRef.current = timestamp;
       video.currentTime = clampTime((video.currentTime || 0) - elapsedSeconds);
 
-      if (video.currentTime <= 0.03) {
-        video.currentTime = 0;
+      if (video.currentTime <= 0.02) {
+        video.currentTime = 0.02;
         reversePreviousTimeRef.current = 0;
-        playForward();
+        reversePlayingRef.current = false;
+        pingPongHoldTimeoutRef.current = window.setTimeout(playForward, edgeHoldMs);
         return;
       }
 
@@ -57,14 +66,17 @@ export function useVideoScrubbing(videoRef: RefObject<HTMLVideoElement | null>) 
 
     const playBackward = () => {
       if (desktopQuery.matches || reducedMotionQuery.matches) return;
+      if (directionRef.current === "backward" || reversePlayingRef.current) return;
+
       video.pause();
       video.loop = false;
-      if (Number.isFinite(video.duration) && video.duration > 0) {
-        video.currentTime = clampTime(Math.min(video.currentTime || video.duration, video.duration - 0.03));
-      }
+      directionRef.current = "backward";
       reversePlayingRef.current = true;
       reversePreviousTimeRef.current = 0;
-      reverseFrameRef.current = window.requestAnimationFrame(stepReverse);
+      pingPongHoldTimeoutRef.current = window.setTimeout(() => {
+        pingPongHoldTimeoutRef.current = 0;
+        reverseFrameRef.current = window.requestAnimationFrame(stepReverse);
+      }, edgeHoldMs);
     };
 
     const stopScrubbing = () => {
@@ -114,6 +126,7 @@ export function useVideoScrubbing(videoRef: RefObject<HTMLVideoElement | null>) 
       targetTimeRef.current = video.currentTime || 0;
       stopScrubbing();
       stopReversePlayback();
+      directionRef.current = "forward";
       video.loop = false;
 
       if (reducedMotionQuery.matches) {
@@ -127,8 +140,10 @@ export function useVideoScrubbing(videoRef: RefObject<HTMLVideoElement | null>) 
         video.pause();
       } else {
         video.autoplay = true;
-        if (video.currentTime >= (video.duration || 0) - 0.03) {
-          video.currentTime = 0;
+        const duration = Number.isFinite(video.duration) ? video.duration : 0;
+        if (duration > 0 && video.currentTime >= duration - 0.02) {
+          playBackward();
+          return;
         }
         playForward();
       }
@@ -162,17 +177,8 @@ export function useVideoScrubbing(videoRef: RefObject<HTMLVideoElement | null>) 
       playBackward();
     };
 
-    const onTimeUpdate = () => {
-      if (desktopQuery.matches || reducedMotionQuery.matches || reversePlayingRef.current) return;
-      const duration = Number.isFinite(video.duration) ? video.duration : 0;
-      if (duration > 0 && video.currentTime >= duration - 0.04) {
-        playBackward();
-      }
-    };
-
     applyMode();
     video.addEventListener("ended", onEnded);
-    video.addEventListener("timeupdate", onTimeUpdate);
     video.addEventListener("loadedmetadata", applyMode);
     window.addEventListener("mousemove", onMouseMove);
     desktopQuery.addEventListener("change", applyMode);
@@ -180,7 +186,6 @@ export function useVideoScrubbing(videoRef: RefObject<HTMLVideoElement | null>) 
 
     return () => {
       video.removeEventListener("ended", onEnded);
-      video.removeEventListener("timeupdate", onTimeUpdate);
       video.removeEventListener("loadedmetadata", applyMode);
       window.removeEventListener("mousemove", onMouseMove);
       desktopQuery.removeEventListener("change", applyMode);
