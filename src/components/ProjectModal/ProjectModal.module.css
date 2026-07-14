@@ -19,7 +19,7 @@
 }
 
 .modalLamp {
-  margin-bottom: -74px;
+  margin-bottom: -56px;
 }
 
 .modal {
@@ -98,7 +98,7 @@
 @media (max-width: 700px) {
   .overlay { align-items: flex-start; padding: max(10px, env(safe-area-inset-top)) max(10px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left)); }
   .stage { max-height: none; }
-  .modalLamp { margin-bottom: -58px; }
+  .modalLamp { margin-bottom: -44px; }
   .close { top: 10px; right: 10px; width: 40px; height: 40px; min-width: 40px; min-height: 40px; padding: 4px; }
   .close span { width: 12px; }
   .video { max-height: 52svh; }

@@ -2,7 +2,7 @@
   position: relative;
   z-index: 1;
   width: 100%;
-  height: 220px;
+  height: 164px;
   pointer-events: none;
   overflow: visible;
 }
@@ -12,7 +12,7 @@
   left: 50%;
   bottom: 0;
   width: min(980px, 96vw);
-  height: 210px;
+  height: 156px;
   transform: translateX(-50%);
   background: radial-gradient(ellipse at center, rgba(255, 244, 214, 0.18) 0%, rgba(255, 244, 214, 0.08) 42%, transparent 72%);
   opacity: 0.72;
@@ -34,14 +34,14 @@
   top: 0;
   left: 50%;
   width: 1px;
-  height: 58px;
+  height: 42px;
   transform: translateX(-50%);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.08));
 }
 
 .gallery-lamp__body {
   position: absolute;
-  top: 54px;
+  top: 38px;
   left: 50%;
   width: 112px;
   height: 22px;
@@ -65,10 +65,10 @@
 
 .gallery-lamp__beam {
   position: absolute;
-  top: 74px;
+  top: 58px;
   left: 50%;
   width: 100%;
-  height: 146px;
+  height: 106px;
   transform: translateX(-50%);
   clip-path: polygon(43% 0, 57% 0, 100% 100%, 0 100%);
   background: linear-gradient(180deg, rgba(255, 244, 214, 0.22), rgba(255, 244, 214, 0.08) 45%, transparent 100%);
@@ -76,12 +76,12 @@
 }
 
 .gallery-lamp--modal {
-  height: 168px;
+  height: 140px;
 }
 
 .gallery-lamp--modal .gallery-lamp__ambient {
   width: min(660px, 92vw);
-  height: 160px;
+  height: 132px;
   opacity: 0.78;
 }
 
@@ -90,7 +90,7 @@
 }
 
 .gallery-lamp--modal .gallery-lamp__beam {
-  height: 104px;
+  height: 82px;
   opacity: 0.82;
 }
 
@@ -106,15 +106,15 @@
 
 @media (max-width: 480px) {
   .gallery-lamp {
-    height: 164px;
+    height: 128px;
   }
 
   .gallery-lamp__rig {
-    animation-duration: 12s;
+    animation: none;
   }
 
   .gallery-lamp__beam {
-    height: 94px;
+    height: 70px;
   }
 }
 

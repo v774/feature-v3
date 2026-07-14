@@ -39,20 +39,8 @@
   text-shadow:
     0 0 5px rgba(255, 65, 88, 0.9),
     0 0 16px rgba(255, 0, 54, 0.55);
-  animation: hero-status-cursor 1.15s steps(1, end) infinite;
+  animation: neon-type-cursor-blink 1.25s ease-in-out infinite;
   will-change: opacity;
-}
-
-@keyframes hero-status-cursor {
-  0%,
-  48% {
-    opacity: 1;
-  }
-
-  49%,
-  100% {
-    opacity: 0;
-  }
 }
 
 @media (max-width: 1023.98px) {

@@ -1,9 +1,33 @@
 import './footer.block.css'
+import { motion } from 'motion/react'
 import { siteContent } from '../../content/siteContent'
+import { useReducedMotion } from '../../hooks/useReducedMotion'
+import { useSectionAnimation } from '../../hooks/useSectionAnimation'
+import { premiumEase } from '../../utils/motionConfig'
 
 export function Footer() {
+  const prefersReducedMotion = useReducedMotion()
+  const {
+    setRef: setSectionRef,
+    controls: sectionControls,
+    initial: sectionInitial,
+  } = useSectionAnimation<HTMLElement>({
+    activationThreshold: 0.35,
+    resetThreshold: 0.06,
+  })
+
   return (
-    <footer className="footer-component-wrapper">
+    <motion.footer
+      className="footer-component-wrapper"
+      ref={setSectionRef}
+      initial={sectionInitial}
+      animate={sectionControls}
+      variants={{
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0 },
+      }}
+      transition={{ duration: prefersReducedMotion ? 0 : 0.7, ease: premiumEase }}
+    >
       <div className="footer-container">
         <div className="footer-top-row">
           <div className="footer-brand-block">
@@ -28,6 +52,6 @@ export function Footer() {
           <p>{siteContent.footerCopyright}</p>
         </div>
       </div>
-    </footer>
+    </motion.footer>
   )
 }

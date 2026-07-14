@@ -3,8 +3,9 @@ import { type FormEvent, useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { contactContent } from '../../content/contactContent'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
+import { useSectionAnimation } from '../../hooks/useSectionAnimation'
 import { useScrambleText } from '../../hooks/useScrambleText'
-import { premiumEase, repeatableViewport } from '../../utils/motionConfig'
+import { premiumEase } from '../../utils/motionConfig'
 
 declare const process: { env?: { VITE_FORM_KEY?: string } } | undefined
 
@@ -37,6 +38,11 @@ const sanitizeText = (value: string) =>
 
 export function Contact() {
   const prefersReducedMotion = useReducedMotion()
+  const {
+    setRef: setSectionRef,
+    controls: sectionControls,
+    initial: sectionInitial,
+  } = useSectionAnimation<HTMLElement>()
   const copy = contactContent
   const { displayed: headingText, done: headingDone } = useScrambleText(copy.heading, 150, !prefersReducedMotion)
   const visibleHeading = prefersReducedMotion ? copy.heading : headingText
@@ -171,19 +177,22 @@ export function Contact() {
       method="post"
       onSubmit={handleSubmit}
       initial={prefersReducedMotion ? false : { opacity: 0, x: isMobileMotion ? 0 : 50, y: isMobileMotion ? 30 : 0, scale: 0.98 }}
-      whileInView={{ opacity: 1, x: 0, y: 0, scale: 1 }}
-      viewport={repeatableViewport}
+      animate={sectionControls}
+      variants={{
+        hidden: { opacity: 0, x: isMobileMotion ? 0 : 50, y: isMobileMotion ? 30 : 0, scale: 0.98 },
+        visible: { opacity: 1, x: 0, y: 0, scale: 1 },
+      }}
       transition={{ duration: prefersReducedMotion ? 0 : 0.8, delay: prefersReducedMotion ? 0 : 0.12, ease: premiumEase }}
     >
-      <motion.label initial={fieldInitial} whileInView={fieldVisible} viewport={repeatableViewport} transition={fieldTransition(0)}>
+      <motion.label initial={fieldInitial} animate={sectionControls} variants={{ hidden: fieldInitial || {}, visible: fieldVisible }} transition={fieldTransition(0)}>
         <span>{copy.name} <b>*</b></span>
         <input type="text" name="name" placeholder={copy.name} autoComplete="name" required value={formData.name} onChange={(event) => setFormData({ ...formData, name: event.target.value })} />
       </motion.label>
-      <motion.label initial={fieldInitial} whileInView={fieldVisible} viewport={repeatableViewport} transition={fieldTransition(1)}>
+      <motion.label initial={fieldInitial} animate={sectionControls} variants={{ hidden: fieldInitial || {}, visible: fieldVisible }} transition={fieldTransition(1)}>
         <span>{copy.email} <b>*</b></span>
         <input type="email" name="email" placeholder={copy.email} autoComplete="email" required value={formData.email} onChange={(event) => setFormData({ ...formData, email: event.target.value })} />
       </motion.label>
-      <motion.div className={`contact-section-wrapper__select-field${openMenu === 'project' ? ' is-open' : ''}`} initial={fieldInitial} whileInView={fieldVisible} viewport={repeatableViewport} transition={fieldTransition(2)}>
+      <motion.div className={`contact-section-wrapper__select-field${openMenu === 'project' ? ' is-open' : ''}`} initial={fieldInitial} animate={sectionControls} variants={{ hidden: fieldInitial || {}, visible: fieldVisible }} transition={fieldTransition(2)}>
         <span>{copy.projectType}</span>
         <input type="hidden" name="projectType" value={formData.project_type} />
         <button className="contact-section-wrapper__select-trigger" type="button" aria-expanded={openMenu === 'project'} onClick={() => setOpenMenu(openMenu === 'project' ? null : 'project')}>
@@ -191,7 +200,7 @@ export function Contact() {
         </button>
         {openMenu === 'project' && <div className="contact-section-wrapper__select-menu">{copy.projectTypes.map((option) => <button type="button" key={option} onClick={() => selectOption('project', option)}>{option}</button>)}</div>}
       </motion.div>
-      <motion.div className={`contact-section-wrapper__select-field${openMenu === 'budget' ? ' is-open' : ''}`} initial={fieldInitial} whileInView={fieldVisible} viewport={repeatableViewport} transition={fieldTransition(3)}>
+      <motion.div className={`contact-section-wrapper__select-field${openMenu === 'budget' ? ' is-open' : ''}`} initial={fieldInitial} animate={sectionControls} variants={{ hidden: fieldInitial || {}, visible: fieldVisible }} transition={fieldTransition(3)}>
         <span>{copy.budget}</span>
         <input type="hidden" name="budget" value={formData.budget} />
         <button className="contact-section-wrapper__select-trigger" type="button" aria-expanded={openMenu === 'budget'} onClick={() => setOpenMenu(openMenu === 'budget' ? null : 'budget')}>
@@ -199,11 +208,23 @@ export function Contact() {
         </button>
         {openMenu === 'budget' && <div className="contact-section-wrapper__select-menu">{copy.budgets.map((option) => <button type="button" key={option} onClick={() => selectOption('budget', option)}>{option}</button>)}</div>}
       </motion.div>
-      <motion.label initial={fieldInitial} whileInView={fieldVisible} viewport={repeatableViewport} transition={fieldTransition(4)}>
+      <motion.label initial={fieldInitial} animate={sectionControls} variants={{ hidden: fieldInitial || {}, visible: fieldVisible }} transition={fieldTransition(4)}>
         <span>{copy.message} <b>*</b></span>
         <textarea ref={messageTextareaRef} className="message-textarea" name="message" placeholder={copy.message} autoComplete="off" rows={1} value={formData.message} onChange={(event) => setFormData({ ...formData, message: event.target.value })} onInput={(event) => resizeMessageTextarea(event.currentTarget)} required />
       </motion.label>
-      <motion.button className="contact-section-wrapper__submit" type="submit" disabled={isSubmitting} initial={prefersReducedMotion ? false : { opacity: 0, y: 12, scale: 0.96 }} whileInView={{ opacity: 1, y: 0, scale: 1 }} viewport={repeatableViewport} transition={{ duration: prefersReducedMotion ? 0 : 0.5, delay: prefersReducedMotion ? 0 : 0.42, ease: premiumEase }} whileTap={prefersReducedMotion ? undefined : { scale: 0.98 }}>
+      <motion.button
+        className="contact-section-wrapper__submit"
+        type="submit"
+        disabled={isSubmitting}
+        initial={prefersReducedMotion ? false : { opacity: 0, y: 12, scale: 0.96 }}
+        animate={sectionControls}
+        variants={{
+          hidden: { opacity: 0, y: 12, scale: 0.96 },
+          visible: { opacity: 1, y: 0, scale: 1 },
+        }}
+        transition={{ duration: prefersReducedMotion ? 0 : 0.5, delay: prefersReducedMotion ? 0 : 0.42, ease: premiumEase }}
+        whileTap={prefersReducedMotion ? undefined : { scale: 0.98 }}
+      >
         {isSubmitting ? copy.sending : copy.send} <span aria-hidden="true">↗</span>
       </motion.button>
       <p className="contact-section-wrapper__disclaimer">{copy.disclaimer}</p>
@@ -218,40 +239,69 @@ export function Contact() {
   )
 
   return (
-    <section className="contact-section-wrapper" id="contact" aria-labelledby="contact-title">
+    <section className="contact-section-wrapper" id="contact" aria-labelledby="contact-title" ref={setSectionRef}>
       <div className="contact-section-wrapper__container">
         <header className="contact-section-wrapper__section-header">
           <p className="contact-section-wrapper__section-eyebrow">{copy.eyebrow}</p>
-          <motion.h2 id="contact-title" initial={prefersReducedMotion ? false : { opacity: 0, y: 50, scale: 0.97 }} whileInView={{ opacity: 1, y: 0, scale: 1 }} viewport={repeatableViewport} transition={{ duration: prefersReducedMotion ? 0 : 0.8, ease: premiumEase }}>
+          <motion.h2
+            id="contact-title"
+            initial={sectionInitial}
+            animate={sectionControls}
+            variants={{
+              hidden: { opacity: 0, y: 50, scale: 0.97 },
+              visible: { opacity: 1, y: 0, scale: 1 },
+            }}
+            transition={{ duration: prefersReducedMotion ? 0 : 0.8, ease: premiumEase }}
+          >
             {visibleHeading}
             {!prefersReducedMotion && (
               <span className={`contact-section-wrapper__type-cursor${headingDone ? ' is-blinking' : ''}`} aria-hidden="true">|</span>
             )}
           </motion.h2>
-          <motion.p className="contact-section-wrapper__section-description" initial={prefersReducedMotion ? false : { opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={repeatableViewport} transition={{ duration: prefersReducedMotion ? 0 : 0.65, delay: prefersReducedMotion ? 0 : 0.1, ease: premiumEase }}>{copy.description}</motion.p>
+          <motion.p
+            className="contact-section-wrapper__section-description"
+            initial={sectionInitial}
+            animate={sectionControls}
+            variants={{
+              hidden: { opacity: 0, y: 24 },
+              visible: { opacity: 1, y: 0 },
+            }}
+            transition={{ duration: prefersReducedMotion ? 0 : 0.65, delay: prefersReducedMotion ? 0 : 0.1, ease: premiumEase }}
+          >
+            {copy.description}
+          </motion.p>
         </header>
         <div className="contact-section-wrapper__workspace">
           <div className="contact-section-wrapper__content">
             <motion.aside
               className="contact-section-wrapper__info-card"
               initial={prefersReducedMotion ? false : { opacity: 0, x: isMobileMotion ? 0 : -42, y: isMobileMotion ? 28 : 0, scale: 0.98 }}
-              whileInView={{ opacity: 1, x: 0, y: 0, scale: 1 }}
-              viewport={repeatableViewport}
+              animate={sectionControls}
+              variants={{
+                hidden: { opacity: 0, x: isMobileMotion ? 0 : -42, y: isMobileMotion ? 28 : 0, scale: 0.98 },
+                visible: { opacity: 1, x: 0, y: 0, scale: 1 },
+              }}
               transition={{ duration: prefersReducedMotion ? 0 : 0.8, delay: prefersReducedMotion ? 0 : 0.08, ease: premiumEase }}
             >
               <motion.div
                 className="contact-section-wrapper__email-block"
                 initial={prefersReducedMotion ? false : { opacity: 0, y: 18 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={repeatableViewport}
+                animate={sectionControls}
+                variants={{
+                  hidden: { opacity: 0, y: 18 },
+                  visible: { opacity: 1, y: 0 },
+                }}
                 transition={{ duration: prefersReducedMotion ? 0 : 0.58, delay: prefersReducedMotion ? 0 : 0.18, ease: premiumEase }}
               >
                 <motion.span
                   className="contact-section-wrapper__icon-box"
                   aria-hidden="true"
                   initial={prefersReducedMotion ? false : { opacity: 0, rotate: -8, scale: 0.82 }}
-                  whileInView={{ opacity: 1, rotate: 0, scale: 1 }}
-                  viewport={repeatableViewport}
+                  animate={sectionControls}
+                  variants={{
+                    hidden: { opacity: 0, rotate: -8, scale: 0.82 },
+                    visible: { opacity: 1, rotate: 0, scale: 1 },
+                  }}
                   transition={{ duration: prefersReducedMotion ? 0 : 0.52, delay: prefersReducedMotion ? 0 : 0.26, ease: premiumEase }}
                 >
                   @
@@ -265,22 +315,31 @@ export function Contact() {
                 className="contact-section-wrapper__separator"
                 aria-hidden="true"
                 initial={prefersReducedMotion ? false : { scaleX: 0, opacity: 0 }}
-                whileInView={{ scaleX: 1, opacity: 1 }}
-                viewport={repeatableViewport}
+                animate={sectionControls}
+                variants={{
+                  hidden: { scaleX: 0, opacity: 0 },
+                  visible: { scaleX: 1, opacity: 1 },
+                }}
                 transition={{ duration: prefersReducedMotion ? 0 : 0.72, delay: prefersReducedMotion ? 0 : 0.34, ease: premiumEase }}
               />
               <motion.div
                 className="contact-section-wrapper__connect"
                 initial={prefersReducedMotion ? false : { opacity: 0, y: 18 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={repeatableViewport}
+                animate={sectionControls}
+                variants={{
+                  hidden: { opacity: 0, y: 18 },
+                  visible: { opacity: 1, y: 0 },
+                }}
                 transition={{ duration: prefersReducedMotion ? 0 : 0.58, delay: prefersReducedMotion ? 0 : 0.42, ease: premiumEase }}
               >
                 <motion.p
                   className="contact-section-wrapper__card-label"
                   initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={repeatableViewport}
+                  animate={sectionControls}
+                  variants={{
+                    hidden: { opacity: 0, y: 10 },
+                    visible: { opacity: 1, y: 0 },
+                  }}
                   transition={{ duration: prefersReducedMotion ? 0 : 0.42, delay: prefersReducedMotion ? 0 : 0.5, ease: premiumEase }}
                 >
                   {copy.connect}
@@ -292,8 +351,11 @@ export function Contact() {
                       href={link.href}
                       key={link.label}
                       initial={prefersReducedMotion ? false : { opacity: 0, y: 16, scale: 0.96 }}
-                      whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                      viewport={repeatableViewport}
+                      animate={sectionControls}
+                      variants={{
+                        hidden: { opacity: 0, y: 16, scale: 0.96 },
+                        visible: { opacity: 1, y: 0, scale: 1 },
+                      }}
                       transition={{ duration: prefersReducedMotion ? 0 : 0.48, delay: prefersReducedMotion ? 0 : 0.58 + index * 0.08, ease: premiumEase }}
                     >
                       <motion.span

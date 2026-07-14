@@ -160,7 +160,7 @@
 }
 
 .titleCursor.blinking {
-  animation: category-title-cursor-blink 1.15s steps(1, end) infinite;
+  animation: neon-type-cursor-blink 1.25s ease-in-out infinite;
 }
 
 .titleCursor.fading {
@@ -170,20 +170,6 @@
   transition:
     opacity 750ms ease,
     filter 750ms ease;
-}
-
-@keyframes category-title-cursor-blink {
-  0%,
-  48% {
-    opacity: 1;
-    filter: drop-shadow(0 0 10px rgba(255, 36, 88, 0.52));
-  }
-
-  49%,
-  100% {
-    opacity: 0;
-    filter: drop-shadow(0 0 0 rgba(255, 36, 88, 0));
-  }
 }
 
 .titleMeta {
@@ -215,7 +201,7 @@
   scrollbar-width: none;
 }
 .gridLamp {
-  margin: -8px 0 8px;
+  margin: -10px 0 -4px;
 }
 
 

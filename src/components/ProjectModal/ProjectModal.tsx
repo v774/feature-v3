@@ -1,6 +1,7 @@
 ﻿import { useCallback, useEffect, useRef, useState, type MouseEvent } from 'react'
 import type { CategoryProject as Project } from '../../content/portfolioContent'
 import { siteContent } from '../../content/siteContent'
+import { useBodyScrollLock } from '../../hooks/useBodyScrollLock'
 import { GalleryLamp } from '../GalleryLamp/GalleryLamp'
 import styles from './ProjectModal.module.css'
 
@@ -20,9 +21,8 @@ export function ProjectModal({ project, onClose, returnFocusElement }: ProjectMo
   const labels = siteContent.modalLabels
   const videoRef = useRef<HTMLVideoElement>(null)
   const closeButtonRef = useRef<HTMLButtonElement>(null)
-  const scrollYRef = useRef(0)
-  const previousBodyStylesRef = useRef({ position: '', top: '', width: '', overflow: '', paddingRight: '' })
   const [isPaused, setIsPaused] = useState(false)
+  useBodyScrollLock(Boolean(project))
 
   const closeModal = useCallback(() => {
     videoRef.current?.pause()
@@ -32,22 +32,6 @@ export function ProjectModal({ project, onClose, returnFocusElement }: ProjectMo
 
   useEffect(() => {
     if (!project) return undefined
-
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
-    scrollYRef.current = window.scrollY
-    previousBodyStylesRef.current = {
-      position: document.body.style.position,
-      top: document.body.style.top,
-      width: document.body.style.width,
-      overflow: document.body.style.overflow,
-      paddingRight: document.body.style.paddingRight,
-    }
-
-    document.body.style.position = 'fixed'
-    document.body.style.top = `-${scrollYRef.current}px`
-    document.body.style.width = '100%'
-    document.body.style.overflow = 'hidden'
-    if (scrollbarWidth > 0) document.body.style.paddingRight = `${scrollbarWidth}px`
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') closeModal()
@@ -61,13 +45,6 @@ export function ProjectModal({ project, onClose, returnFocusElement }: ProjectMo
     return () => {
       document.removeEventListener('keydown', handleKeyDown)
       modalVideo?.pause()
-      const previousStyles = previousBodyStylesRef.current
-      document.body.style.position = previousStyles.position
-      document.body.style.top = previousStyles.top
-      document.body.style.width = previousStyles.width
-      document.body.style.overflow = previousStyles.overflow
-      document.body.style.paddingRight = previousStyles.paddingRight
-      window.scrollTo(0, scrollYRef.current)
     }
   }, [closeModal, project])
 

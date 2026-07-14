@@ -1,9 +1,10 @@
 ﻿import { motion, type MotionStyle, useScroll, useTransform } from "motion/react";
 import { type KeyboardEvent, useRef } from "react";
+import type { useAnimationControls } from "motion/react";
 import { useNavigate } from "react-router-dom";
 import { homepageContent } from "../../content/homepageContent";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
-import { premiumEase, repeatableViewport } from "../../utils/motionConfig";
+import { premiumEase } from "../../utils/motionConfig";
 import type { Project } from "../../types/portfolioTypes";
 import "./ProjectCard.css";
 
@@ -11,9 +12,11 @@ type ProjectCardProps = {
   project: Project;
   index: number;
   totalCards: number;
+  entranceControls: ReturnType<typeof useAnimationControls>;
+  entranceInitial: "hidden" | false;
 };
 
-export function ProjectCard({ project, index, totalCards }: ProjectCardProps) {
+export function ProjectCard({ project, index, totalCards, entranceControls, entranceInitial }: ProjectCardProps) {
   const trackRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
   const navigate = useNavigate();
@@ -49,9 +52,12 @@ export function ProjectCard({ project, index, totalCards }: ProjectCardProps) {
       >
         <motion.div
           className="project-card-surface"
-          initial={prefersReducedMotion ? false : { opacity: 0, y: 48, scale: 0.98 }}
-          whileInView={{ opacity: 1, y: 0, scale: 1 }}
-          viewport={repeatableViewport}
+          initial={entranceInitial}
+          animate={entranceControls}
+          variants={{
+            hidden: { opacity: 0, y: 48, scale: 0.98 },
+            visible: { opacity: 1, y: 0, scale: 1 },
+          }}
           transition={{ duration: prefersReducedMotion ? 0 : 0.72, delay: cardDelay, ease: premiumEase }}
         >
           <header className="project-card-header">

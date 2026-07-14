@@ -1,5 +1,8 @@
 ﻿import { type RefObject, useEffect } from "react";
 
+const DESKTOP_SCRUB_START = 0;
+const DESKTOP_SCRUB_END = 4;
+
 export function useVideoScrubbing(videoRef: RefObject<HTMLVideoElement | null>) {
   useEffect(() => {
     const video = videoRef.current;
@@ -15,9 +18,10 @@ export function useVideoScrubbing(videoRef: RefObject<HTMLVideoElement | null>) 
     const minSeekDelta = 0.018;
     const interpolationStrength = 0.72;
 
-    const clampTime = (time: number) => {
+    const clampDesktopScrubTime = (time: number) => {
       const duration = Number.isFinite(video.duration) ? video.duration : 0;
-      return Math.min(Math.max(time, 0), duration);
+      const availableDuration = Math.min(duration, DESKTOP_SCRUB_END);
+      return Math.min(Math.max(time, DESKTOP_SCRUB_START), availableDuration);
     };
 
     const stopScrubbing = () => {
@@ -41,9 +45,10 @@ export function useVideoScrubbing(videoRef: RefObject<HTMLVideoElement | null>) 
       }
 
       const currentTime = video.currentTime || 0;
-      const targetTime = clampTime(targetTimeRef.current);
+      const targetTime = clampDesktopScrubTime(targetTimeRef.current);
       const difference = targetTime - currentTime;
-      const isEdgeTarget = targetTime <= minSeekDelta || targetTime >= duration - minSeekDelta;
+      const scrubEnd = Math.min(duration, DESKTOP_SCRUB_END);
+      const isEdgeTarget = targetTime <= minSeekDelta || targetTime >= scrubEnd - minSeekDelta;
 
       if (isEdgeTarget) {
         if (Math.abs(difference) > 0.002) {
@@ -57,7 +62,7 @@ export function useVideoScrubbing(videoRef: RefObject<HTMLVideoElement | null>) 
       }
 
       if (!video.seeking) {
-        video.currentTime = clampTime(currentTime + difference * interpolationStrength);
+        video.currentTime = clampDesktopScrubTime(currentTime + difference * interpolationStrength);
       }
 
       frameRef.current = window.requestAnimationFrame(stepScrub);
@@ -97,8 +102,11 @@ export function useVideoScrubbing(videoRef: RefObject<HTMLVideoElement | null>) 
       }
 
       const viewportWidth = Math.max(window.innerWidth, 1);
-      const progress = Math.min(Math.max(event.clientX / viewportWidth, 0), 1);
-      targetTimeRef.current = progress * video.duration;
+      const normalizedX = Math.min(Math.max(event.clientX / viewportWidth, 0), 1);
+      const availableDuration = Math.min(video.duration, DESKTOP_SCRUB_END);
+      targetTimeRef.current = clampDesktopScrubTime(
+        DESKTOP_SCRUB_START + normalizedX * (availableDuration - DESKTOP_SCRUB_START),
+      );
       hasCursorTargetRef.current = true;
 
       if (!frameRef.current) {

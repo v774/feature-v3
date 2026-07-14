@@ -74,25 +74,25 @@ export const homepageContent: HomepageContent = {
     decorations: [
       {
         className: "about-decoration about-decoration-top-left",
-        src: "/images/hero/dark/about.png",
+        src: "/images/about/top-left.png",
         spreadX: -180,
         spreadY: -120,
       },
       {
         className: "about-decoration about-decoration-bottom-left",
-        src: "/images/hero/dark/process.png",
+        src: "/images/about/bottom-left.png",
         spreadX: -170,
         spreadY: 130,
       },
       {
         className: "about-decoration about-decoration-top-right",
-        src: "/images/hero/dark/selectedWork.png",
+        src: "/images/about/top-right.png",
         spreadX: 180,
         spreadY: -120,
       },
       {
         className: "about-decoration about-decoration-bottom-right",
-        src: "/images/hero/dark/contact.png",
+        src: "/images/about/bottom-right.png",
         spreadX: 170,
         spreadY: 130,
       },

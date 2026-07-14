@@ -64,20 +64,8 @@
 }
 
 .contact-section-wrapper__type-cursor.is-blinking {
-  animation: contact-type-cursor-blink 1.15s steps(1, end) infinite;
+  animation: neon-type-cursor-blink 1.25s ease-in-out infinite;
   will-change: opacity;
-}
-
-@keyframes contact-type-cursor-blink {
-  0%,
-  48% {
-    opacity: 1;
-  }
-
-  49%,
-  100% {
-    opacity: 0;
-  }
 }
 
 .contact-section-wrapper__section-description {

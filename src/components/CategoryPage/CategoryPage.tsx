@@ -12,8 +12,9 @@ import { GalleryLamp } from '../GalleryLamp/GalleryLamp'
 import { ProjectModal } from '../ProjectModal/ProjectModal'
 import { setPendingHomepageSection } from '../../utils/sectionNavigation'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
+import { useSectionAnimation } from '../../hooks/useSectionAnimation'
 import { useScrambleText } from '../../hooks/useScrambleText'
-import { premiumEase, repeatableViewport } from '../../utils/motionConfig'
+import { premiumEase } from '../../utils/motionConfig'
 import styles from './CategoryPage.module.css'
 import './category-grid.css'
 
@@ -29,6 +30,19 @@ export function CategoryPage() {
   const navigate = useNavigate()
   const { locale } = useTranslation()
   const prefersReducedMotion = useReducedMotion()
+  const {
+    setRef: setHeaderRef,
+    controls: headerControls,
+    initial: headerInitial,
+  } = useSectionAnimation<HTMLDivElement>()
+  const {
+    setRef: setGridRef,
+    controls: gridControls,
+    initial: gridInitial,
+  } = useSectionAnimation<HTMLDivElement>({
+    activationThreshold: 0.35,
+    resetThreshold: 0.06,
+  })
   const matchedCategory = categories.find((item) => item.enabled && item.slug === categoryId)
   const fallbackCategory = categories.find((item) => item.enabled)!
   const category = matchedCategory ?? fallbackCategory
@@ -121,12 +135,12 @@ export function CategoryPage() {
       <main className={styles.main}>
         <motion.div
           className={styles.headerGroup}
-          initial={prefersReducedMotion ? false : 'hidden'}
-          whileInView="visible"
-          viewport={repeatableViewport}
+          ref={setHeaderRef}
+          initial={headerInitial}
+          animate={headerControls}
           variants={{
-            hidden: {},
-            visible: { transition: { staggerChildren: 0.08 } },
+            hidden: { opacity: 0 },
+            visible: { opacity: 1, transition: { staggerChildren: 0.08 } },
           }}
         >
           <MotionLink
@@ -207,37 +221,43 @@ export function CategoryPage() {
           </motion.div>
         </motion.div>
         <GalleryLamp variant="grid" className={styles.gridLamp} />
-        <AnimatePresence mode="wait">
-          <motion.section
-            className="category-project-grid"
-            aria-label={`${categoryName} ${siteContent.categoryPage.projects}`}
-            key={category.slug}
-            initial={prefersReducedMotion ? false : { opacity: 0, y: 18, scale: 0.985 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={prefersReducedMotion ? undefined : { opacity: 0, y: -12, scale: 0.99 }}
-            transition={{ duration: prefersReducedMotion ? 0 : 0.45, ease: premiumEase }}
-          >
-            {items.map((project, index) => (
-              <CategoryProjectCard
-                project={project}
-                index={index}
-                activePreviewId={activePreviewId}
-                setActivePreviewId={setActivePreviewId}
-                onWatch={openProject}
-                key={project.id}
-              />
-            ))}
-          </motion.section>
-        </AnimatePresence>
+        <motion.div
+          ref={setGridRef}
+          initial={gridInitial}
+          animate={gridControls}
+          variants={{
+            hidden: { opacity: 0, y: 28 },
+            visible: { opacity: 1, y: 0 },
+          }}
+          transition={{ duration: prefersReducedMotion ? 0 : 0.6, ease: premiumEase }}
+        >
+          <AnimatePresence mode="wait">
+            <motion.section
+              className="category-project-grid"
+              aria-label={`${categoryName} ${siteContent.categoryPage.projects}`}
+              key={category.slug}
+              initial={prefersReducedMotion ? false : { opacity: 0, y: 18, scale: 0.985 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={prefersReducedMotion ? undefined : { opacity: 0, y: -12, scale: 0.99 }}
+              transition={{ duration: prefersReducedMotion ? 0 : 0.45, ease: premiumEase }}
+            >
+              {items.map((project, index) => (
+                <CategoryProjectCard
+                  project={project}
+                  index={index}
+                  activePreviewId={activePreviewId}
+                  setActivePreviewId={setActivePreviewId}
+                  onWatch={openProject}
+                  entranceControls={gridControls}
+                  entranceInitial={gridInitial}
+                  key={project.id}
+                />
+              ))}
+            </motion.section>
+          </AnimatePresence>
+        </motion.div>
       </main>
-      <motion.div
-        initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={repeatableViewport}
-        transition={{ duration: prefersReducedMotion ? 0 : 0.7, ease: premiumEase }}
-      >
-        <Footer />
-      </motion.div>
+      <Footer />
       <ProjectModal
         key={selectedProject?.id ?? 'closed'}
         project={selectedProject}

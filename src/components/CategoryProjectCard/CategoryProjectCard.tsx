@@ -1,5 +1,5 @@
 ﻿import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
-import { motion } from 'motion/react'
+import { motion, type useAnimationControls } from 'motion/react'
 import type { CategoryProject as Project } from '../../content/portfolioContent'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
 import { siteContent } from '../../content/siteContent'
@@ -12,9 +12,19 @@ type ProjectCardProps = {
   activePreviewId: string | null
   setActivePreviewId: (id: string | null) => void
   onWatch: (project: Project, opener: HTMLElement | null) => void
+  entranceControls: ReturnType<typeof useAnimationControls>
+  entranceInitial: 'hidden' | false
 }
 
-export function CategoryProjectCard({ project, index, activePreviewId, setActivePreviewId, onWatch }: ProjectCardProps) {
+export function CategoryProjectCard({
+  project,
+  index,
+  activePreviewId,
+  setActivePreviewId,
+  onWatch,
+  entranceControls,
+  entranceInitial,
+}: ProjectCardProps) {
   const prefersReducedMotion = useReducedMotion()
   const cardRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -139,8 +149,12 @@ export function CategoryProjectCard({ project, index, activePreviewId, setActive
     <motion.div
       ref={cardRef}
       className={`${styles.card} ${isPreviewing ? styles.previewing : ''} ${isFrozen ? styles.frozen : ''}`}
-      initial={prefersReducedMotion ? false : { opacity: 0, y: 24 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={entranceInitial}
+      animate={entranceControls}
+      variants={{
+        hidden: { opacity: 0, y: 30, scale: 0.98 },
+        visible: { opacity: 1, y: 0, scale: 1 },
+      }}
       transition={{ duration: prefersReducedMotion ? 0 : 0.48, delay: prefersReducedMotion ? 0 : index * 0.06, ease: premiumEase }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}

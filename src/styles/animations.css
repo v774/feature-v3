@@ -1,14 +1,15 @@
-@keyframes blink {
+@keyframes neon-type-cursor-blink {
   0%,
-  100% {
+  45% {
     opacity: 1;
   }
 
-  50% {
+  55%,
+  82% {
     opacity: 0;
   }
-}
 
-.animate-blink {
-  animation: blink 1s step-end infinite;
+  100% {
+    opacity: 1;
+  }
 }

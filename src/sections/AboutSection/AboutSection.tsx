@@ -1,9 +1,11 @@
 import { AnimatedText } from "../../components/AnimatedText/AnimatedText";
 import { ContactButton } from "../../components/ContactButton/ContactButton";
-import { FadeIn } from "../../components/FadeIn/FadeIn";
 import { homepageContent, type AboutDecorationContent } from "../../content/homepageContent";
 import { motion, useScroll, useTransform, type MotionValue } from "motion/react";
-import { useRef } from "react";
+import { useCallback, useRef } from "react";
+import { useReducedMotion } from "../../hooks/useReducedMotion";
+import { useSectionAnimation } from "../../hooks/useSectionAnimation";
+import { premiumEase } from "../../utils/motionConfig";
 import "./AboutSection.css";
 
 function AboutDecoration({
@@ -27,13 +29,27 @@ function AboutDecoration({
 
 export function AboutSection() {
   const sectionRef = useRef<HTMLElement>(null);
+  const prefersReducedMotion = useReducedMotion();
+  const {
+    setRef: setSectionAnimationRef,
+    controls: sectionControls,
+    initial: sectionInitial,
+  } = useSectionAnimation<HTMLElement>();
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"],
   });
+  const setAboutSectionRef = useCallback((element: HTMLElement | null) => {
+    sectionRef.current = element;
+    setSectionAnimationRef(element);
+  }, [setSectionAnimationRef]);
 
   return (
-    <section id="about" className="about-section" ref={sectionRef}>
+    <section
+      id="about"
+      className="about-section"
+      ref={setAboutSectionRef}
+    >
       {homepageContent.about.decorations.map((decoration) => (
         <AboutDecoration
           key={decoration.src}
@@ -42,9 +58,17 @@ export function AboutSection() {
         />
       ))}
       <div className="about-content">
-        <FadeIn>
+        <motion.div
+          initial={sectionInitial}
+          animate={sectionControls}
+          variants={{
+            hidden: { opacity: 0, y: 30 },
+            visible: { opacity: 1, y: 0 },
+          }}
+          transition={{ duration: prefersReducedMotion ? 0 : 0.7, ease: premiumEase }}
+        >
           <h2 className="about-heading gradient-heading">{homepageContent.about.heading}</h2>
-        </FadeIn>
+        </motion.div>
         <AnimatedText text={homepageContent.about.text} className="about-text" />
         <div className="about-button-row">
           <ContactButton />
