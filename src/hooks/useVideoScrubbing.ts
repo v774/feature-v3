@@ -1,131 +1,125 @@
-﻿import { type RefObject, useEffect } from "react";
+import { type RefObject, useEffect } from "react";
 
-const DESKTOP_SCRUB_START = 0;
-const DESKTOP_SCRUB_END = 4;
+const MOBILE_REVERSE_EDGE = 0.04;
+const MOBILE_REVERSE_SPEED = 1;
 
 export function useVideoScrubbing(videoRef: RefObject<HTMLVideoElement | null>) {
   useEffect(() => {
     const video = videoRef.current;
-    if (!video) {
-      return undefined;
-    }
+    if (!video) return undefined;
 
     const desktopQuery = window.matchMedia("(min-width: 1024px)");
     const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const targetTimeRef = { current: 0 };
-    const frameRef = { current: 0 };
-    const hasCursorTargetRef = { current: false };
-    const minSeekDelta = 0.018;
-    const interpolationStrength = 0.72;
+    const mobileFrameRef = { current: 0 };
+    const mobilePreviousTimestampRef = { current: 0 };
+    const mobileDirectionRef = { current: "forward" as "forward" | "backward" };
 
-    const clampDesktopScrubTime = (time: number) => {
-      const duration = Number.isFinite(video.duration) ? video.duration : 0;
-      const availableDuration = Math.min(duration, DESKTOP_SCRUB_END);
-      return Math.min(Math.max(time, DESKTOP_SCRUB_START), availableDuration);
+    const stopMobilePlayback = () => {
+      if (mobileFrameRef.current) {
+        window.cancelAnimationFrame(mobileFrameRef.current);
+        mobileFrameRef.current = 0;
+      }
+      mobilePreviousTimestampRef.current = 0;
     };
 
-    const stopScrubbing = () => {
-      hasCursorTargetRef.current = false;
-      if (frameRef.current) {
-        window.cancelAnimationFrame(frameRef.current);
-        frameRef.current = 0;
+    const queueMobileFrame = (callback: FrameRequestCallback) => {
+      if (!mobileFrameRef.current) {
+        mobileFrameRef.current = window.requestAnimationFrame(callback);
       }
     };
 
-    const stepScrub = () => {
-      frameRef.current = 0;
+    const stepMobileForward = () => {
+      mobileFrameRef.current = 0;
 
-      if (!hasCursorTargetRef.current || !desktopQuery.matches || reducedMotionQuery.matches) {
-        return;
-      }
+      if (desktopQuery.matches || reducedMotionQuery.matches) return;
 
       const duration = Number.isFinite(video.duration) ? video.duration : 0;
       if (duration <= 0) {
+        queueMobileFrame(stepMobileForward);
         return;
       }
 
-      const currentTime = video.currentTime || 0;
-      const targetTime = clampDesktopScrubTime(targetTimeRef.current);
-      const difference = targetTime - currentTime;
-      const scrubEnd = Math.min(duration, DESKTOP_SCRUB_END);
-      const isEdgeTarget = targetTime <= minSeekDelta || targetTime >= scrubEnd - minSeekDelta;
-
-      if (isEdgeTarget) {
-        if (Math.abs(difference) > 0.002) {
-          video.currentTime = targetTime;
-        }
+      if (video.currentTime >= duration - MOBILE_REVERSE_EDGE) {
+        mobileDirectionRef.current = "backward";
+        mobilePreviousTimestampRef.current = 0;
+        video.pause();
+        video.currentTime = Math.max(MOBILE_REVERSE_EDGE, duration - MOBILE_REVERSE_EDGE);
+        queueMobileFrame(stepMobileBackward);
         return;
       }
 
-      if (Math.abs(difference) <= minSeekDelta) {
+      queueMobileFrame(stepMobileForward);
+    };
+
+    const stepMobileBackward = (timestamp: number) => {
+      mobileFrameRef.current = 0;
+
+      if (desktopQuery.matches || reducedMotionQuery.matches) return;
+
+      if (!mobilePreviousTimestampRef.current) {
+        mobilePreviousTimestampRef.current = timestamp;
+      }
+
+      const deltaSeconds = (timestamp - mobilePreviousTimestampRef.current) / 1000;
+      mobilePreviousTimestampRef.current = timestamp;
+      video.currentTime = Math.max(
+        MOBILE_REVERSE_EDGE,
+        video.currentTime - deltaSeconds * MOBILE_REVERSE_SPEED,
+      );
+
+      if (video.currentTime <= MOBILE_REVERSE_EDGE) {
+        mobileDirectionRef.current = "forward";
+        mobilePreviousTimestampRef.current = 0;
+        video.currentTime = MOBILE_REVERSE_EDGE;
+        video.play().catch(() => undefined);
+        queueMobileFrame(stepMobileForward);
         return;
       }
 
-      if (!video.seeking) {
-        video.currentTime = clampDesktopScrubTime(currentTime + difference * interpolationStrength);
+      queueMobileFrame(stepMobileBackward);
+    };
+
+    const startMobilePingPong = () => {
+      stopMobilePlayback();
+      mobilePreviousTimestampRef.current = 0;
+      video.autoplay = true;
+      video.loop = false;
+      video.muted = true;
+      video.playsInline = true;
+
+      if (mobileDirectionRef.current === "backward") {
+        video.pause();
+        queueMobileFrame(stepMobileBackward);
+        return;
       }
 
-      frameRef.current = window.requestAnimationFrame(stepScrub);
+      video.play().catch(() => undefined);
+      queueMobileFrame(stepMobileForward);
     };
 
     const applyMode = () => {
-      targetTimeRef.current = video.currentTime || 0;
-      stopScrubbing();
+      stopMobilePlayback();
+      video.loop = false;
 
-      if (reducedMotionQuery.matches) {
+      if (reducedMotionQuery.matches || desktopQuery.matches) {
         video.autoplay = false;
-        video.loop = false;
         video.pause();
         return;
       }
 
-      if (desktopQuery.matches) {
-        video.autoplay = false;
-        video.loop = false;
-        video.pause();
-      } else {
-        video.autoplay = true;
-        video.loop = true;
-        video.muted = true;
-        video.playsInline = true;
-        video.play().catch(() => {});
-      }
-    };
-
-    const onMouseMove = (event: MouseEvent) => {
-      if (!desktopQuery.matches || !Number.isFinite(video.duration) || reducedMotionQuery.matches) {
-        return;
-      }
-
-      if (!video.paused) {
-        video.pause();
-      }
-
-      const viewportWidth = Math.max(window.innerWidth, 1);
-      const normalizedX = Math.min(Math.max(event.clientX / viewportWidth, 0), 1);
-      const availableDuration = Math.min(video.duration, DESKTOP_SCRUB_END);
-      targetTimeRef.current = clampDesktopScrubTime(
-        DESKTOP_SCRUB_START + normalizedX * (availableDuration - DESKTOP_SCRUB_START),
-      );
-      hasCursorTargetRef.current = true;
-
-      if (!frameRef.current) {
-        frameRef.current = window.requestAnimationFrame(stepScrub);
-      }
+      startMobilePingPong();
     };
 
     applyMode();
     video.addEventListener("loadedmetadata", applyMode);
-    window.addEventListener("mousemove", onMouseMove, { passive: true });
     desktopQuery.addEventListener("change", applyMode);
     reducedMotionQuery.addEventListener("change", applyMode);
 
     return () => {
       video.removeEventListener("loadedmetadata", applyMode);
-      window.removeEventListener("mousemove", onMouseMove);
       desktopQuery.removeEventListener("change", applyMode);
       reducedMotionQuery.removeEventListener("change", applyMode);
-      stopScrubbing();
+      stopMobilePlayback();
     };
   }, [videoRef]);
 }

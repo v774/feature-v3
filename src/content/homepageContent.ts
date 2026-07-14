@@ -27,6 +27,13 @@ export interface HomepageContent {
     location: string;
     highlights: string[];
     localVideoSrc: string;
+    desktopSequence: {
+      basePath: string;
+      filePrefix: string;
+      extension: string;
+      frameCount: number;
+      framePadding: number;
+    };
     watermark: string;
     highlightsAriaLabel: string;
   };
@@ -61,6 +68,13 @@ export const homepageContent: HomepageContent = {
     location: "Worldwide",
     highlights: ["Logo Animation", "Brand Motion", "Lottie UI"],
     localVideoSrc: heroVideoSrc,
+    desktopSequence: {
+      basePath: "/images/hero/heroSeccvence",
+      filePrefix: "neon-llama-ishodnik_",
+      extension: "webp",
+      frameCount: 121,
+      framePadding: 5,
+    },
     watermark: "VL MOTION",
     highlightsAriaLabel: "Portfolio highlights",
   },
