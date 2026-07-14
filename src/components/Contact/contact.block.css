@@ -1,4 +1,4 @@
-.contact-section-wrapper {
+﻿.contact-section-wrapper {
   width: 100%;
   padding: 132px 32px;
   box-sizing: border-box;
@@ -58,9 +58,9 @@
 .contact-section-wrapper__type-cursor {
   display: inline-block;
   margin-left: 0.04em;
-  color: #ccff00;
-  -webkit-text-fill-color: #ccff00;
-  text-shadow: 0 0 18px rgba(204, 255, 0, 0.45);
+  color: var(--accent-neon-red);
+  -webkit-text-fill-color: var(--accent-neon-red);
+  text-shadow: var(--accent-neon-red-glow);
 }
 
 .contact-section-wrapper__type-cursor.is-blinking {
@@ -421,11 +421,11 @@
 
   .contact-section-wrapper__email-block:hover .contact-section-wrapper__icon-box,
   .contact-section-wrapper__social-badge:hover .contact-section-wrapper__badge-icon {
-    border-color: rgba(204, 255, 0, 0.38);
+    border-color: rgba(255, 36, 88, 0.38);
     background: rgba(139, 92, 246, 0.22);
     box-shadow:
       0 0 18px rgba(139, 92, 246, 0.28),
-      0 0 24px rgba(204, 255, 0, 0.12);
+      0 0 24px rgba(255, 36, 88, 0.12);
   }
 
   .contact-section-wrapper__social-badge:hover {

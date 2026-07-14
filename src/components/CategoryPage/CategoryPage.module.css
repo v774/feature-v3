@@ -1,4 +1,4 @@
-.page {
+﻿.page {
   position: relative;
   min-height: 100svh;
   overflow-x: clip;
@@ -152,11 +152,9 @@
 .titleCursor {
   display: inline-block;
   margin-left: 0.04em;
-  color: #ccff00;
-  -webkit-text-fill-color: #ccff00;
-  text-shadow:
-    0 0 18px rgba(204, 255, 0, 0.42),
-    0 0 28px rgba(139, 92, 246, 0.18);
+  color: var(--accent-neon-red);
+  -webkit-text-fill-color: var(--accent-neon-red);
+  text-shadow: var(--accent-neon-red-glow);
   opacity: 1;
   will-change: opacity, filter;
 }
@@ -168,7 +166,7 @@
 .titleCursor.fading {
   animation: none;
   opacity: 0;
-  filter: drop-shadow(0 0 0 rgba(204, 255, 0, 0));
+  filter: drop-shadow(0 0 0 rgba(255, 36, 88, 0));
   transition:
     opacity 750ms ease,
     filter 750ms ease;
@@ -178,13 +176,13 @@
   0%,
   48% {
     opacity: 1;
-    filter: drop-shadow(0 0 10px rgba(204, 255, 0, 0.52));
+    filter: drop-shadow(0 0 10px rgba(255, 36, 88, 0.52));
   }
 
   49%,
   100% {
     opacity: 0;
-    filter: drop-shadow(0 0 0 rgba(204, 255, 0, 0));
+    filter: drop-shadow(0 0 0 rgba(255, 36, 88, 0));
   }
 }
 
@@ -216,6 +214,10 @@
   overflow: visible;
   scrollbar-width: none;
 }
+.gridLamp {
+  margin: -8px 0 8px;
+}
+
 
 .filters::-webkit-scrollbar {
   display: none;
@@ -275,6 +277,8 @@
     padding-bottom: 4px;
     white-space: nowrap;
   }
+
+
 }
 
 @media (max-width: 600px) {

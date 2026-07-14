@@ -1,4 +1,4 @@
-.hero-section {
+﻿.hero-section {
   position: relative;
   min-height: 100vh;
   min-height: 100svh;
@@ -196,8 +196,9 @@
 .hero-type-cursor {
   display: inline-block;
   margin-left: 0.04em;
-  color: #ccff00;
-  -webkit-text-fill-color: #ccff00;
+  color: var(--accent-neon-red);
+  -webkit-text-fill-color: var(--accent-neon-red);
+  text-shadow: var(--accent-neon-red-glow);
 }
 
 .hero-type-cursor.is-blinking {

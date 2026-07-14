@@ -1,4 +1,4 @@
-import { type RefObject, useEffect } from "react";
+﻿import { type RefObject, useEffect } from "react";
 
 export function useVideoScrubbing(videoRef: RefObject<HTMLVideoElement | null>) {
   useEffect(() => {
@@ -11,65 +11,13 @@ export function useVideoScrubbing(videoRef: RefObject<HTMLVideoElement | null>) 
     const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     const targetTimeRef = { current: 0 };
     const frameRef = { current: 0 };
-    const reverseFrameRef = { current: 0 };
-    const reversePreviousTimeRef = { current: 0 };
-    const reversePlayingRef = { current: false };
-    const directionRef = { current: "forward" as "forward" | "backward" };
     const hasCursorTargetRef = { current: false };
     const minSeekDelta = 0.018;
     const interpolationStrength = 0.72;
-    const edgeTime = 0.04;
-    const reverseSpeed = 1;
 
     const clampTime = (time: number) => {
       const duration = Number.isFinite(video.duration) ? video.duration : 0;
       return Math.min(Math.max(time, 0), duration);
-    };
-
-    const stopReversePlayback = () => {
-      reversePlayingRef.current = false;
-      if (reverseFrameRef.current) {
-        window.cancelAnimationFrame(reverseFrameRef.current);
-        reverseFrameRef.current = 0;
-      }
-    };
-
-    const playForward = () => {
-      stopReversePlayback();
-      directionRef.current = "forward";
-      video.playbackRate = 1;
-      video.play().catch(() => {});
-    };
-
-    const stepReverse = (timestamp: number) => {
-      if (!reversePlayingRef.current) return;
-      if (!reversePreviousTimeRef.current) reversePreviousTimeRef.current = timestamp;
-
-      const elapsedSeconds = (timestamp - reversePreviousTimeRef.current) / 1000;
-      reversePreviousTimeRef.current = timestamp;
-      video.currentTime = Math.max(edgeTime, (video.currentTime || 0) - elapsedSeconds * reverseSpeed);
-
-      if (video.currentTime <= edgeTime) {
-        video.currentTime = edgeTime;
-        reversePreviousTimeRef.current = 0;
-        reversePlayingRef.current = false;
-        playForward();
-        return;
-      }
-
-      reverseFrameRef.current = window.requestAnimationFrame(stepReverse);
-    };
-
-    const playBackward = () => {
-      if (desktopQuery.matches || reducedMotionQuery.matches) return;
-      if (directionRef.current === "backward" || reversePlayingRef.current) return;
-
-      video.pause();
-      video.loop = false;
-      directionRef.current = "backward";
-      reversePlayingRef.current = true;
-      reversePreviousTimeRef.current = 0;
-      reverseFrameRef.current = window.requestAnimationFrame(stepReverse);
     };
 
     const stopScrubbing = () => {
@@ -118,39 +66,32 @@ export function useVideoScrubbing(videoRef: RefObject<HTMLVideoElement | null>) 
     const applyMode = () => {
       targetTimeRef.current = video.currentTime || 0;
       stopScrubbing();
-      stopReversePlayback();
-      directionRef.current = "forward";
-      video.loop = false;
 
       if (reducedMotionQuery.matches) {
         video.autoplay = false;
+        video.loop = false;
         video.pause();
         return;
       }
 
       if (desktopQuery.matches) {
         video.autoplay = false;
+        video.loop = false;
         video.pause();
       } else {
         video.autoplay = true;
-        const duration = Number.isFinite(video.duration) ? video.duration : 0;
-        if (duration > 0 && video.currentTime >= duration - edgeTime) {
-          playBackward();
-          return;
-        }
-        playForward();
+        video.loop = true;
+        video.muted = true;
+        video.playsInline = true;
+        video.play().catch(() => {});
       }
     };
 
     const onMouseMove = (event: MouseEvent) => {
-      if (!desktopQuery.matches || !Number.isFinite(video.duration)) {
-        return;
-      }
-      if (reducedMotionQuery.matches) {
+      if (!desktopQuery.matches || !Number.isFinite(video.duration) || reducedMotionQuery.matches) {
         return;
       }
 
-      stopReversePlayback();
       if (!video.paused) {
         video.pause();
       }
@@ -165,37 +106,18 @@ export function useVideoScrubbing(videoRef: RefObject<HTMLVideoElement | null>) 
       }
     };
 
-    const onEnded = () => {
-      if (desktopQuery.matches || reducedMotionQuery.matches) return;
-      playBackward();
-    };
-
-    const onTimeUpdate = () => {
-      if (desktopQuery.matches || reducedMotionQuery.matches || directionRef.current !== "forward") return;
-      const duration = Number.isFinite(video.duration) ? video.duration : 0;
-      if (duration > 0 && video.currentTime >= duration - edgeTime) {
-        video.pause();
-        playBackward();
-      }
-    };
-
     applyMode();
-    video.addEventListener("ended", onEnded);
-    video.addEventListener("timeupdate", onTimeUpdate);
     video.addEventListener("loadedmetadata", applyMode);
-    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("mousemove", onMouseMove, { passive: true });
     desktopQuery.addEventListener("change", applyMode);
     reducedMotionQuery.addEventListener("change", applyMode);
 
     return () => {
-      video.removeEventListener("ended", onEnded);
-      video.removeEventListener("timeupdate", onTimeUpdate);
       video.removeEventListener("loadedmetadata", applyMode);
       window.removeEventListener("mousemove", onMouseMove);
       desktopQuery.removeEventListener("change", applyMode);
       reducedMotionQuery.removeEventListener("change", applyMode);
       stopScrubbing();
-      stopReversePlayback();
     };
   }, [videoRef]);
 }

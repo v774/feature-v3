@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Kanit:wght@300;400;500;600;700;800;900&display=swap");
+﻿@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Kanit:wght@300;400;500;600;700;800;900&display=swap");
 
 :root {
   --font-interface: "Inter", sans-serif;
@@ -10,6 +10,10 @@
   --color-green-dark: #1c2e1e;
   --color-green-muted: #5a635a;
   --color-green-soft: #738273;
+  --accent-neon-red: #ff2458;
+  --accent-neon-red-glow:
+    0 0 8px rgba(255, 36, 88, 0.65),
+    0 0 18px rgba(255, 36, 88, 0.25);
 
   --page-padding-mobile: 20px;
   --page-padding-small: 32px;

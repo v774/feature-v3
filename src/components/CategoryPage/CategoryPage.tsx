@@ -1,4 +1,4 @@
-import { useEffect, useState, type MouseEvent } from 'react'
+﻿import { useEffect, useState, type MouseEvent } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
 import { categories, portfolioCategories, projects, type CategoryProject as Project } from '../../content/portfolioContent'
@@ -8,6 +8,7 @@ import { useTranslation } from '../../translations/useTranslation'
 import { Footer } from '../Footer/footer'
 import { Header } from '../Header/header'
 import { CategoryProjectCard } from '../CategoryProjectCard/CategoryProjectCard'
+import { GalleryLamp } from '../GalleryLamp/GalleryLamp'
 import { ProjectModal } from '../ProjectModal/ProjectModal'
 import { setPendingHomepageSection } from '../../utils/sectionNavigation'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
@@ -35,40 +36,74 @@ export function CategoryPage() {
     (project) => project.enabled && project.categorySlug === category.slug,
   )
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
+  const [activePreviewId, setActivePreviewId] = useState<string | null>(null)
+  const [returnFocusElement, setReturnFocusElement] = useState<HTMLElement | null>(null)
   const categoryName =
     portfolioCategories.find((item) => item.slug === category.slug)?.label
     ?? category.slug.split('-').map((word) => word[0]?.toUpperCase() + word.slice(1)).join(' ')
-  const [categoryTitleStart, setCategoryTitleStart] = useState({ key: categoryName, started: prefersReducedMotion })
-  const startCategoryTitle = categoryTitleStart.key === categoryName ? categoryTitleStart.started : prefersReducedMotion
+  const [categoryTitleStart, setCategoryTitleStart] = useState({ key: category.slug, started: prefersReducedMotion })
+  const startCategoryTitle = categoryTitleStart.key === category.slug ? categoryTitleStart.started : prefersReducedMotion
   const { displayed: categoryTitleText, done: categoryTitleDone } = useScrambleText(categoryName, 0, startCategoryTitle && !prefersReducedMotion, 0.25)
   const visibleCategoryTitle = prefersReducedMotion ? categoryName : categoryTitleText
-  const [categoryCursor, setCategoryCursor] = useState({ key: categoryName, visible: true, fading: false })
-  const showCategoryCursor = categoryCursor.key === categoryName ? categoryCursor.visible : true
-  const fadeCategoryCursor = categoryCursor.key === categoryName ? categoryCursor.fading : false
+  const [categoryCursor, setCategoryCursor] = useState({ key: category.slug, visible: true, fading: false })
+  const showCategoryCursor = categoryCursor.key === category.slug ? categoryCursor.visible : true
+  const fadeCategoryCursor = categoryCursor.key === category.slug ? categoryCursor.fading : false
   const homePath = localePrefix(locale) || '/'
 
   useEffect(() => {
-    if (prefersReducedMotion) return undefined
+    const resetId = window.setTimeout(() => {
+      setActivePreviewId(null)
+      setCategoryTitleStart({ key: category.slug, started: prefersReducedMotion })
+      setCategoryCursor({ key: category.slug, visible: true, fading: false })
+    }, 0)
 
-    const startTitleId = window.setTimeout(() => setCategoryTitleStart({ key: categoryName, started: true }), 820)
-    return () => window.clearTimeout(startTitleId)
-  }, [categoryName, prefersReducedMotion])
+    if (prefersReducedMotion) {
+      return () => window.clearTimeout(resetId)
+    }
+
+    const startTitleId = window.setTimeout(() => setCategoryTitleStart({ key: category.slug, started: true }), 820)
+    return () => {
+      window.clearTimeout(resetId)
+      window.clearTimeout(startTitleId)
+    }
+  }, [category.slug, prefersReducedMotion])
 
   useEffect(() => {
     if (prefersReducedMotion || !categoryTitleDone) return undefined
 
-    const fadeCursorId = window.setTimeout(() => setCategoryCursor({ key: categoryName, visible: true, fading: true }), 1000)
-    const hideCursorId = window.setTimeout(() => setCategoryCursor({ key: categoryName, visible: false, fading: true }), 1750)
+    const fadeCursorId = window.setTimeout(() => setCategoryCursor({ key: category.slug, visible: true, fading: true }), 1000)
+    const hideCursorId = window.setTimeout(() => setCategoryCursor({ key: category.slug, visible: false, fading: true }), 1750)
     return () => {
       window.clearTimeout(fadeCursorId)
       window.clearTimeout(hideCursorId)
     }
-  }, [categoryName, categoryTitleDone, prefersReducedMotion])
+  }, [category.slug, categoryTitleDone, prefersReducedMotion])
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden) setActivePreviewId(null)
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
+  }, [])
+
+  useEffect(() => () => setActivePreviewId(null), [])
 
   const handleBackToProjects = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault()
     setPendingHomepageSection('projects')
     navigate(homePath)
+  }
+
+  const openProject = (project: Project, opener: HTMLElement | null) => {
+    setActivePreviewId(null)
+    setReturnFocusElement(opener)
+    setSelectedProject(project)
+  }
+
+  const closeProject = () => {
+    setSelectedProject(null)
   }
 
   if (!matchedCategory) {
@@ -102,7 +137,7 @@ export function CategoryPage() {
             transition={{ duration: prefersReducedMotion ? 0 : 0.7, ease: premiumEase }}
             whileTap={prefersReducedMotion ? undefined : { scale: 0.96 }}
           >
-            <span className={styles.backArrow} aria-hidden="true">←</span>
+            <span className={styles.backArrow} aria-hidden="true">&larr;</span>
             <span className={styles.backText}>{siteContent.categoryPage.back}</span>
           </MotionLink>
           <motion.p
@@ -171,6 +206,7 @@ export function CategoryPage() {
             })}
           </motion.div>
         </motion.div>
+        <GalleryLamp variant="grid" className={styles.gridLamp} />
         <AnimatePresence mode="wait">
           <motion.section
             className="category-project-grid"
@@ -182,7 +218,14 @@ export function CategoryPage() {
             transition={{ duration: prefersReducedMotion ? 0 : 0.45, ease: premiumEase }}
           >
             {items.map((project, index) => (
-              <CategoryProjectCard project={project} index={index} onWatch={setSelectedProject} key={project.id} />
+              <CategoryProjectCard
+                project={project}
+                index={index}
+                activePreviewId={activePreviewId}
+                setActivePreviewId={setActivePreviewId}
+                onWatch={openProject}
+                key={project.id}
+              />
             ))}
           </motion.section>
         </AnimatePresence>
@@ -198,7 +241,8 @@ export function CategoryPage() {
       <ProjectModal
         key={selectedProject?.id ?? 'closed'}
         project={selectedProject}
-        onClose={() => setSelectedProject(null)}
+        returnFocusElement={returnFocusElement}
+        onClose={closeProject}
       />
     </div>
   )

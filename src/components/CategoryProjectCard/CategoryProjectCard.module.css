@@ -1,17 +1,23 @@
-.card {
+﻿.card {
   position: relative;
   z-index: 1;
   aspect-ratio: 16 / 9;
+  cursor: pointer;
+}
+
+.cardSurface {
+  position: absolute;
+  inset: 0;
   overflow: hidden;
   border: 1px solid rgba(184, 137, 255, .2);
   border-radius: 12px;
   background: #101014;
   box-shadow: 0 18px 50px var(--surface-color);
-  cursor: pointer;
+  transform: translate3d(0, 0, 0);
   transition:
-    border-color 350ms ease,
-    box-shadow 350ms ease,
-    transform 350ms ease;
+    border-color 360ms ease,
+    box-shadow 380ms ease,
+    transform 400ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .media {
@@ -31,10 +37,11 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transform: scale(1);
   transition:
-    filter 500ms ease,
+    filter 420ms ease,
     opacity 350ms ease,
-    transform 500ms ease;
+    transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .video {
@@ -49,7 +56,7 @@
 .frozen .video {
   opacity: 1;
   filter: blur(5px) brightness(.72) saturate(1.08);
-  transform: scale(1.035);
+  transform: scale(1.025);
 }
 
 .frozen .poster {
@@ -101,8 +108,8 @@
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: #ec008c;
-  box-shadow: 0 0 8px rgba(236, 0, 140, .7);
+  background: var(--accent-neon-red);
+  box-shadow: var(--accent-neon-red-glow);
 }
 
 .infoBottom {
@@ -126,46 +133,6 @@
   font-weight: 700;
   letter-spacing: -.03em;
   line-height: 1.1;
-  transition: transform 350ms ease;
-}
-
-.titleCursor {
-  display: inline-block;
-  margin-left: 0.04em;
-  color: #ccff00;
-  -webkit-text-fill-color: #ccff00;
-  text-shadow:
-    0 0 10px rgba(204, 255, 0, .45),
-    0 0 18px rgba(139, 92, 246, .18);
-  opacity: 1;
-  will-change: opacity, filter;
-}
-
-.titleCursor.blinking {
-  animation: category-card-title-cursor-blink 1.15s steps(1, end) infinite;
-}
-
-.titleCursor.fading {
-  animation: none;
-  opacity: 0;
-  filter: drop-shadow(0 0 0 rgba(204, 255, 0, 0));
-  transition:
-    opacity 750ms ease,
-    filter 750ms ease;
-}
-
-@keyframes category-card-title-cursor-blink {
-  0%,
-  48% {
-    opacity: 1;
-    filter: drop-shadow(0 0 8px rgba(204, 255, 0, .5));
-  }
-
-  49%,
-  100% {
-    opacity: 0;
-    filter: drop-shadow(0 0 0 rgba(204, 255, 0, 0));
-  }
 }
 
 .watchFull {
@@ -206,11 +173,12 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .card:hover,
-  .card:focus-visible {
+  .card:hover .cardSurface,
+  .card:focus-visible .cardSurface {
     border-color: var(--accent-color);
     box-shadow: 0 22px 60px rgba(118, 33, 176, .14);
-    transform: translateY(-6px);
+    transform: translate3d(0, -4px, 0);
+    will-change: transform;
   }
 
   .card:hover .poster,
@@ -218,12 +186,7 @@
   .card:focus-visible .poster,
   .card:focus-visible .video {
     filter: brightness(1.06);
-    transform: scale(1.03);
-  }
-
-  .card:hover .infoBottom h2,
-  .card:focus-visible .infoBottom h2 {
-    transform: translateY(-3px);
+    transform: scale(1.02);
   }
 
   .card:hover .infoTop,
@@ -236,7 +199,7 @@
   .card.frozen:hover .video,
   .card.frozen:focus-visible .video {
     filter: blur(5px) brightness(.72) saturate(1.08);
-    transform: scale(1.035);
+    transform: scale(1.025);
   }
 
   .frozen .watchFull,

@@ -89,7 +89,9 @@ export function Contact() {
     setSubmitMessage('')
 
     if (!formKey) {
-      console.error('VITE_FORM_KEY is missing; refusing to submit the contact form.')
+      if (import.meta.env.DEV) {
+        console.error('VITE_FORM_KEY is missing; refusing to submit the contact form.')
+      }
       setSubmitMessage(copy.unavailableMessage)
       return
     }
@@ -125,18 +127,22 @@ export function Contact() {
       })) as Web3FormsResponse
 
       if (!response.ok || !result.success) {
-        console.error('Web3Forms Error Details:', {
-          status: response.status,
-          statusText: response.statusText,
-          ...result,
-        })
+        if (import.meta.env.DEV) {
+          console.error('Web3Forms Error Details:', {
+            status: response.status,
+            statusText: response.statusText,
+            ...result,
+          })
+        }
         throw new Error(result.message || `Form submission failed with status ${response.status}`)
       }
 
       setFormData({ name: '', email: '', project_type: '', budget: '', message: '' })
       setIsSubmitted(true)
     } catch (error) {
-      console.error('Contact form submission failed:', error)
+      if (import.meta.env.DEV) {
+        console.error('Contact form submission failed:', error)
+      }
       setSubmitMessage(copy.failureMessage)
     } finally {
       setIsSubmitting(false)
