@@ -19,6 +19,7 @@ function MetaIcon({ type }: { type: 'format' | 'software' | 'delivery' }) {
 
 export function ProjectModal({ project, onClose, returnFocusElement }: ProjectModalProps) {
   const labels = siteContent.modalLabels
+  const overlayRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
   const closeButtonRef = useRef<HTMLButtonElement>(null)
   const [isPaused, setIsPaused] = useState(false)
@@ -34,7 +35,38 @@ export function ProjectModal({ project, onClose, returnFocusElement }: ProjectMo
     if (!project) return undefined
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') closeModal()
+      if (event.key === 'Escape') {
+        closeModal()
+        return
+      }
+
+      if (event.key !== 'Tab') return
+
+      const focusableElements = overlayRef.current?.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), video[controls], [tabindex]:not([tabindex="-1"])',
+      )
+      const focusable = Array.from(focusableElements ?? []).filter((element) => {
+        const style = window.getComputedStyle(element)
+        return style.display !== 'none' && style.visibility !== 'hidden'
+      })
+
+      if (!focusable.length) {
+        event.preventDefault()
+        closeButtonRef.current?.focus()
+        return
+      }
+
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+      const activeElement = document.activeElement
+
+      if (event.shiftKey && activeElement === first) {
+        event.preventDefault()
+        last.focus()
+      } else if (!event.shiftKey && activeElement === last) {
+        event.preventDefault()
+        first.focus()
+      }
     }
 
     document.addEventListener('keydown', handleKeyDown)
@@ -86,7 +118,7 @@ export function ProjectModal({ project, onClose, returnFocusElement }: ProjectMo
     toggleVideo()
   }
 
-  return <div className={styles.overlay} role="dialog" aria-modal="true" aria-labelledby="project-modal-title" onClick={closeModal}>
+  return <div ref={overlayRef} className={styles.overlay} role="dialog" aria-modal="true" aria-labelledby="project-modal-title" onClick={closeModal}>
     <div className={styles.stage} onClick={stopPropagation}>
       <GalleryLamp variant="modal" className={styles.modalLamp} />
       <div className={styles.modal}>

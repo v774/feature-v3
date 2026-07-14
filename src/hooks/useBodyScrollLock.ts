@@ -13,11 +13,13 @@ type BodyScrollStyles = {
 export function useBodyScrollLock(locked: boolean) {
   const scrollYRef = useRef(0);
   const previousStylesRef = useRef<BodyScrollStyles | null>(null);
+  const previousHtmlScrollBehaviorRef = useRef("");
 
   useEffect(() => {
     if (!locked) return undefined;
 
     scrollYRef.current = window.scrollY;
+    previousHtmlScrollBehaviorRef.current = document.documentElement.style.scrollBehavior;
     previousStylesRef.current = {
       position: document.body.style.position,
       top: document.body.style.top,
@@ -50,7 +52,11 @@ export function useBodyScrollLock(locked: boolean) {
         document.body.style.overflow = previousStyles.overflow;
         document.body.style.paddingRight = previousStyles.paddingRight;
       }
+      document.documentElement.style.scrollBehavior = "auto";
       window.scrollTo(0, scrollYRef.current);
+      window.requestAnimationFrame(() => {
+        document.documentElement.style.scrollBehavior = previousHtmlScrollBehaviorRef.current;
+      });
       previousStylesRef.current = null;
     };
   }, [locked]);
