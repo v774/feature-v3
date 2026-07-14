@@ -1,11 +1,5 @@
 :root {
-  --hero-bg: url('/images/hero/dark/hero.png');
-  --about-bg: url('/images/hero/dark/about.png');
   --contact-bg: none;
-  --faq-bg: url('/images/hero/dark/faq.png');
-  --process-bg: url('/images/hero/dark/process.png');
-  --selected-work-bg: url('/images/hero/dark/selectedWork.png');
-  --testimonials-bg: url('/images/hero/dark/testimonials.png');
 
   --bg: #0c0c0c;
   --surface: #11141a;

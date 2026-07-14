@@ -93,7 +93,7 @@ function SeoManager() {
   const location = useLocation();
 
   useEffect(() => {
-    const routePath = location.pathname.replace(/^\/(?:en|ua|pl)(?=\/|$)/, "") || "/";
+    const routePath = location.pathname || "/";
     const routeSeo = seoContent.routes[routePath] ?? seoContent.routes["/"];
     const title = routeSeo.title;
     const description = routeSeo.description;
@@ -130,7 +130,7 @@ function AppRoutes() {
   const { pathname } = useLocation();
   const categoryPattern = portfolioCategories.map((category) => category.slug).join("|");
   const isValidRoute =
-    new RegExp(`^/(?:$|(?:en|ua|pl)/?$|(?:(?:en|ua|pl)/)?work/[^/]+/?$|(?:${categoryPattern})/?$)`).test(
+    new RegExp(`^/(?:$|work/[^/]+/?$|(?:${categoryPattern})/?$)`).test(
       pathname,
     );
 
@@ -139,13 +139,7 @@ function AppRoutes() {
       <SeoManager />
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/en" element={<HomePage />} />
-        <Route path="/ua" element={<HomePage />} />
-        <Route path="/pl" element={<HomePage />} />
         <Route path="/work/:categoryId" element={<CategoryPage />} />
-        <Route path="/en/work/:categoryId" element={<CategoryPage />} />
-        <Route path="/ua/work/:categoryId" element={<CategoryPage />} />
-        <Route path="/pl/work/:categoryId" element={<CategoryPage />} />
         <Route path="/logo-animation" element={<Navigate to="/work/logo-animation" replace />} />
         <Route path="/icons" element={<Navigate to="/work/icons" replace />} />
         <Route path="/lottie-ui" element={<Navigate to="/work/lottie-ui" replace />} />

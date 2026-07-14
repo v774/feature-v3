@@ -2,7 +2,6 @@
 import type { CategoryProject as Project } from '../../content/portfolioContent'
 import { siteContent } from '../../content/siteContent'
 import { useBodyScrollLock } from '../../hooks/useBodyScrollLock'
-import { GalleryLamp } from '../GalleryLamp/GalleryLamp'
 import styles from './ProjectModal.module.css'
 
 type ProjectModalProps = {
@@ -120,7 +119,6 @@ export function ProjectModal({ project, onClose, returnFocusElement }: ProjectMo
 
   return <div ref={overlayRef} className={styles.overlay} role="dialog" aria-modal="true" aria-labelledby="project-modal-title" onClick={closeModal}>
     <div className={styles.stage} onClick={stopPropagation}>
-      <GalleryLamp variant="modal" className={styles.modalLamp} />
       <div className={styles.modal}>
         <button ref={closeButtonRef} className={styles.close} type="button" onClick={closeModal} aria-label={labels.closeProject}><span /><span /></button>
         <div className={styles.videoContainer}>

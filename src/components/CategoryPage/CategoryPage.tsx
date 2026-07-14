@@ -3,12 +3,9 @@ import { AnimatePresence, motion } from 'motion/react'
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
 import { categories, portfolioCategories, projects, type CategoryProject as Project } from '../../content/portfolioContent'
 import { siteContent } from '../../content/siteContent'
-import { localePrefix } from '../../translations'
-import { useTranslation } from '../../translations/useTranslation'
 import { Footer } from '../Footer/footer'
 import { Header } from '../Header/header'
 import { CategoryProjectCard } from '../CategoryProjectCard/CategoryProjectCard'
-import { GalleryLamp } from '../GalleryLamp/GalleryLamp'
 import { ProjectModal } from '../ProjectModal/ProjectModal'
 import { setPendingHomepageSection } from '../../utils/sectionNavigation'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
@@ -28,7 +25,6 @@ const headerItemVariants = {
 export function CategoryPage() {
   const { categoryId = 'logo-animation' } = useParams()
   const navigate = useNavigate()
-  const { locale } = useTranslation()
   const prefersReducedMotion = useReducedMotion()
   const {
     setRef: setHeaderRef,
@@ -62,7 +58,7 @@ export function CategoryPage() {
   const [categoryCursor, setCategoryCursor] = useState({ key: category.slug, visible: true, fading: false })
   const showCategoryCursor = categoryCursor.key === category.slug ? categoryCursor.visible : true
   const fadeCategoryCursor = categoryCursor.key === category.slug ? categoryCursor.fading : false
-  const homePath = localePrefix(locale) || '/'
+  const homePath = '/'
 
   useEffect(() => {
     const resetId = window.setTimeout(() => {
@@ -121,7 +117,7 @@ export function CategoryPage() {
   }
 
   if (!matchedCategory) {
-    return <Navigate to={`${localePrefix(locale)}/work/${fallbackCategory.slug}`} replace />
+    return <Navigate to={`/work/${fallbackCategory.slug}`} replace />
   }
 
   return (
@@ -199,7 +195,7 @@ export function CategoryPage() {
               return (
                 <Link
                   className={`${styles.filterLink}${active ? ` ${styles.active}` : ''}`}
-                  to={`${localePrefix(locale)}/work/${filter.slug}`}
+                  to={`/work/${filter.slug}`}
                   role="tab"
                   aria-selected={active}
                   key={filter.slug}
@@ -220,7 +216,6 @@ export function CategoryPage() {
             })}
           </motion.div>
         </motion.div>
-        <GalleryLamp variant="grid" className={styles.gridLamp} />
         <motion.div
           ref={setGridRef}
           initial={gridInitial}

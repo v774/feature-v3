@@ -200,10 +200,6 @@
   overflow: visible;
   scrollbar-width: none;
 }
-.gridLamp {
-  margin: -10px 0 -4px;
-}
-
 
 .filters::-webkit-scrollbar {
   display: none;
