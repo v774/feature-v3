@@ -13,6 +13,11 @@ export interface ContactContent {
   sending: string;
   disclaimer: string;
   connect: string;
+  emailCardLabel: string;
+  locationLabel: string;
+  location: string;
+  availabilityLabel: string;
+  availability: string;
   socialLinksLabel: string;
   successHeading: string;
   successMessage: string;
@@ -28,7 +33,7 @@ export interface ContactContent {
 
 export const contactContent: ContactContent = {
   eyebrow: "CONTACT",
-  heading: "Let's create something amazing.",
+  heading: "Get in touch",
   description:
     "Have a project in mind? I'd love to hear about it. Tell me a little about your idea and let's make something meaningful together.",
   name: "Name",
@@ -40,6 +45,11 @@ export const contactContent: ContactContent = {
   sending: "Sending...",
   disclaimer: "Your information is safe and will never be shared.",
   connect: "Connect",
+  emailCardLabel: "Email us",
+  locationLabel: "Our location",
+  location: "Ukraine / Remote",
+  availabilityLabel: "Availability",
+  availability: "Available worldwide",
   socialLinksLabel: "Social links",
   successHeading: "Thank you!",
   successMessage: "Your message has been sent successfully. We'll be in touch soon.",

@@ -1,9 +1,21 @@
 import './footer.block.css'
 import { motion } from 'motion/react'
+import { contactContent } from '../../content/contactContent'
 import { siteContent } from '../../content/siteContent'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
 import { useSectionAnimation } from '../../hooks/useSectionAnimation'
 import { premiumEase } from '../../utils/motionConfig'
+
+const footerShapes = [
+  'star',
+  'dots',
+  'arch',
+  'circle',
+  'slash',
+  'discs',
+  'triangles',
+  'donut',
+] as const
 
 export function Footer() {
   const prefersReducedMotion = useReducedMotion()
@@ -15,6 +27,7 @@ export function Footer() {
     activationThreshold: 0.35,
     resetThreshold: 0.06,
   })
+  const footerSocialLinks = siteContent.socialLinks.filter((link) => link.label.toLowerCase() !== 'email')
 
   return (
     <motion.footer
@@ -23,33 +36,42 @@ export function Footer() {
       initial={sectionInitial}
       animate={sectionControls}
       variants={{
-        hidden: { opacity: 0, y: 20 },
+        hidden: { opacity: 0, y: 24 },
         visible: { opacity: 1, y: 0 },
       }}
-      transition={{ duration: prefersReducedMotion ? 0 : 0.7, ease: premiumEase }}
+      transition={{ duration: prefersReducedMotion ? 0 : 0.8, ease: premiumEase }}
     >
-      <div className="footer-container">
-        <div className="footer-top-row">
-          <div className="footer-brand-block">
-            <a className="footer-brand-logo" href="/" aria-label={siteContent.homeAriaLabel}>
-              <b>{siteContent.brandShortName}</b>
-              <span>{siteContent.brandSuffix}</span>
-            </a>
-            <p className="footer-brand-subtext">{siteContent.footerTagline}</p>
-          </div>
+      <div className="footer-card">
+        <div className="footer-top-grid">
+          <a className="footer-brand-lockup" href="/" aria-label={siteContent.homeAriaLabel}>
+            <span>{siteContent.brandShortName}</span>
+            <span>{siteContent.brandSuffix}</span>
+          </a>
 
-          <div className="footer-right-group">
-            <a className="footer-email-badge" href={`mailto:${siteContent.email}`}>{siteContent.email}</a>
-            <nav className="footer-social-links" aria-label={siteContent.footerSocialLabel}>
-              {siteContent.socialLinks.map((link) => (
-                <a href={link.href} key={link.label}>{link.label}</a>
-              ))}
-            </nav>
-          </div>
+          <nav className="footer-link-group" aria-label={siteContent.footerSocialLabel}>
+            <p>Social</p>
+            {footerSocialLinks.map((link) => (
+              <a href={link.href} key={link.label}>{link.label}</a>
+            ))}
+          </nav>
+
+          <address className="footer-link-group footer-contact-group">
+            <p>Contact</p>
+            <a href={`mailto:${siteContent.email}`}>{siteContent.email}</a>
+            <span>{contactContent.availability}</span>
+            <span>{contactContent.location}</span>
+          </address>
         </div>
 
-        <div className="footer-bottom-row">
+        <div className="footer-shape-row" aria-hidden="true">
+          {footerShapes.map((shape) => (
+            <span className={`footer-shape footer-shape--${shape}`} key={shape} />
+          ))}
+        </div>
+
+        <div className="footer-meta-row">
           <p>{siteContent.footerCopyright}</p>
+          <a className="footer-back-top" href="#home" aria-label="Back to top">↑</a>
         </div>
       </div>
     </motion.footer>
