@@ -14,13 +14,13 @@
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 100px;
     background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.012)),
-        rgba(12, 12, 15, 0.72);
+        linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.006)),
+        rgba(8, 8, 11, 0.26);
     box-shadow:
         0 12px 36px rgba(0, 0, 0, 0.28),
         inset 0 1px 0 rgba(255, 255, 255, 0.075);
-    backdrop-filter: blur(18px) saturate(128%);
-    -webkit-backdrop-filter: blur(18px) saturate(128%);
+    backdrop-filter: blur(10px) saturate(128%);
+    -webkit-backdrop-filter: blur(10px) saturate(128%);
     transform: translateX(-50%);
     transition:
         background-color 300ms ease,
@@ -32,8 +32,8 @@
 .header-component-wrapper__header--scrolled {
     border-color: rgba(255, 36, 88, 0.18);
     background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01)),
-        rgba(10, 10, 13, 0.9);
+        linear-gradient(180deg, rgba(255, 255, 255, 0.048), rgba(255, 255, 255, 0.008)),
+        rgba(8, 8, 11, 0.34);
     box-shadow:
         0 16px 40px rgba(0, 0, 0, 0.32),
         0 0 24px rgba(255, 36, 88, 0.04),
@@ -212,12 +212,21 @@
         font-size: 22px;
     }
 
-    .header-component-wrapper__logo span,
-    .header-component-wrapper__contact-button {
+    .header-component-wrapper__logo span {
         display: none;
     }
 
     .header-component-wrapper__actions {
-        display: none;
+        display: flex;
+        height: 44px;
+    }
+
+    .header-component-wrapper__contact-button {
+        display: inline-flex;
+        height: 38px;
+        min-width: 92px;
+        justify-content: center;
+        padding: 0 14px;
+        font-size: 11px;
     }
 }
