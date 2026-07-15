@@ -71,7 +71,6 @@ export function Footer() {
 
         <div className="footer-meta-row">
           <p>{siteContent.footerCopyright}</p>
-          <a className="footer-back-top" href="#home" aria-label="Back to top">↑</a>
         </div>
       </div>
     </motion.footer>
