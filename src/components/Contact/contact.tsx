@@ -154,8 +154,8 @@ export function Contact() {
   }
 
   const headingVariants = {
-    hidden: { opacity: 0, y: 45, letterSpacing: '0.11em', clipPath: 'inset(100% 0 0 0)' },
-    visible: { opacity: 1, y: 0, letterSpacing: '0.035em', clipPath: 'inset(0% 0 0 0)' },
+    hidden: { opacity: 0, y: 34, scaleY: 0.92 },
+    visible: { opacity: 1, y: 0, scaleY: 1 },
   }
 
   const circuitLineVariants = {
@@ -169,8 +169,8 @@ export function Contact() {
   }
 
   const headingSweepVariants = {
-    hidden: { opacity: 0, x: '-120%' },
-    visible: { opacity: [0, 0.48, 0], x: ['-120%', '180%', '520%'] },
+    hidden: { opacity: 0, x: '-80%' },
+    visible: { opacity: [0, 0.34, 0], x: ['-80%', '160%', '360%'] },
   }
 
   const contactDetails = [
@@ -281,13 +281,13 @@ export function Contact() {
         initial={sectionInitial}
         animate={sectionControls}
         variants={headingVariants}
-        transition={{ duration: prefersReducedMotion ? 0 : 0.8, ease: premiumEase }}
+        transition={{ duration: prefersReducedMotion ? 0 : 0.95, ease: premiumEase }}
       >
         <span>CONTACT</span>
         <motion.span
           className="contact-section-wrapper__watermark-sweep"
           variants={headingSweepVariants}
-          transition={{ duration: prefersReducedMotion ? 0 : 1.2, delay: prefersReducedMotion ? 0 : 0.82, ease: premiumEase }}
+          transition={{ duration: prefersReducedMotion ? 0 : 1.25, delay: prefersReducedMotion ? 0 : 0.78, ease: premiumEase }}
         />
       </motion.div>
 

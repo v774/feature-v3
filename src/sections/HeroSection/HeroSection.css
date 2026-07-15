@@ -36,28 +36,51 @@
   left: 50%;
   z-index: 1;
   width: max-content;
-  max-width: calc(100vw - 32px);
-  overflow: hidden;
+  max-width: none;
+  overflow: visible;
   pointer-events: none;
-  background: radial-gradient(circle, rgba(142, 127, 148, 0) 0%, #8e7f94 70%);
+  background:
+    radial-gradient(circle at 50% 42%, rgba(255, 36, 88, 0.28) 0%, rgba(142, 127, 148, 0.72) 68%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.24), rgba(255, 36, 88, 0.12));
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
   font-family: var(--font-display);
-  font-size: clamp(3.25rem, 14vw, 12rem);
+  font-size: clamp(4.75rem, 22vw, 13rem);
   font-weight: 900;
   line-height: 0.8;
   letter-spacing: -0.04em;
-  opacity: 0.055;
+  opacity: 0.105;
   text-transform: uppercase;
   transform: translate(-50%, -50%);
   -webkit-text-fill-color: transparent;
   white-space: nowrap;
 }
 
+@media (min-width: 640px) {
+  .hero-watermark {
+    font-size: clamp(7rem, 20vw, 16rem);
+  }
+}
+
 @media (min-width: 1024px) {
   .hero-watermark {
-    font-size: clamp(6rem, 12vw, 14rem);
+    font-size: clamp(10rem, 20vw, 22rem);
+    opacity: 0.095;
+  }
+}
+
+@media (min-width: 1440px) {
+  .hero-watermark {
+    font-size: clamp(13rem, 18vw, 24rem);
+  }
+}
+
+@media (max-width: 430px) {
+  .hero-watermark {
+    top: 43%;
+    font-size: clamp(3rem, 18vw, 5.2rem);
+    opacity: 0.085;
   }
 }
 

@@ -39,7 +39,7 @@
   max-width: 100%;
   color: #ffffff;
   font-family: var(--font-display);
-  font-size: clamp(4.2rem, 10vw, 9rem);
+  font-size: clamp(4rem, 8.8vw, 7.8rem);
   font-weight: 950;
   line-height: 0.78;
   letter-spacing: -0.035em;

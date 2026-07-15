@@ -77,11 +77,13 @@
   font-weight: 950;
   line-height: 0.72;
   letter-spacing: 0.035em;
+  opacity: 0;
   text-align: center;
   text-transform: uppercase;
   white-space: nowrap;
   font-stretch: condensed;
   transform: none;
+  transform-origin: center bottom;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.52) 0%, rgba(92, 86, 92, 0.34) 42%, rgba(255, 36, 88, 0.22) 100%),
     linear-gradient(90deg, rgba(255, 255, 255, 0.18), rgba(255, 36, 88, 0.14));
@@ -90,6 +92,7 @@
   text-shadow:
     0 0 32px rgba(255, 255, 255, 0.055),
     0 0 68px rgba(255, 36, 88, 0.12);
+  will-change: opacity, transform;
 }
 
 .contact-section-wrapper__watermark span:first-child {
@@ -100,10 +103,12 @@
   position: absolute;
   inset: -18% auto -18% -35%;
   width: 28%;
+  opacity: 0;
   pointer-events: none;
   background: linear-gradient(90deg, transparent, rgba(255, 79, 135, 0.34), transparent);
   filter: blur(10px);
   transform: skewX(-18deg);
+  will-change: opacity, transform;
 }
 
 /* =========================================================
