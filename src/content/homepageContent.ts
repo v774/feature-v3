@@ -1,6 +1,6 @@
 import { siteContent } from "./siteContent";
 
-const heroVideoSrc = new URL("../assets/videos/hero/neon-llama.mp4", import.meta.url).href;
+const heroVideoSrc = new URL("../assets/videos/hero/Neon-Llama.mp4", import.meta.url).href;
 
 export interface ServiceContent {
   number: string;
@@ -69,7 +69,7 @@ export const homepageContent: HomepageContent = {
     highlights: ["Logo Animation", "Brand Motion", "Lottie UI"],
     localVideoSrc: heroVideoSrc,
     desktopSequence: {
-      basePath: "/images/hero/heroSeccvence",
+      basePath: "/images/hero/heroSequence",
       filePrefix: "neon-llama-ishodnik_",
       extension: "webp",
       frameCount: 121,

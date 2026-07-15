@@ -59,6 +59,7 @@ export interface FeaturedHomepageProject {
   number: string;
   name: string;
   category: string;
+  description: string;
   href: string;
   images: PortfolioProjectImages;
 }
@@ -258,34 +259,6 @@ export const portfolioProjects: PortfolioProject[] = [
     featuredTitle: "Posters",
     featuredCategory: "Animated Posters",
   },
-  {
-    id: "social-media-01",
-    slug: "onyx-social-content",
-    title: "Onyx - Social Content",
-    category: "social-media",
-    description: "A luxury motion direction.",
-    thumbnail: "/images/projects/1.webp",
-    video: "/videos/Social_media/7.webm",
-    poster: "/images/projects/1.webp",
-    images: {
-      leftTop: "/images/projects/1.webp",
-      leftBottom: "/images/projects/2.webp",
-      right: "/images/projects/3.webp",
-    },
-    featured: false,
-    showInMarquee: false,
-    published: true,
-    order: 6,
-    client: "Onyx",
-    year: "2026",
-    tools: ["After Effects"],
-    tags: ["Luxury", "Elegant"],
-    format: "WEBM",
-    delivery: "Social",
-    duration: "00:15",
-    seoTitle: "Onyx Social Content | VL Motion",
-    seoDescription: "Luxury social content motion direction created by VL Motion.",
-  },
 ];
 
 export const showreelProject: CategoryProject = {
@@ -333,6 +306,7 @@ export const featuredHomepageProjects: FeaturedHomepageProject[] = portfolioProj
     number: String(index + 1).padStart(2, "0"),
     name: project.featuredTitle ?? project.title,
     category: project.featuredCategory ?? portfolioCategories.find((category) => category.slug === project.category)?.label ?? project.category,
+    description: project.description,
     href: `/work/${project.category}`,
     images: project.images,
   }));

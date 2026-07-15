@@ -38,14 +38,13 @@ export const seoContent: SeoContent = {
   canonicalUrl: baseUrl,
   defaultTitle: "VL Motion | Motion Designer & Logo Animation",
   defaultDescription:
-    "Motion designer creating premium logo animations, brand motion systems, Lottie animations, animated posters and social media content.",
+    "Motion designer creating premium logo animations, brand motion systems, Lottie animations and animated posters.",
   keywords: [
     "motion designer",
     "logo animation",
     "brand motion",
     "Lottie animation",
     "animated posters",
-    "social media animation",
     "VL Motion",
   ],
   themeColor: "#08080a",

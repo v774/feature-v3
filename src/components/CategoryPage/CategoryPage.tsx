@@ -31,14 +31,6 @@ export function CategoryPage() {
     controls: headerControls,
     initial: headerInitial,
   } = useSectionAnimation<HTMLDivElement>()
-  const {
-    setRef: setGridRef,
-    controls: gridControls,
-    initial: gridInitial,
-  } = useSectionAnimation<HTMLDivElement>({
-    activationThreshold: 0.35,
-    resetThreshold: 0.06,
-  })
   const matchedCategory = categories.find((item) => item.enabled && item.slug === categoryId)
   const fallbackCategory = categories.find((item) => item.enabled)!
   const category = matchedCategory ?? fallbackCategory
@@ -217,14 +209,9 @@ export function CategoryPage() {
           </motion.div>
         </motion.div>
         <motion.div
-          ref={setGridRef}
-          initial={gridInitial}
-          animate={gridControls}
-          variants={{
-            hidden: { opacity: 0, y: 28 },
-            visible: { opacity: 1, y: 0 },
-          }}
-          transition={{ duration: prefersReducedMotion ? 0 : 0.6, ease: premiumEase }}
+          initial={prefersReducedMotion ? false : { opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: prefersReducedMotion ? 0 : 0.45, ease: premiumEase }}
         >
           <AnimatePresence mode="wait">
             <motion.section
@@ -243,8 +230,6 @@ export function CategoryPage() {
                   activePreviewId={activePreviewId}
                   setActivePreviewId={setActivePreviewId}
                   onWatch={openProject}
-                  entranceControls={gridControls}
-                  entranceInitial={gridInitial}
                   key={project.id}
                 />
               ))}

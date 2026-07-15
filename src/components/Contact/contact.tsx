@@ -42,9 +42,15 @@ export function Contact() {
     setRef: setSectionRef,
     controls: sectionControls,
     initial: sectionInitial,
-  } = useSectionAnimation<HTMLElement>()
+    isActive: isSectionActive,
+  } = useSectionAnimation<HTMLElement>({
+    activationThreshold: 0.32,
+    resetThreshold: 0.04,
+    minCycleMs: 1400,
+  })
   const copy = contactContent
-  const { displayed: headingText, done: headingDone } = useScrambleText(copy.heading, 150, !prefersReducedMotion)
+  const shouldAnimateHeading = !prefersReducedMotion && isSectionActive
+  const { displayed: headingText, done: headingDone } = useScrambleText(copy.heading, 150, shouldAnimateHeading)
   const visibleHeading = prefersReducedMotion ? copy.heading : headingText
   const [formData, setFormData] = useState<ContactFormData>({
     name: '',
@@ -164,8 +170,8 @@ export function Contact() {
   const fieldInitial = prefersReducedMotion ? false : { opacity: 0, y: 16 }
   const fieldVisible = { opacity: 1, y: 0 }
   const fieldTransition = (index: number) => ({
-    duration: prefersReducedMotion ? 0 : 0.5,
-    delay: prefersReducedMotion ? 0 : index * 0.07,
+    duration: prefersReducedMotion ? 0 : 0.56,
+    delay: prefersReducedMotion ? 0 : 0.1 + index * 0.055,
     ease: premiumEase,
   })
 
@@ -176,13 +182,13 @@ export function Contact() {
       action={submitUrl}
       method="post"
       onSubmit={handleSubmit}
-      initial={prefersReducedMotion ? false : { opacity: 0, x: isMobileMotion ? 0 : 50, y: isMobileMotion ? 30 : 0, scale: 0.98 }}
+      initial={prefersReducedMotion ? false : { opacity: 0, y: isMobileMotion ? 26 : 34, scale: 0.985 }}
       animate={sectionControls}
       variants={{
-        hidden: { opacity: 0, x: isMobileMotion ? 0 : 50, y: isMobileMotion ? 30 : 0, scale: 0.98 },
+        hidden: { opacity: 0, y: isMobileMotion ? 26 : 34, scale: 0.985 },
         visible: { opacity: 1, x: 0, y: 0, scale: 1 },
       }}
-      transition={{ duration: prefersReducedMotion ? 0 : 0.8, delay: prefersReducedMotion ? 0 : 0.12, ease: premiumEase }}
+      transition={{ duration: prefersReducedMotion ? 0 : 0.74, delay: prefersReducedMotion ? 0 : 0.12, ease: premiumEase }}
     >
       <motion.label initial={fieldInitial} animate={sectionControls} variants={{ hidden: fieldInitial || {}, visible: fieldVisible }} transition={fieldTransition(0)}>
         <span>{copy.name} <b>*</b></span>
@@ -248,15 +254,19 @@ export function Contact() {
             initial={sectionInitial}
             animate={sectionControls}
             variants={{
-              hidden: { opacity: 0, y: 50, scale: 0.97 },
+              hidden: { opacity: 0, y: 36, scale: 0.985 },
               visible: { opacity: 1, y: 0, scale: 1 },
             }}
-            transition={{ duration: prefersReducedMotion ? 0 : 0.8, ease: premiumEase }}
+            transition={{ duration: prefersReducedMotion ? 0 : 0.78, ease: premiumEase }}
+            aria-label={copy.heading}
           >
-            {visibleHeading}
-            {!prefersReducedMotion && (
-              <span className={`contact-section-wrapper__type-cursor${headingDone ? ' is-blinking' : ''}`} aria-hidden="true">|</span>
-            )}
+            <span className="contact-section-wrapper__heading-placeholder" aria-hidden="true">{copy.heading}</span>
+            <span className="contact-section-wrapper__heading-live" aria-hidden="true">
+              {visibleHeading}
+              {!prefersReducedMotion && (
+                <span className={`contact-section-wrapper__type-cursor${headingDone ? ' is-blinking' : ''}`} aria-hidden="true">|</span>
+              )}
+            </span>
           </motion.h2>
           <motion.p
             className="contact-section-wrapper__section-description"
@@ -275,13 +285,13 @@ export function Contact() {
           <div className="contact-section-wrapper__content">
             <motion.aside
               className="contact-section-wrapper__info-card"
-              initial={prefersReducedMotion ? false : { opacity: 0, x: isMobileMotion ? 0 : -42, y: isMobileMotion ? 28 : 0, scale: 0.98 }}
+              initial={prefersReducedMotion ? false : { opacity: 0, y: isMobileMotion ? 24 : 32, scale: 0.985 }}
               animate={sectionControls}
               variants={{
-                hidden: { opacity: 0, x: isMobileMotion ? 0 : -42, y: isMobileMotion ? 28 : 0, scale: 0.98 },
+                hidden: { opacity: 0, y: isMobileMotion ? 24 : 32, scale: 0.985 },
                 visible: { opacity: 1, x: 0, y: 0, scale: 1 },
               }}
-              transition={{ duration: prefersReducedMotion ? 0 : 0.8, delay: prefersReducedMotion ? 0 : 0.08, ease: premiumEase }}
+              transition={{ duration: prefersReducedMotion ? 0 : 0.74, delay: prefersReducedMotion ? 0 : 0.08, ease: premiumEase }}
             >
               <motion.div
                 className="contact-section-wrapper__email-block"

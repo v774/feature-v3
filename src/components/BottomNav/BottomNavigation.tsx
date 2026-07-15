@@ -12,8 +12,6 @@ function NavigationIcon({ name }: { name: string }) {
     work: <><rect x="3" y="3" width="3" height="3" rx=".5"/><rect x="10" y="3" width="3" height="3" rx=".5"/><rect x="3" y="10" width="3" height="3" rx=".5"/><rect x="10" y="10" width="3" height="3" rx=".5"/></>,
     about: <><circle cx="8" cy="5" r="2"/><path d="M4 14c.2-2.3 1.5-3.5 4-3.5s3.8 1.2 4 3.5"/></>,
     process: <><circle cx="8" cy="8" r="4.5"/><path d="M8 1.5v2M8 12.5v2M1.5 8h2M12.5 8h2M3.4 3.4l1.4 1.4M11.2 11.2l1.4 1.4"/></>,
-    testimonials: <><path d="M3 4.5h10v6H7l-3 2v-2H3a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1Z"/><path d="M5 7h6"/></>,
-    faq: <><circle cx="8" cy="8" r="6"/><path d="M6.5 6a1.5 1.5 0 1 1 2.2 1.3c-.5.3-.7.6-.7 1.2M8 11.5h.01"/></>,
     contact: <><rect x="2" y="3.5" width="12" height="9" rx="1"/><path d="m2.5 4.5 5.5 4 5.5-4"/></>,
   }
 

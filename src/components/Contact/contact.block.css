@@ -44,6 +44,7 @@
 }
 
 .contact-section-wrapper__section-header h2 {
+  position: relative;
   max-width: 880px;
   margin: 0 0 18px;
   color: #ffffff;
@@ -53,6 +54,18 @@
   line-height: 0.92;
   letter-spacing: -0.04em;
   text-transform: uppercase;
+}
+
+.contact-section-wrapper__heading-placeholder {
+  display: block;
+  visibility: hidden;
+}
+
+.contact-section-wrapper__heading-live {
+  position: absolute;
+  inset: 0;
+  display: block;
+  overflow-wrap: anywhere;
 }
 
 .contact-section-wrapper__type-cursor {
@@ -89,6 +102,7 @@
   box-shadow: 0 28px 100px rgba(0, 0, 0, 0.36);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
+  transform: translate3d(0, 0, 0);
 }
 
 .contact-section-wrapper__content {
@@ -117,9 +131,10 @@
   color: #ffffff;
   overflow: hidden;
   transition:
-    border-color 260ms ease,
-    box-shadow 260ms ease,
-    transform 260ms ease;
+    border-color 420ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 420ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
 }
 
 .contact-section-wrapper__info-card::before {
@@ -133,8 +148,8 @@
   opacity: 0.7;
   transform: translateX(-18%);
   transition:
-    opacity 320ms ease,
-    transform 520ms ease;
+    opacity 460ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 620ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .contact-section-wrapper__info-card > * {
@@ -165,10 +180,10 @@
   font-weight: 800;
   box-shadow: 0 0 0 rgba(139, 92, 246, 0);
   transition:
-    border-color 260ms ease,
-    background-color 260ms ease,
-    box-shadow 260ms ease,
-    transform 260ms ease;
+    border-color 360ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 360ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 360ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 360ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .contact-section-wrapper__email-copy {
@@ -222,9 +237,9 @@
   align-items: center;
   gap: 12px;
   transition:
-    color 240ms ease,
-    opacity 240ms ease,
-    transform 240ms ease;
+    color 360ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 360ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 360ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .contact-section-wrapper__social-badge .contact-section-wrapper__badge-icon {
@@ -385,9 +400,9 @@
   text-transform: uppercase;
   box-shadow: 0 18px 42px rgba(93, 95, 239, 0.28);
   transition:
-    box-shadow 240ms ease,
-    filter 240ms ease,
-    transform 240ms ease;
+    box-shadow 360ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 360ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 360ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .contact-section-wrapper__form .contact-section-wrapper__submit:disabled {

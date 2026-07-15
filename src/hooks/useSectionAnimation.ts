@@ -1,5 +1,5 @@
 import { useAnimationControls } from "motion/react";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "./useReducedMotion";
 
 type SectionAnimationOptions = {
@@ -16,10 +16,12 @@ export function useSectionAnimation<T extends Element>({
   setRef: (element: T | null) => void;
   controls: ReturnType<typeof useAnimationControls>;
   initial: "hidden" | false;
+  isActive: boolean;
 } {
   const ref = useRef<T>(null);
   const controls = useAnimationControls();
   const prefersReducedMotion = useReducedMotion();
+  const [isActive, setIsActive] = useState(prefersReducedMotion);
   const isVisibleRef = useRef(false);
   const lastActivationRef = useRef(0);
   const resetTimeoutRef = useRef(0);
@@ -50,6 +52,7 @@ export function useSectionAnimation<T extends Element>({
       const reset = () => {
         if (latestRatioRef.current <= resetThreshold) {
           isVisibleRef.current = false;
+          setIsActive(false);
           controls.set("hidden");
         }
       };
@@ -74,6 +77,7 @@ export function useSectionAnimation<T extends Element>({
           clearPendingReset();
           if (!isVisibleRef.current) {
             isVisibleRef.current = true;
+            setIsActive(true);
             lastActivationRef.current = performance.now();
             void controls.start("visible");
           }
@@ -99,5 +103,6 @@ export function useSectionAnimation<T extends Element>({
     setRef,
     controls,
     initial: prefersReducedMotion ? false : "hidden",
+    isActive: prefersReducedMotion || isActive,
   };
 }
