@@ -1,6 +1,6 @@
 import { siteContent } from "./siteContent";
 
-const heroVideoSrc = new URL("../assets/videos/hero/Neon-Llama.mp4", import.meta.url).href;
+const heroVideoSrc = new URL("../assets/videos/hero/neon-lama.mp4", import.meta.url).href;
 
 export interface ServiceContent {
   number: string;
