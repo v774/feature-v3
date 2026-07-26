@@ -19,6 +19,7 @@ export function BackgroundVideo() {
         muted
         playsInline
         preload="auto"
+        poster={heroData.posterSrc}
         className="background-video-media"
         src={heroData.localVideoSrc}
       />

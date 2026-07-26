@@ -27,6 +27,7 @@ export interface HomepageContent {
     location: string;
     highlights: string[];
     localVideoSrc: string;
+    posterSrc: string;
     desktopSequence: {
       basePath: string;
       filePrefix: string;
@@ -68,6 +69,7 @@ export const homepageContent: HomepageContent = {
     location: "Worldwide",
     highlights: ["Logo Animation", "Brand Motion", "Lottie UI"],
     localVideoSrc: heroVideoSrc,
+    posterSrc: "/images/hero/heroSequence/neon-llama-ishodnik_00000.webp",
     desktopSequence: {
       basePath: "/images/hero/heroSequence",
       filePrefix: "neon-llama-ishodnik_",
