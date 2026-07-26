@@ -9,6 +9,7 @@ type HeroImageSequenceConfig = {
 };
 
 const desktopQueryText = "(min-width: 1024px)";
+const mobileFramesPerSecond = 30;
 
 function getFrameSrc(config: HeroImageSequenceConfig, index: number) {
   const frameNumber = String(index).padStart(config.framePadding, "0");
@@ -24,11 +25,15 @@ function drawCoverImage(canvas: HTMLCanvasElement, image: HTMLImageElement) {
   const scale = Math.max(width / image.naturalWidth, height / image.naturalHeight);
   const drawWidth = image.naturalWidth * scale;
   const drawHeight = image.naturalHeight * scale;
-  const drawX = (width - drawWidth) / 2;
-  const drawY = (height - drawHeight) / 2;
 
   context.clearRect(0, 0, width, height);
-  context.drawImage(image, drawX, drawY, drawWidth, drawHeight);
+  context.drawImage(
+    image,
+    (width - drawWidth) / 2,
+    (height - drawHeight) / 2,
+    drawWidth,
+    drawHeight,
+  );
 }
 
 export function useHeroImageSequence(
@@ -43,20 +48,21 @@ export function useHeroImageSequence(
     const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     const images = Array.from({ length: config.frameCount }, () => new Image());
     const loadedFrames = new Set<number>();
-    const frameRef = { current: 0 };
-    const targetFrameRef = { current: 0 };
-    const renderedFrameRef = { current: -1 };
-    const lastLoadedFrameRef = { current: 0 };
+    let animationFrame = 0;
+    let targetFrame = 0;
+    let renderedFrame = -1;
+    let lastLoadedFrame = 0;
+    let mobileFrame = 0;
+    let mobileDirection: 1 | -1 = 1;
+    let previousMobileTimestamp = 0;
     let mounted = true;
 
     const drawFrame = (frameIndex: number) => {
       const safeFrame = Math.min(Math.max(frameIndex, 0), config.frameCount - 1);
-      const image = loadedFrames.has(safeFrame)
-        ? images[safeFrame]
-        : images[lastLoadedFrameRef.current];
+      const image = loadedFrames.has(safeFrame) ? images[safeFrame] : images[lastLoadedFrame];
 
-      if (!image || !image.complete) return;
-      renderedFrameRef.current = safeFrame;
+      if (!image?.complete || !image.naturalWidth) return;
+      renderedFrame = safeFrame;
       drawCoverImage(canvas, image);
     };
 
@@ -69,57 +75,79 @@ export function useHeroImageSequence(
       if (canvas.width !== nextWidth || canvas.height !== nextHeight) {
         canvas.width = nextWidth;
         canvas.height = nextHeight;
-        drawFrame(renderedFrameRef.current >= 0 ? renderedFrameRef.current : targetFrameRef.current);
+        drawFrame(renderedFrame >= 0 ? renderedFrame : targetFrame);
       }
     };
 
-    const requestDraw = () => {
-      if (frameRef.current) return;
-
-      frameRef.current = window.requestAnimationFrame(() => {
-        frameRef.current = 0;
-        if (!desktopQuery.matches || reducedMotionQuery.matches) return;
-        drawFrame(targetFrameRef.current);
+    const requestDesktopDraw = () => {
+      if (animationFrame) return;
+      animationFrame = window.requestAnimationFrame(() => {
+        animationFrame = 0;
+        if (desktopQuery.matches && !reducedMotionQuery.matches) drawFrame(targetFrame);
       });
+    };
+
+    const animateMobile = (timestamp: number) => {
+      animationFrame = 0;
+      if (desktopQuery.matches || reducedMotionQuery.matches) return;
+
+      const frameInterval = 1000 / mobileFramesPerSecond;
+      if (!previousMobileTimestamp) previousMobileTimestamp = timestamp;
+
+      if (timestamp - previousMobileTimestamp >= frameInterval) {
+        const elapsedFrames = Math.max(1, Math.floor((timestamp - previousMobileTimestamp) / frameInterval));
+        previousMobileTimestamp = timestamp;
+        mobileFrame += elapsedFrames * mobileDirection;
+
+        if (mobileFrame >= config.frameCount - 1) {
+          mobileFrame = config.frameCount - 1;
+          mobileDirection = -1;
+        } else if (mobileFrame <= 0) {
+          mobileFrame = 0;
+          mobileDirection = 1;
+        }
+
+        drawFrame(mobileFrame);
+      }
+
+      animationFrame = window.requestAnimationFrame(animateMobile);
     };
 
     const onPointerMove = (event: MouseEvent) => {
       if (!desktopQuery.matches || reducedMotionQuery.matches) return;
-
       const progress = Math.min(Math.max(event.clientX / Math.max(window.innerWidth, 1), 0), 1);
-      targetFrameRef.current = Math.round(progress * (config.frameCount - 1));
-      requestDraw();
-    };
-
-    const preloadFrames = () => {
-      images.forEach((image, index) => {
-        image.decoding = "async";
-        image.onload = () => {
-          if (!mounted) return;
-          loadedFrames.add(index);
-          lastLoadedFrameRef.current = index;
-
-          if (index === 0 || index === targetFrameRef.current) {
-            requestDraw();
-          }
-        };
-        image.src = getFrameSrc(config, index);
-      });
+      targetFrame = Math.round(progress * (config.frameCount - 1));
+      requestDesktopDraw();
     };
 
     const applyMode = () => {
+      if (animationFrame) window.cancelAnimationFrame(animationFrame);
+      animationFrame = 0;
+      previousMobileTimestamp = 0;
+      canvas.hidden = false;
       resizeCanvas();
-      if (desktopQuery.matches && !reducedMotionQuery.matches) {
-        canvas.hidden = false;
-        requestDraw();
+
+      if (reducedMotionQuery.matches) {
+        drawFrame(0);
+      } else if (desktopQuery.matches) {
+        requestDesktopDraw();
       } else {
-        canvas.hidden = true;
+        animationFrame = window.requestAnimationFrame(animateMobile);
       }
     };
 
-    preloadFrames();
-    applyMode();
+    images.forEach((image, index) => {
+      image.decoding = "async";
+      image.onload = () => {
+        if (!mounted) return;
+        loadedFrames.add(index);
+        lastLoadedFrame = index;
+        if (index === 0 || index === targetFrame || index === mobileFrame) drawFrame(index);
+      };
+      image.src = getFrameSrc(config, index);
+    });
 
+    applyMode();
     window.addEventListener("mousemove", onPointerMove, { passive: true });
     window.addEventListener("resize", resizeCanvas);
     desktopQuery.addEventListener("change", applyMode);
@@ -131,10 +159,7 @@ export function useHeroImageSequence(
       window.removeEventListener("resize", resizeCanvas);
       desktopQuery.removeEventListener("change", applyMode);
       reducedMotionQuery.removeEventListener("change", applyMode);
-
-      if (frameRef.current) {
-        window.cancelAnimationFrame(frameRef.current);
-      }
+      if (animationFrame) window.cancelAnimationFrame(animationFrame);
     };
   }, [canvasRef, config]);
 }

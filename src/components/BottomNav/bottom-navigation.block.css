@@ -101,12 +101,33 @@
 
 @media (max-width: 575.98px) {
     .bottom-navigation {
+        bottom: 10px;
+        width: calc(100% - 28px);
+        max-width: 430px;
         justify-content: space-between;
+        padding: 10px 8px;
+        padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
     }
 
     .bottom-navigation__item {
         min-width: 0;
+        min-height: 54px;
         flex: 1;
+        gap: 5px;
+        padding: 7px 4px;
+        font-size: 11px;
+        font-weight: 500;
+    }
+
+    .bottom-navigation__icon {
+        width: 23px;
+        height: 23px;
+    }
+
+    .bottom-navigation__icon svg {
+        width: 21px;
+        height: 21px;
+        stroke-width: 1.2;
     }
 }
 

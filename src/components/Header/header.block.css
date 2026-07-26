@@ -204,12 +204,18 @@
 }
 
 @media (max-width: 767px) {
+    .header-component-wrapper__header {
+        top: 10px;
+        width: calc(100% - 24px);
+        height: 72px;
+    }
+
     .header-component-wrapper__container {
-        padding: 0 13px;
+        padding: 0 18px;
     }
 
     .header-component-wrapper__logo {
-        font-size: 22px;
+        font-size: 27px;
     }
 
     .header-component-wrapper__logo span {
@@ -218,15 +224,15 @@
 
     .header-component-wrapper__actions {
         display: flex;
-        height: 44px;
+        height: 48px;
     }
 
     .header-component-wrapper__contact-button {
         display: inline-flex;
-        height: 38px;
-        min-width: 92px;
+        height: 46px;
+        min-width: 112px;
         justify-content: center;
-        padding: 0 14px;
-        font-size: 11px;
+        padding: 0 18px;
+        font-size: 13px;
     }
 }
