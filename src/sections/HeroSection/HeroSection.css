@@ -296,16 +296,16 @@
   }
 
   .hero-description {
-    max-width: 400px;
+    max-width: 360px;
     font-size: 15px;
   }
 
   .hero-headline {
-    max-width: 760px;
+    max-width: 700px;
   }
 
   .hero-bottom-row {
-    grid-template-columns: minmax(0, 1fr) minmax(320px, 0.42fr);
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 0.38fr);
     align-items: end;
     justify-content: space-between;
   }
@@ -318,5 +318,19 @@
   .hero-actions,
   .hero-meta {
     justify-content: flex-end;
+  }
+}
+
+@media (min-width: 1200px) {
+  .hero-description {
+    max-width: 400px;
+  }
+
+  .hero-headline {
+    max-width: 760px;
+  }
+
+  .hero-bottom-row {
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 0.42fr);
   }
 }

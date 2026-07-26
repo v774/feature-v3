@@ -147,7 +147,9 @@ export function CategoryPage() {
             variants={headerItemVariants}
             transition={{ duration: prefersReducedMotion ? 0 : 0.7, ease: premiumEase }}
           >
-            {siteContent.categoryPage.work} <b>›</b> {categoryName}
+            <span>{siteContent.categoryPage.work}</span>
+            <b aria-hidden="true">&gt;</b>
+            <span>{categoryName}</span>
           </motion.p>
           <AnimatePresence mode="wait">
             <motion.div

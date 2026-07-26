@@ -127,3 +127,21 @@
     width: 220px;
   }
 }
+
+@media (min-width: 1280px) {
+  .about-decoration-top-left {
+    left: calc(50% - 610px);
+  }
+
+  .about-decoration-bottom-left {
+    left: calc(50% - 520px);
+  }
+
+  .about-decoration-top-right {
+    right: calc(50% - 610px);
+  }
+
+  .about-decoration-bottom-right {
+    right: calc(50% - 520px);
+  }
+}

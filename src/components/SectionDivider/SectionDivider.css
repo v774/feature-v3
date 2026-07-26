@@ -1,0 +1,283 @@
+.section-divider {
+  position: relative;
+  z-index: 12;
+  width: 100%;
+  height: 1px;
+  margin-top: -1px;
+  pointer-events: none;
+  isolation: isolate;
+}
+
+.section-divider__visual {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+  height: clamp(72px, 8vw, 116px);
+  overflow: hidden;
+  transform: translateY(-50%);
+}
+
+.section-divider__line {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(58vw, 900px);
+  height: 1px;
+  opacity: 0;
+  transform: translateX(-50%) scaleX(0);
+  transform-origin: center;
+  transition:
+    transform 900ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 450ms ease;
+}
+
+.section-divider__node {
+  position: absolute;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.45);
+  transition:
+    opacity 320ms ease 620ms,
+    transform 420ms cubic-bezier(0.22, 1, 0.36, 1) 620ms;
+}
+
+.section-divider__node--left {
+  left: max(18%, calc(50% - 360px));
+}
+
+.section-divider__node--right {
+  left: min(82%, calc(50% + 360px));
+}
+
+.section-divider[data-visible="true"] .section-divider__line {
+  opacity: 1;
+  transform: translateX(-50%) scaleX(1);
+}
+
+.section-divider[data-visible="true"] .section-divider__node {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.section-divider--dark .section-divider__visual {
+  background:
+    radial-gradient(ellipse at 50% 50%, rgba(255, 36, 88, 0.07), transparent 46%),
+    linear-gradient(180deg, transparent, rgba(255, 36, 88, 0.018), transparent);
+}
+
+.section-divider--dark .section-divider__line {
+  width: min(58vw, 860px);
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 36, 88, 0.78) 20%,
+    rgba(255, 134, 162, 0.88) 50%,
+    rgba(255, 36, 88, 0.78) 80%,
+    transparent
+  );
+  box-shadow:
+    0 0 10px rgba(255, 36, 88, 0.34),
+    0 0 22px rgba(255, 36, 88, 0.14);
+}
+
+.section-divider--dark .section-divider__node {
+  border: 1px solid rgba(255, 36, 88, 0.86);
+  background: #09090b;
+  box-shadow: 0 0 10px rgba(255, 36, 88, 0.36);
+}
+
+.section-divider--light {
+  z-index: 14;
+}
+
+.section-divider--light .section-divider__visual {
+  height: clamp(84px, 9vw, 128px);
+  background: linear-gradient(
+    180deg,
+    rgba(12, 12, 12, 0.035),
+    rgba(110, 8, 40, 0.045) 48%,
+    rgba(255, 255, 255, 0.08)
+  );
+}
+
+.section-divider--light .section-divider__line {
+  width: min(70vw, 1060px);
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(112, 8, 40, 0.88) 16%,
+    rgba(194, 16, 70, 0.96) 50%,
+    rgba(112, 8, 40, 0.88) 84%,
+    transparent
+  );
+  box-shadow:
+    0 0 8px rgba(112, 8, 40, 0.28),
+    0 0 18px rgba(255, 36, 88, 0.12);
+}
+
+.section-divider--light .section-divider__node {
+  border: 1px solid rgba(116, 10, 43, 0.84);
+  background: #fff;
+  box-shadow: 0 0 9px rgba(255, 36, 88, 0.24);
+}
+
+.section-divider__circuit {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 48px;
+  overflow: visible;
+  fill: none;
+  stroke: rgba(255, 36, 88, 0.64);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 0 5px rgba(255, 36, 88, 0.22));
+  transform: translateY(-8px);
+}
+
+.section-divider__circuit path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 950ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.section-divider__circuit circle {
+  fill: #09090b;
+  stroke: rgba(255, 36, 88, 0.88);
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scale(0.45);
+  transition:
+    opacity 300ms ease 720ms,
+    transform 400ms cubic-bezier(0.22, 1, 0.36, 1) 720ms;
+}
+
+.section-divider--circuit .section-divider__line,
+.section-divider--circuit .section-divider__node,
+.section-divider--transition .section-divider__line,
+.section-divider--transition .section-divider__node {
+  display: none;
+}
+
+.section-divider--circuit .section-divider__visual {
+  background: linear-gradient(180deg, rgba(116, 10, 43, 0.05), rgba(8, 8, 10, 0.08));
+}
+
+.section-divider--circuit[data-visible="true"] .section-divider__circuit path,
+.section-divider--transition[data-visible="true"] .section-divider__circuit path {
+  stroke-dashoffset: 0;
+}
+
+.section-divider--circuit[data-visible="true"] .section-divider__circuit circle,
+.section-divider--transition[data-visible="true"] .section-divider__circuit circle {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.section-divider--transition {
+  z-index: 13;
+}
+
+.section-divider--transition .section-divider__visual {
+  height: clamp(128px, 13vw, 190px);
+  background:
+    radial-gradient(ellipse at 28% 52%, rgba(255, 36, 88, 0.13), transparent 42%),
+    radial-gradient(ellipse at 72% 52%, rgba(101, 69, 255, 0.07), transparent 42%),
+    radial-gradient(ellipse at 50% 54%, rgba(255, 36, 88, 0.1), transparent 62%);
+}
+
+.section-divider--transition .section-divider__circuit {
+  stroke: rgba(255, 36, 88, 0.82);
+  filter: drop-shadow(0 0 7px rgba(255, 36, 88, 0.32));
+}
+
+.section-divider--transition .section-divider__circuit circle {
+  stroke: rgba(255, 36, 88, 0.96);
+  box-shadow: 0 0 10px rgba(255, 36, 88, 0.28);
+}
+
+@media (max-width: 900px) {
+  .section-divider__line {
+    width: min(72vw, 620px);
+  }
+
+  .section-divider__circuit {
+    width: 118%;
+    margin-left: -9%;
+  }
+
+  .section-divider--transition .section-divider__visual {
+    height: 124px;
+  }
+}
+
+@media (max-width: 600px) {
+  .section-divider__visual,
+  .section-divider--light .section-divider__visual {
+    height: 66px;
+  }
+
+  .section-divider__line,
+  .section-divider--dark .section-divider__line,
+  .section-divider--light .section-divider__line {
+    width: 124px;
+  }
+
+  .section-divider__node--left {
+    left: calc(50% - 62px);
+  }
+
+  .section-divider__node--right {
+    left: calc(50% + 62px);
+  }
+
+  .section-divider--circuit .section-divider__circuit,
+  .section-divider--transition .section-divider__circuit {
+    display: none;
+  }
+
+  .section-divider--circuit .section-divider__line,
+  .section-divider--circuit .section-divider__node,
+  .section-divider--transition .section-divider__line,
+  .section-divider--transition .section-divider__node {
+    display: block;
+  }
+
+  .section-divider--circuit .section-divider__line,
+  .section-divider--transition .section-divider__line {
+    width: 124px;
+    background: linear-gradient(90deg, transparent, rgba(255, 36, 88, 0.82), transparent);
+    box-shadow: 0 0 14px rgba(255, 36, 88, 0.24);
+  }
+
+  .section-divider--circuit .section-divider__node,
+  .section-divider--transition .section-divider__node {
+    border: 1px solid rgba(255, 36, 88, 0.9);
+    background: #09090b;
+    box-shadow: 0 0 9px rgba(255, 36, 88, 0.3);
+  }
+
+  .section-divider--transition .section-divider__visual {
+    height: 92px;
+    background:
+      radial-gradient(ellipse at 50% 52%, rgba(255, 36, 88, 0.14), transparent 62%),
+      linear-gradient(180deg, transparent, rgba(54, 7, 21, 0.16), transparent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section-divider__line,
+  .section-divider__node,
+  .section-divider__circuit path,
+  .section-divider__circuit circle {
+    transition: none;
+  }
+}

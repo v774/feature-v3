@@ -12,7 +12,7 @@
 }
 
 .services-heading {
-  margin-bottom: 48px;
+  margin-bottom: 40px;
   color: #0c0c0c;
   font-size: clamp(3rem, 12vw, 160px);
   font-weight: 900;
@@ -92,23 +92,23 @@
 
 @media (min-width: 640px) {
   .services-section {
-    padding: 96px 32px;
+    padding: 84px 32px;
     border-radius: 50px 50px 0 0;
   }
 
   .service-item {
-    padding: 40px 0;
+    padding: 34px 0;
   }
 }
 
 @media (min-width: 768px) {
   .services-section {
-    padding: 128px 40px;
+    padding: 96px 40px;
     border-radius: 60px 60px 0 0;
   }
 
   .service-item {
-    padding: 48px 0;
+    padding: 36px 0;
   }
 }
 

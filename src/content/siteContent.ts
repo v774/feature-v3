@@ -68,14 +68,12 @@ export const siteContent: SiteContent = {
   ],
   contactCta: "Let's talk",
   contactButtonLabel: "Contact Me",
-  footerTagline: "Motion design portfolio foundation.",
+  footerTagline: "Logo animation · Brand motion · Lottie UI",
   footerSocialLabel: "Social links",
   footerCopyright: "© 2026 VALENTYN LAVRYK · MOTION DESIGNER",
-  email: "hello@example.com",
+  email: "valentyn.lvrk@gmail.com",
   socialLinks: [
-    { label: "Behance", href: "https://behance.net", shortLabel: "Be" },
-    { label: "Instagram", href: "https://instagram.com", shortLabel: "Ig" },
-    { label: "Email", href: "mailto:hello@example.com", shortLabel: "Mail" },
+    { label: "Email", href: "mailto:valentyn.lvrk@gmail.com", shortLabel: "Mail" },
   ],
   categoryPage: {
     back: "Back",

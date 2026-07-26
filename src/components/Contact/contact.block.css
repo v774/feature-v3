@@ -24,9 +24,10 @@
   overflow: hidden;
   color: #fff;
   background:
-    radial-gradient(circle at 50% 7%, rgba(255, 36, 88, 0.22), transparent 34%),
+    linear-gradient(180deg, transparent 76%, #050505 100%),
+    radial-gradient(ellipse at 50% 0%, rgba(255, 36, 88, 0.16), transparent 38%),
     radial-gradient(circle at 50% 45%, rgba(255, 36, 88, 0.08), transparent 42%),
-    radial-gradient(circle at 48% 96%, rgba(91, 54, 255, 0.055), transparent 34%),
+    radial-gradient(ellipse at 50% 100%, rgba(255, 36, 88, 0.035), transparent 42%),
     #050505;
   font-family: var(--font-interface);
   scroll-margin-top: 96px;
@@ -66,7 +67,7 @@
    ========================================================= */
 .contact-section-wrapper__watermark {
   position: relative;
-  z-index: 1;
+  z-index: 3;
   width: 100%;
   margin-top: clamp(-86px, -7vh, -58px);
   pointer-events: none;
@@ -109,43 +110,6 @@
   filter: blur(10px);
   transform: skewX(-18deg);
   will-change: opacity, transform;
-}
-
-/* =========================================================
-   DECORATIVE SVG CIRCUIT LINES
-   ========================================================= */
-.contact-section-wrapper__circuit {
-  position: absolute;
-  top: clamp(190px, 26vh, 270px);
-  z-index: 0;
-  width: clamp(300px, 30vw, 520px);
-  height: 160px;
-  pointer-events: none;
-  overflow: visible;
-}
-
-.contact-section-wrapper__circuit--left {
-  left: 0;
-}
-
-.contact-section-wrapper__circuit--right {
-  right: 0;
-}
-
-.contact-section-wrapper__circuit path {
-  fill: none;
-  stroke: rgba(255, 36, 88, 0.62);
-  stroke-width: 1;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  filter: drop-shadow(0 0 5px rgba(255, 36, 88, 0.16));
-}
-
-.contact-section-wrapper__circuit circle {
-  fill: #050505;
-  stroke: rgba(255, 36, 88, 0.78);
-  stroke-width: 1.2;
-  filter: drop-shadow(0 0 5px rgba(255, 36, 88, 0.18));
 }
 
 /* =========================================================
@@ -325,9 +289,13 @@
 
 .contact-section-wrapper__card-arrow::before {
   content: '\2197';
+  display: block;
   font-size: 20px;
   font-weight: 900;
   line-height: 1;
+  transform: rotate(-15deg);
+  transform-origin: center;
+  transition: transform 360ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* =========================================================
@@ -495,6 +463,10 @@
     background: rgba(255, 36, 88, 0.13);
     box-shadow: 0 0 20px rgba(255, 36, 88, 0.16);
     transform: translate(3px, -3px);
+  }
+
+  .contact-section-wrapper__detail-card:hover .contact-section-wrapper__card-arrow::before {
+    transform: rotate(45deg);
   }
 
   .contact-section-wrapper__submit:hover,

@@ -4,7 +4,7 @@ import { homepageContent } from "../../content/homepageContent";
 import { marqueeProjects, type MarqueeProject } from "../../content/portfolioContent";
 import "./MarqueeSection.css";
 
-const repeatCount = 8;
+const repeatCount = 3;
 const repeatProjects = (projects: MarqueeProject[]) =>
   Array.from({ length: repeatCount }, () => projects).flat();
 
@@ -30,9 +30,25 @@ export function MarqueeSection() {
 
   useEffect(() => {
     let frameId = 0;
+    const section = sectionRef.current;
+    const videos = section ? Array.from(section.querySelectorAll<HTMLVideoElement>("video")) : [];
+    const videoObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const video = entry.target as HTMLVideoElement;
+          if (entry.isIntersecting) {
+            void video.play().catch(() => undefined);
+          } else {
+            video.pause();
+          }
+        });
+      },
+      { rootMargin: "120px 0px", threshold: 0.15 },
+    );
+
+    videos.forEach((video) => videoObserver.observe(video));
 
     const updateRows = () => {
-      const section = sectionRef.current;
       const firstRow = firstRowRef.current;
       const secondRow = secondRowRef.current;
       if (!section || !firstRow || !secondRow) {
@@ -67,6 +83,8 @@ export function MarqueeSection() {
     return () => {
       window.removeEventListener("scroll", requestUpdate);
       window.removeEventListener("resize", requestUpdate);
+      videoObserver.disconnect();
+      videos.forEach((video) => video.pause());
       if (frameId) {
         window.cancelAnimationFrame(frameId);
       }
@@ -80,7 +98,7 @@ export function MarqueeSection() {
           {rows[0].map((project, index) => (
             <Link className="marquee-tile" key={`first-${project.id}-${index}`} to={project.href ?? "/"}>
               {project.type === "video" ? (
-                <video className="marquee-image" src={project.src} poster={project.poster} muted loop playsInline autoPlay preload="metadata" />
+                <video className="marquee-image" src={project.src} poster={project.poster} muted loop playsInline preload="metadata" />
               ) : (
                 <img className="marquee-image" src={project.src} alt={project.alt} loading="lazy" decoding="async" />
               )}
@@ -91,7 +109,7 @@ export function MarqueeSection() {
           {rows[1].map((project, index) => (
             <Link className="marquee-tile" key={`second-${project.id}-${index}`} to={project.href ?? "/"}>
               {project.type === "video" ? (
-                <video className="marquee-image" src={project.src} poster={project.poster} muted loop playsInline autoPlay preload="metadata" />
+                <video className="marquee-image" src={project.src} poster={project.poster} muted loop playsInline preload="metadata" />
               ) : (
                 <img className="marquee-image" src={project.src} alt={project.alt} loading="lazy" decoding="async" />
               )}

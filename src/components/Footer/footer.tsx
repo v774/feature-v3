@@ -28,6 +28,7 @@ export function Footer() {
     resetThreshold: 0.06,
   })
   const footerSocialLinks = siteContent.socialLinks.filter((link) => link.label.toLowerCase() !== 'email')
+  const hasSocialLinks = footerSocialLinks.length > 0
 
   return (
     <motion.footer
@@ -42,18 +43,20 @@ export function Footer() {
       transition={{ duration: prefersReducedMotion ? 0 : 0.8, ease: premiumEase }}
     >
       <div className="footer-card">
-        <div className="footer-top-grid">
+        <div className="footer-top-grid" data-has-socials={hasSocialLinks ? 'true' : 'false'}>
           <a className="footer-brand-lockup" href="/" aria-label={siteContent.homeAriaLabel}>
             <span>{siteContent.brandShortName}</span>
             <span>{siteContent.brandSuffix}</span>
           </a>
 
-          <nav className="footer-link-group" aria-label={siteContent.footerSocialLabel}>
-            <p>Social</p>
-            {footerSocialLinks.map((link) => (
-              <a href={link.href} key={link.label}>{link.label}</a>
-            ))}
-          </nav>
+          {hasSocialLinks && (
+            <nav className="footer-link-group" aria-label={siteContent.footerSocialLabel}>
+              <p>Social</p>
+              {footerSocialLinks.map((link) => (
+                <a href={link.href} key={link.label}>{link.label}</a>
+              ))}
+            </nav>
+          )}
 
           <address className="footer-link-group footer-contact-group">
             <p>Contact</p>

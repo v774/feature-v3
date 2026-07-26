@@ -4,6 +4,7 @@ import { HeroStatus } from "../../components/HeroStatus/HeroStatus";
 import { homepageContent } from "../../content/homepageContent";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { useScrambleText } from "../../hooks/useScrambleText";
+import { useSectionAnimation } from "../../hooks/useSectionAnimation";
 import { scrollToHomepageSection } from "../../utils/sectionNavigation";
 import "./HeroSection.css";
 
@@ -14,11 +15,24 @@ type HeroSectionProps = {
 export function HeroSection({ onShowreel }: HeroSectionProps) {
   const prefersReducedMotion = useReducedMotion();
   const heroData = homepageContent.hero;
-  const { displayed, done } = useScrambleText(heroData.headline, 800, !prefersReducedMotion);
+  const {
+    setRef: setHeroRef,
+    controls: heroControls,
+    initial: heroInitial,
+    isActive: heroIsActive,
+  } = useSectionAnimation<HTMLElement>({
+    activationThreshold: 0.35,
+    resetThreshold: 0.03,
+  });
+  const { displayed, done } = useScrambleText(
+    heroData.headline,
+    800,
+    heroIsActive && !prefersReducedMotion,
+  );
   const headline = prefersReducedMotion ? heroData.headline : displayed;
 
   return (
-    <section id="home" className="hero-section">
+    <section id="home" className="hero-section" ref={setHeroRef}>
       <BackgroundVideo />
       <div className="hero-dot-overlay" aria-hidden="true" />
       <div className="hero-vignette" aria-hidden="true" />
@@ -32,16 +46,24 @@ export function HeroSection({ onShowreel }: HeroSectionProps) {
           <div className="hero-copy-column">
             <motion.p
               className="hero-kicker"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={heroInitial}
+              animate={heroControls}
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0 },
+              }}
               transition={{ delay: 0.8, duration: 0.8, ease: [0.215, 0.61, 0.355, 1] }}
             >
               {heroData.kicker}
             </motion.p>
             <motion.h1
               className="hero-headline"
-              initial={{ opacity: 0, y: 28 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={heroInitial}
+              animate={heroControls}
+              variants={{
+                hidden: { opacity: 0, y: 28 },
+                visible: { opacity: 1, y: 0 },
+              }}
               transition={{ delay: 0.8, duration: 1, ease: [0.215, 0.61, 0.355, 1] }}
             >
               {headline}
@@ -55,8 +77,12 @@ export function HeroSection({ onShowreel }: HeroSectionProps) {
 
           <motion.div
             className="hero-detail-column"
-            initial={{ opacity: 0, y: 25 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={heroInitial}
+            animate={heroControls}
+            variants={{
+              hidden: { opacity: 0, y: 25 },
+              visible: { opacity: 1, y: 0 },
+            }}
             transition={{ delay: 1, duration: 0.9, ease: [0.215, 0.61, 0.355, 1] }}
           >
             <p className="hero-description">{heroData.description}</p>

@@ -158,16 +158,6 @@ export function Contact() {
     visible: { opacity: 1, y: 0, scaleY: 1 },
   }
 
-  const circuitLineVariants = {
-    hidden: { pathLength: 0, opacity: 0 },
-    visible: { pathLength: 1, opacity: 1 },
-  }
-
-  const circuitNodeVariants = {
-    hidden: { opacity: 0, scale: 0.75 },
-    visible: { opacity: 1, scale: 1 },
-  }
-
   const headingSweepVariants = {
     hidden: { opacity: 0, x: '-80%' },
     visible: { opacity: [0, 0.34, 0], x: ['-80%', '160%', '360%'] },
@@ -290,54 +280,6 @@ export function Contact() {
           transition={{ duration: prefersReducedMotion ? 0 : 1.25, delay: prefersReducedMotion ? 0 : 0.78, ease: premiumEase }}
         />
       </motion.div>
-
-      <motion.svg
-        className="contact-section-wrapper__circuit contact-section-wrapper__circuit--left"
-        viewBox="0 0 360 160"
-        aria-hidden="true"
-        initial={sectionInitial}
-        animate={sectionControls}
-      >
-        <motion.path
-          d="M0 106 H92 L148 50 H244 L300 86 H360"
-          variants={circuitLineVariants}
-          transition={{ duration: prefersReducedMotion ? 0 : 1, delay: prefersReducedMotion ? 0 : 0.72, ease: premiumEase }}
-        />
-        {[92, 148, 244, 300].map((cx, index) => (
-          <motion.circle
-            cx={cx}
-            cy={cx === 148 || cx === 244 ? 50 : cx === 92 ? 106 : 86}
-            r="5"
-            key={cx}
-            variants={circuitNodeVariants}
-            transition={{ duration: prefersReducedMotion ? 0 : 0.28, delay: prefersReducedMotion ? 0 : 1.15 + index * 0.05, ease: premiumEase }}
-          />
-        ))}
-      </motion.svg>
-
-      <motion.svg
-        className="contact-section-wrapper__circuit contact-section-wrapper__circuit--right"
-        viewBox="0 0 360 160"
-        aria-hidden="true"
-        initial={sectionInitial}
-        animate={sectionControls}
-      >
-        <motion.path
-          d="M360 106 H268 L212 50 H116 L60 86 H0"
-          variants={circuitLineVariants}
-          transition={{ duration: prefersReducedMotion ? 0 : 1, delay: prefersReducedMotion ? 0 : 0.72, ease: premiumEase }}
-        />
-        {[268, 212, 116, 60].map((cx, index) => (
-          <motion.circle
-            cx={cx}
-            cy={cx === 212 || cx === 116 ? 50 : cx === 268 ? 106 : 86}
-            r="5"
-            key={cx}
-            variants={circuitNodeVariants}
-            transition={{ duration: prefersReducedMotion ? 0 : 0.28, delay: prefersReducedMotion ? 0 : 1.15 + index * 0.05, ease: premiumEase }}
-          />
-        ))}
-      </motion.svg>
 
       <div className="contact-section-wrapper__container">
         <div className="contact-section-wrapper__workspace">
