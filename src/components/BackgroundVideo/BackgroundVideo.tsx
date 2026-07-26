@@ -12,6 +12,8 @@ export function BackgroundVideo() {
     <div className="background-video" aria-hidden="true">
       <canvas ref={sequenceRef} className="background-video-sequence" />
       <video
+        autoPlay
+        loop
         muted
         playsInline
         preload="auto"

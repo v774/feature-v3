@@ -19,8 +19,8 @@
     box-shadow:
         0 12px 36px rgba(0, 0, 0, 0.28),
         inset 0 1px 0 rgba(255, 255, 255, 0.075);
-    backdrop-filter: blur(10px) saturate(128%);
-    -webkit-backdrop-filter: blur(10px) saturate(128%);
+    backdrop-filter: blur(18px) saturate(138%);
+    -webkit-backdrop-filter: blur(18px) saturate(138%);
     transform: translateX(-50%);
     transition:
         background-color 300ms ease,
@@ -204,18 +204,12 @@
 }
 
 @media (max-width: 767px) {
-    .header-component-wrapper__header {
-        top: 10px;
-        width: calc(100% - 24px);
-        height: 72px;
-    }
-
     .header-component-wrapper__container {
-        padding: 0 18px;
+        padding: 0 13px;
     }
 
     .header-component-wrapper__logo {
-        font-size: 27px;
+        font-size: 22px;
     }
 
     .header-component-wrapper__logo span {
@@ -224,15 +218,15 @@
 
     .header-component-wrapper__actions {
         display: flex;
-        height: 48px;
+        height: 44px;
     }
 
     .header-component-wrapper__contact-button {
         display: inline-flex;
-        height: 46px;
-        min-width: 112px;
+        height: 38px;
+        min-width: 92px;
         justify-content: center;
-        padding: 0 18px;
-        font-size: 13px;
+        padding: 0 14px;
+        font-size: 11px;
     }
 }

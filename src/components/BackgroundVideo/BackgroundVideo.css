@@ -25,6 +25,7 @@
 }
 
 .background-video-sequence {
+  display: none;
   z-index: 1;
 }
 
@@ -33,7 +34,7 @@
     display: none;
   }
 
-  .background-video-media {
-    object-position: 50% center;
+  .background-video-sequence {
+    display: block;
   }
 }

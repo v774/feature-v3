@@ -9,7 +9,6 @@ type HeroImageSequenceConfig = {
 };
 
 const desktopQueryText = "(min-width: 1024px)";
-const mobileFramesPerSecond = 30;
 
 function getFrameSrc(config: HeroImageSequenceConfig, index: number) {
   const frameNumber = String(index).padStart(config.framePadding, "0");
@@ -52,9 +51,7 @@ export function useHeroImageSequence(
     let targetFrame = 0;
     let renderedFrame = -1;
     let lastLoadedFrame = 0;
-    let mobileFrame = 0;
-    let mobileDirection: 1 | -1 = 1;
-    let previousMobileTimestamp = 0;
+    let hasStartedPreloading = false;
     let mounted = true;
 
     const drawFrame = (frameIndex: number) => {
@@ -87,32 +84,6 @@ export function useHeroImageSequence(
       });
     };
 
-    const animateMobile = (timestamp: number) => {
-      animationFrame = 0;
-      if (desktopQuery.matches || reducedMotionQuery.matches) return;
-
-      const frameInterval = 1000 / mobileFramesPerSecond;
-      if (!previousMobileTimestamp) previousMobileTimestamp = timestamp;
-
-      if (timestamp - previousMobileTimestamp >= frameInterval) {
-        const elapsedFrames = Math.max(1, Math.floor((timestamp - previousMobileTimestamp) / frameInterval));
-        previousMobileTimestamp = timestamp;
-        mobileFrame += elapsedFrames * mobileDirection;
-
-        if (mobileFrame >= config.frameCount - 1) {
-          mobileFrame = config.frameCount - 1;
-          mobileDirection = -1;
-        } else if (mobileFrame <= 0) {
-          mobileFrame = 0;
-          mobileDirection = 1;
-        }
-
-        drawFrame(mobileFrame);
-      }
-
-      animationFrame = window.requestAnimationFrame(animateMobile);
-    };
-
     const onPointerMove = (event: MouseEvent) => {
       if (!desktopQuery.matches || reducedMotionQuery.matches) return;
       const progress = Math.min(Math.max(event.clientX / Math.max(window.innerWidth, 1), 0), 1);
@@ -123,29 +94,35 @@ export function useHeroImageSequence(
     const applyMode = () => {
       if (animationFrame) window.cancelAnimationFrame(animationFrame);
       animationFrame = 0;
-      previousMobileTimestamp = 0;
-      canvas.hidden = false;
+      canvas.hidden = !desktopQuery.matches;
+
+      if (!desktopQuery.matches) return;
+
+      preloadFrames();
       resizeCanvas();
 
       if (reducedMotionQuery.matches) {
         drawFrame(0);
-      } else if (desktopQuery.matches) {
-        requestDesktopDraw();
       } else {
-        animationFrame = window.requestAnimationFrame(animateMobile);
+        requestDesktopDraw();
       }
     };
 
-    images.forEach((image, index) => {
-      image.decoding = "async";
-      image.onload = () => {
-        if (!mounted) return;
-        loadedFrames.add(index);
-        lastLoadedFrame = index;
-        if (index === 0 || index === targetFrame || index === mobileFrame) drawFrame(index);
-      };
-      image.src = getFrameSrc(config, index);
-    });
+    function preloadFrames() {
+      if (hasStartedPreloading) return;
+      hasStartedPreloading = true;
+
+      images.forEach((image, index) => {
+        image.decoding = "async";
+        image.onload = () => {
+          if (!mounted) return;
+          loadedFrames.add(index);
+          lastLoadedFrame = index;
+          if (index === 0 || index === targetFrame) drawFrame(index);
+        };
+        image.src = getFrameSrc(config, index);
+      });
+    }
 
     applyMode();
     window.addEventListener("mousemove", onPointerMove, { passive: true });
