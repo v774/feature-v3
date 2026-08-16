@@ -29,6 +29,7 @@ export function CategoryProjectCard({
   const [isPreviewing, setIsPreviewing] = useState(false)
   const [isFrozen, setIsFrozen] = useState(false)
   const isActivePreview = activePreviewId === project.id
+  const hasVideo = project.videoPath.trim().length > 0
 
   const clearPreviewTimer = () => {
     if (freezeTimerRef.current !== null) {
@@ -95,7 +96,7 @@ export function CategoryProjectCard({
   }, [activePreviewId, isDesktop, project.id, setActivePreviewId])
 
   const handleMouseEnter = () => {
-    if (!isDesktop) return
+    if (!isDesktop || !hasVideo) return
     const video = videoRef.current
     if (!video) return
 
@@ -159,7 +160,7 @@ export function CategoryProjectCard({
       <div className={styles.cardSurface}>
         <div className={styles.media}>
           <img className={styles.poster} src={project.previewImage} alt="" loading="lazy" decoding="async" />
-          {isDesktop && (
+          {isDesktop && hasVideo && (
             <video
               ref={videoRef}
               className={styles.video}
@@ -172,7 +173,7 @@ export function CategoryProjectCard({
             />
           )}
           <span className={styles.shade} aria-hidden="true" />
-          <span className={styles.watchFull} aria-hidden="true">Watch Full</span>
+          {hasVideo && <span className={styles.watchFull} aria-hidden="true">Watch Full</span>}
           <div className={styles.infoLayer}>
             <div className={styles.infoTop}>
               <span className={styles.format}><span className={styles.formatDot} aria-hidden="true" />1920x1080</span>

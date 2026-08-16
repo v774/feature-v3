@@ -16,16 +16,28 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: min(100%, 920px);
+}
+
+.about-eyebrow {
+  margin-bottom: 18px;
+  color: var(--accent-neon-red);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-align: center;
 }
 
 .about-heading {
+  max-width: 920px;
   margin-bottom: 32px;
-  font-size: clamp(3rem, 12vw, 160px);
+  font-size: clamp(2.75rem, 7.5vw, 7.5rem);
   font-weight: 900;
-  line-height: 1;
+  line-height: 1.02;
   letter-spacing: -0.05em;
   text-align: center;
   text-transform: uppercase;
+  overflow-wrap: anywhere;
 }
 
 .about-text {

@@ -160,7 +160,7 @@
   overflow-wrap: anywhere;
   font-size: clamp(1.55rem, 3.4vw, 3.4rem);
   font-weight: 900;
-  line-height: 0.9;
+  line-height: 1;
   letter-spacing: -0.045em;
   text-shadow:
     0 2px 24px rgba(0, 0, 0, 0.72),

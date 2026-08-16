@@ -8,11 +8,22 @@
 }
 
 .ambientBackground {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+  /* М'яке велике сяйво на верхню/середню частину сторінки */
+  background: radial-gradient(
+    circle at 50% 30%, 
+    rgba(255, 36, 88, 0.06) 0%, 
+    rgba(93, 95, 239, 0.04) 45%, 
+    transparent 80%
+  );
+  filter: blur(80px);
 }
 
 .primaryGlow,
@@ -56,14 +67,14 @@
 .main {
   position: relative;
   z-index: 1;
-  width: min(calc(100% - 48px), 1360px);
+  width: min(calc(100% - 48px), 1240px);
   margin: 0 auto;
-  padding: 146px 0 112px;
+  padding: 124px 0 80px;
 }
 
 .headerGroup {
   position: relative;
-  padding: 24px 0 42px;
+  padding: 18px 0 32px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -83,7 +94,7 @@
   display: flex;
   width: fit-content;
   min-height: 42px;
-  margin-bottom: 36px;
+  margin-bottom: 26px;
   align-items: center;
   gap: 9px;
   padding: 0 18px;
@@ -169,24 +180,35 @@
 .titleBlock {
   width: fit-content;
   max-width: 100%;
-  margin-bottom: 34px;
+  margin-bottom: 26px;
 }
 
 .main h1 {
   max-width: 100%;
-  margin: 0 0 22px;
-  overflow: clip;
+  margin: 0 0 16px;
+  overflow: visible;
   color: #fff;
   font-family: var(--font-display);
-  font-size: clamp(4.5rem, 8.4vw, 8.75rem);
+  font-size: clamp(3.75rem, 6.8vw, 7.25rem);
   font-weight: 900;
   letter-spacing: 0;
-  line-height: 0.88;
+  line-height: 0.96;
   pointer-events: none;
   text-transform: uppercase;
   text-wrap: balance;
+  overflow-wrap: anywhere;
   user-select: none;
   -webkit-user-select: none;
+}
+
+.categoryDescription {
+  max-width: 720px;
+  margin: 0 0 18px;
+  color: rgba(255, 255, 255, 0.58);
+  font-size: clamp(0.92rem, 1.25vw, 1.05rem);
+  line-height: 1.55;
+  letter-spacing: 0;
+  overflow-wrap: break-word;
 }
 
 .titleCursor {
@@ -296,7 +318,7 @@
 @media (max-width: 880px) {
   .main {
     width: min(calc(100% - 40px), 1360px);
-    padding-top: 124px;
+    padding-top: 112px;
   }
 
   .headerGroup {
@@ -318,14 +340,14 @@
   }
 
   .main h1 {
-    font-size: clamp(3.75rem, 12vw, 6.5rem);
+    font-size: clamp(3.2rem, 10vw, 5.5rem);
   }
 }
 
 @media (max-width: 600px) {
   .main {
     width: calc(100% - 28px);
-    padding: 108px 0 92px;
+    padding: 96px 0 72px;
   }
 
   .headerGroup {
@@ -348,8 +370,8 @@
 
   .main h1 {
     margin-bottom: 18px;
-    font-size: clamp(2.8rem, 15vw, 4.6rem);
-    line-height: 0.92;
+    font-size: clamp(2.5rem, 13vw, 4rem);
+    line-height: 1;
   }
 
   .titleBlock {

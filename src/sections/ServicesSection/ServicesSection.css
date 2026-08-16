@@ -69,7 +69,9 @@
   color: #0c0c0c;
   font-size: clamp(1rem, 2.2vw, 2.1rem);
   font-weight: 500;
+  line-height: 1.15;
   text-transform: uppercase;
+  overflow-wrap: anywhere;
 }
 
 .service-description {
@@ -81,6 +83,7 @@
   line-height: 1.65;
   opacity: 0.6;
   transition: opacity 250ms ease;
+  overflow-wrap: break-word;
 }
 
 @media (max-width: 479px) {

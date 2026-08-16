@@ -166,6 +166,9 @@ export function CategoryPage() {
                   <span className={`${styles.titleCursor}${categoryTitleDone ? ` ${styles.blinking}` : ''}${fadeCategoryCursor ? ` ${styles.fading}` : ''}`} aria-hidden="true">|</span>
                 )}
               </h1>
+              <p className={styles.categoryDescription}>
+                {portfolioCategories.find((item) => item.slug === category.slug)?.description}
+              </p>
               <div className={styles.titleMeta}>
                 <motion.span
                   className={styles.titleAccent}

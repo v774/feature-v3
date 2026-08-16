@@ -8,7 +8,8 @@
   --contact-panel: rgba(255, 255, 255, 0.018);
   --contact-panel-border: rgba(255, 255, 255, 0.13);
   --contact-panel-radius: 30px;
-  --contact-max-width: 1420px; /* Main desktop width */
+  --contact-max-width: 1420px;
+  /* Main desktop width */
   --contact-panel-height: 520px;
   --contact-gap: 16px;
 
@@ -19,7 +20,7 @@
   padding: clamp(70px, 7vh, 96px) clamp(24px, 4vw, 64px);
   box-sizing: border-box;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   flex-direction: column;
   overflow: hidden;
   color: #fff;
@@ -64,36 +65,42 @@
 
 /* =========================================================
    CONTACT DISPLAY HEADING
+   Заголовок завжди стоїть на початку секції на всіх екранах.
    ========================================================= */
 .contact-section-wrapper__watermark {
   position: relative;
   z-index: 3;
   width: 100%;
-  margin-top: clamp(-86px, -7vh, -58px);
+  margin: 0 0 clamp(52px, 6vh, 86px);
+
   pointer-events: none;
-  overflow: hidden;
+  overflow: visible;
+
   color: transparent;
   font-family: var(--font-display);
   font-size: clamp(7rem, 13vw, 13rem);
   font-weight: 950;
-  line-height: 0.72;
-  letter-spacing: 0.035em;
-  opacity: 0;
+  line-height: 0.78;
+  letter-spacing: clamp(10px, 1.35vw, 26px);
+
+  opacity: 1;
   text-align: center;
   text-transform: uppercase;
   white-space: nowrap;
   font-stretch: condensed;
+
   transform: none;
   transform-origin: center bottom;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.52) 0%, rgba(92, 86, 92, 0.34) 42%, rgba(255, 36, 88, 0.22) 100%),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.18), rgba(255, 36, 88, 0.14));
+
+  background: linear-gradient(180deg, #646973 0%, #bbccd7 100%);
   background-clip: text;
   -webkit-background-clip: text;
+
   text-shadow:
-    0 0 32px rgba(255, 255, 255, 0.055),
-    0 0 68px rgba(255, 36, 88, 0.12);
-  will-change: opacity, transform;
+    0 0 28px rgba(255, 255, 255, 0.05),
+    0 0 58px rgba(255, 36, 88, 0.12);
+
+  will-change: auto;
 }
 
 .contact-section-wrapper__watermark span:first-child {
@@ -101,27 +108,20 @@
 }
 
 .contact-section-wrapper__watermark-sweep {
-  position: absolute;
-  inset: -18% auto -18% -35%;
-  width: 28%;
-  opacity: 0;
-  pointer-events: none;
-  background: linear-gradient(90deg, transparent, rgba(255, 79, 135, 0.34), transparent);
-  filter: blur(10px);
-  transform: skewX(-18deg);
-  will-change: opacity, transform;
+  display: none !important;
 }
 
 /* =========================================================
    MAIN LAYOUT
    43 / 57 closely matches the reference proportions.
    ========================================================= */
+/* Блоки форми й контактів ідуть одразу після великого заголовка. */
 .contact-section-wrapper__container {
   position: relative;
   z-index: 2;
   width: min(100%, var(--contact-max-width));
   max-width: 100%;
-  margin-top: 200px;
+  margin-top: 150px;
   margin-inline: auto;
 }
 
@@ -189,7 +189,8 @@
   line-height: 0.98;
   letter-spacing: -0.055em;
   text-transform: none;
-  overflow-wrap: balance;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
 }
 
 .contact-section-wrapper__section-description {
@@ -243,7 +244,7 @@
   font-weight: 900;
 }
 
-.contact-section-wrapper__detail-card > div {
+.contact-section-wrapper__detail-card>div {
   min-width: 0;
   flex: 1;
 }
@@ -321,7 +322,7 @@
   gap: 9px;
 }
 
-.contact-section-wrapper__field > span {
+.contact-section-wrapper__field>span {
   color: rgba(247, 242, 247, 0.9);
   font-size: 14px;
   font-weight: 750;
@@ -565,10 +566,6 @@
     --contact-gap: 14px;
   }
 
-  .contact-section-wrapper__container {
-    margin-top: 150px;
-  }
-
   .contact-section-wrapper__workspace {
     grid-template-columns: minmax(0, 46fr) minmax(0, 54fr);
   }
@@ -611,7 +608,7 @@
   }
 
   .contact-section-wrapper__container {
-    margin-top: 34px;
+    margin-top: 0;
   }
 
   .contact-section-wrapper__workspace {
@@ -645,10 +642,11 @@
 
   .contact-section-wrapper__watermark {
     top: auto;
-    margin-top: 0;
+    margin: 0 0 34px;
     overflow: visible;
     font-size: clamp(5rem, 18vw, 9rem);
     line-height: 0.86;
+    letter-spacing: clamp(6px, 1.5vw, 16px);
   }
 
   .contact-section-wrapper__circuit {
@@ -663,6 +661,7 @@
   }
 
   .contact-section-wrapper__watermark {
+    margin-bottom: 28px;
     color: rgba(255, 255, 255, 0.075);
     font-size: clamp(3.75rem, 20vw, 6.8rem);
     letter-spacing: 0.02em;
@@ -813,6 +812,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .contact-section-wrapper *,
   .contact-section-wrapper *::before,
   .contact-section-wrapper *::after {

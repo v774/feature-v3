@@ -82,10 +82,15 @@ export function ProjectModal({ project, onClose, returnFocusElement }: ProjectMo
   useEffect(() => {
     const video = videoRef.current
     if (!video) return undefined
+
+    video.currentTime = 0
+    void video.play().catch(() => undefined)
+
     const syncPlaybackState = () => setIsPaused(video.paused)
     video.addEventListener('play', syncPlaybackState)
     video.addEventListener('pause', syncPlaybackState)
     syncPlaybackState()
+
     return () => {
       video.removeEventListener('play', syncPlaybackState)
       video.removeEventListener('pause', syncPlaybackState)
@@ -93,6 +98,7 @@ export function ProjectModal({ project, onClose, returnFocusElement }: ProjectMo
   }, [closeModal, project])
 
   if (!project) return null
+  const hasVideo = project.videoPath.trim().length > 0
   const stopPropagation = (event: MouseEvent<HTMLDivElement>) => event.stopPropagation()
   const handleVideoError = () => {
     if (import.meta.env.DEV) {
@@ -119,15 +125,21 @@ export function ProjectModal({ project, onClose, returnFocusElement }: ProjectMo
 
   return <div ref={overlayRef} className={styles.overlay} role="dialog" aria-modal="true" aria-labelledby="project-modal-title" onClick={closeModal}>
     <div className={styles.stage} onClick={stopPropagation}>
+      <button ref={closeButtonRef} className={styles.close} type="button" onClick={closeModal} aria-label={labels.closeProject}><span /><span /></button>
       <div className={styles.modal}>
-        <button ref={closeButtonRef} className={styles.close} type="button" onClick={closeModal} aria-label={labels.closeProject}><span /><span /></button>
         <div className={styles.videoContainer}>
-          <video ref={videoRef} className={styles.video} src={project.videoPath} controls autoPlay playsInline preload="auto" onError={handleVideoError} />
-          <div className={styles.pauseOverlay} onClick={handlePlaybackOverlayClick} role="presentation">
-            <button className={`${styles.pauseIndicator} ${isPaused ? styles.pauseIndicatorVisible : ''}`} type="button" tabIndex={-1} aria-hidden="true">
-              {isPaused ? 'PLAY' : 'II'}
-            </button>
-          </div>
+          {hasVideo ? (
+            <>
+             <video ref={videoRef} className={styles.video} src={project.videoPath} controls autoPlay muted playsInline preload="auto" onError={handleVideoError} />
+              <div className={styles.pauseOverlay} onClick={handlePlaybackOverlayClick} role="presentation">
+                <button className={`${styles.pauseIndicator} ${isPaused ? styles.pauseIndicatorVisible : ''}`} type="button" tabIndex={-1} aria-hidden="true">
+                  {isPaused ? 'PLAY' : 'II'}
+                </button>
+              </div>
+            </>
+          ) : (
+            <img className={styles.video} src={project.previewImage} alt="" />
+          )}
         </div>
         <div className={styles.details}>
           <p className={styles.eyebrow}><span aria-hidden="true">*</span> {labels.selectedWork}</p>

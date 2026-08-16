@@ -67,11 +67,12 @@ export function AboutSection() {
           }}
           transition={{ duration: prefersReducedMotion ? 0 : 0.7, ease: premiumEase }}
         >
+          <p className="about-eyebrow">{homepageContent.about.eyebrow}</p>
           <h2 className="about-heading gradient-heading">{homepageContent.about.heading}</h2>
         </motion.div>
         <AnimatedText text={homepageContent.about.text} className="about-text" />
         <div className="about-button-row">
-          <ContactButton />
+          <ContactButton label={homepageContent.about.cta} />
         </div>
       </div>
     </section>

@@ -1,6 +1,10 @@
 import { portfolioCategories, portfolioProjects } from "./portfolioContent";
 import { siteContent } from "./siteContent";
 
+/*
+ * ТИПИ SEO
+ * Технічна частина. Структуру не змінювати.
+ */
 export interface RouteSeoContent {
   title: string;
   description: string;
@@ -16,6 +20,10 @@ export interface SeoContent {
   defaultDescription: string;
   keywords: string[];
   themeColor: string;
+  /*
+   * Прев'ю посилання у соцмережах і месенджерах.
+   * Файл повинен лежати у public/og-preview.jpg.
+   */
   openGraph: {
     type: string;
     image: string;
@@ -30,8 +38,22 @@ export interface SeoContent {
   routes: Record<string, RouteSeoContent>;
 }
 
-const baseUrl = "https://valentyn-portfolio.vercel.app";
+/*
+ * ГОЛОВНИЙ ДОМЕН САЙТУ
+ * Після підключення власного домену змінюється тільки цей рядок.
+ */
+const baseUrl = "https://vportfolio-flame.vercel.app";
 
+/*
+ * SEO-АДМІНКА
+ *
+ * Тут змінюються:
+ * - title і description;
+ * - ключові слова;
+ * - колір браузера;
+ * - OG-картинка;
+ * - SEO окремих маршрутів.
+ */
 export const seoContent: SeoContent = {
   siteName: siteContent.siteName,
   author: "Valentyn Lavryk",
@@ -48,6 +70,10 @@ export const seoContent: SeoContent = {
     "VL Motion",
   ],
   themeColor: "#08080a",
+  /*
+   * Прев'ю посилання у соцмережах і месенджерах.
+   * Файл повинен лежати у public/og-preview.jpg.
+   */
   openGraph: {
     type: "website",
     image: `${baseUrl}/og-preview.jpg`,
@@ -59,6 +85,10 @@ export const seoContent: SeoContent = {
     card: "summary_large_image",
     image: `${baseUrl}/og-preview.jpg`,
   },
+  /*
+   * SEO головної та сторінок категорій.
+   * Категорії формуються автоматично з portfolioContent.ts.
+   */
   routes: {
     "/": {
       title: "VL Motion | Motion Designer & Logo Animation",

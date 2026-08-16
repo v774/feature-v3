@@ -113,6 +113,7 @@ export function ProjectsSection() {
         >
           {projectsHeading}
         </motion.h2>
+        <p className="projects-intro">{homepageContent.projects.description}</p>
         <motion.div
           ref={coverflowRef}
           className="projects-coverflow"

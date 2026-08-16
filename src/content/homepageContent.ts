@@ -1,7 +1,17 @@
 import { siteContent } from "./siteContent";
 
+/*
+ * ВІДЕО HERO
+ * Тут задається локальний файл відео першого екрана.
+ * Шлях імпорту залишай у такому форматі.
+ */
 const heroVideoSrc = new URL("../assets/videos/hero/neon-lama.mp4", import.meta.url).href;
 
+/*
+ * ТИПИ ДАНИХ
+ * Це технічна частина. Назви полів краще не змінювати,
+ * бо їх очікують компоненти сайту.
+ */
 export interface ServiceContent {
   number: string;
   title: string;
@@ -16,6 +26,7 @@ export interface AboutDecorationContent {
 }
 
 export interface HomepageContent {
+  /* ================= HERO ================= */
   hero: {
     brand: string;
     kicker: string;
@@ -28,6 +39,11 @@ export interface HomepageContent {
     highlights: string[];
     localVideoSrc: string;
     posterSrc: string;
+    /*
+     * Покадрова секвенція для desktop.
+     * frameCount — кількість кадрів.
+     * framePadding — кількість цифр у назві кадру.
+     */
     desktopSequence: {
       basePath: string;
       filePrefix: string;
@@ -38,24 +54,42 @@ export interface HomepageContent {
     watermark: string;
     highlightsAriaLabel: string;
   };
+  /* ============== РУХОМА СТРІЧКА ============== */
   marquee: {
     ariaLabel: string;
   };
+  /* ================= ABOUT ================= */
   about: {
+    eyebrow: string;
     heading: string;
     text: string;
+    cta: string;
     decorations: AboutDecorationContent[];
   };
+  /* ================ SERVICES ================ */
   services: {
     heading: string;
     items: ServiceContent[];
   };
+  /*
+   * ================= PROJECT =================
+   * Тут тільки заголовок та опис секції.
+   * Самі категорії та роботи лежать у portfolioContent.ts.
+   */
   projects: {
     heading: string;
+    description: string;
     liveProjectLabel: string;
   };
 }
 
+/*
+ * АДМІНКА ГОЛОВНОЇ СТОРІНКИ
+ *
+ * Тут можна безпечно змінювати тексти, шляхи до картинок,
+ * відео, кількість послуг і декоративні елементи.
+ * Структуру об'єкта та назви полів не змінюй.
+ */
 export const homepageContent: HomepageContent = {
   hero: {
     brand: siteContent.brandName,
@@ -68,8 +102,15 @@ export const homepageContent: HomepageContent = {
     availability: "Available for new projects",
     location: "Worldwide",
     highlights: ["Logo Animation", "Brand Motion", "Lottie UI"],
+    /* Відео Hero. */
     localVideoSrc: heroVideoSrc,
+    /* Статична картинка до завантаження відео або секвенції. */
     posterSrc: "/images/hero/heroSequence/neon-llama-ishodnik_00000.webp",
+    /*
+     * Покадрова секвенція для desktop.
+     * frameCount — кількість кадрів.
+     * framePadding — кількість цифр у назві кадру.
+     */
     desktopSequence: {
       basePath: "/images/hero/heroSequence",
       filePrefix: "neon-llama-ishodnik_",
@@ -80,13 +121,22 @@ export const homepageContent: HomepageContent = {
     watermark: "VL MOTION",
     highlightsAriaLabel: "Portfolio highlights",
   },
+  /* ============== РУХОМА СТРІЧКА ============== */
   marquee: {
     ariaLabel: "Selected visual work",
   },
+  /* ================= ABOUT ================= */
   about: {
-    heading: "About me",
+    eyebrow: "",
+    heading: "ABOUT ME",
     text:
-      "With more than five years of experience in design, i focus on branding, web design, and user experience, i truly enjoy working with businesses that aim to stand out and present their best image. Let's build something incredible together!",
+      "I’m Valentyn, a motion designer creating polished logo animations, brand motion, animated icons, Lottie interactions and social content. I focus on clear ideas, precise timing and visuals that help brands feel more memorable.",
+    cta: "LET’S WORK TOGETHER",
+    /*
+     * Декоративні картинки секції About.
+     * src — шлях до картинки.
+     * spreadX / spreadY — напрямок руху в анімації.
+     */
     decorations: [
       {
         className: "about-decoration about-decoration-top-left",
@@ -114,43 +164,45 @@ export const homepageContent: HomepageContent = {
       },
     ],
   },
+  /* ================ SERVICES ================ */
   services: {
     heading: "Services",
     items: [
       {
         number: "01",
-        title: "3D Modeling",
+        title: "Logo Animation",
         description:
-          "Creation of detailed objects, characters, or environments tailored to specific client needs, ideal for games, products, and visualizations.",
+          "Custom logo reveals, intros and outros designed to make your brand feel polished, memorable and alive.",
       },
+ 
       {
         number: "02",
-        title: "Rendering",
+        title: "Lottie & UI",
         description:
-          "High-quality, photorealistic renders that showcase designs with custom lighting, textures, and materials to bring concepts to life.",
+          "Lightweight interface animations, micro-interactions and animated elements for apps, websites and digital products.",
       },
       {
         number: "03",
-        title: "Motion Design",
+        title: "Animated Icons",
         description:
-          "Dynamic animations and motion graphics that add energy and storytelling to brands, products, and digital experiences.",
+          "Smooth animated icon sets created for interfaces, presentations, products and social media.",
       },
       {
         number: "04",
-        title: "Branding",
+        title: "Animated Posters",
         description:
-          "Crafting cohesive visual identities -- from logos to full brand systems -- that communicate a clear and memorable presence.",
-      },
-      {
-        number: "05",
-        title: "Web Design",
-        description:
-          "Designing clean, modern, and conversion-focused websites with attention to layout, typography, and user experience.",
+          "Bold animated posters for music, events, campaigns and social platforms.",
       },
     ],
   },
+  /*
+   * ================= PROJECT =================
+   * Тут тільки заголовок та опис секції.
+   * Самі категорії та роботи лежать у portfolioContent.ts.
+   */
   projects: {
-    heading: "Project",
+    heading: "PROJECT",
+    description: "A selection of logo animation, Lottie, icon motion and animated poster projects.",
     liveProjectLabel: "Live Project",
   },
 };
