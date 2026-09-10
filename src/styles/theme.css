@@ -70,10 +70,18 @@ select,
     stroke 0.3s ease;
 }
 
-html,
+html {
+  scroll-behavior: smooth;
+  background: var(--color-background);
+  color-scheme: dark;
+}
+
 body {
   color: var(--color-text-primary);
   background: var(--color-background);
+  min-height: 100%;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 
 body,

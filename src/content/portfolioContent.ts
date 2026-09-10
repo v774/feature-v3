@@ -105,7 +105,7 @@ export const portfolioCategories: PortfolioCategory[] = [
     enabled: true,
     size: "large",
     order: 1,
-    featuredImage: "/images/projects/1.webp",
+    featuredImage: "/images/projects/logo_animation.webp",
   },
   {
     slug: "icons",

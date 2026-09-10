@@ -75,7 +75,7 @@ export const iconProjects: PortfolioProject[] = [
       showInMarquee: false,
   
       /* true = показувати картку на сайті. */
-      published: true,
+      published: false,
   
       /* Порядок усередині цієї категорії. */
       order: 2,
@@ -112,7 +112,7 @@ export const iconProjects: PortfolioProject[] = [
       showInMarquee: false,
   
       /* true = показувати картку на сайті. */
-      published: true,
+      published: false,
   
       /* Порядок усередині цієї категорії. */
       order: 3,

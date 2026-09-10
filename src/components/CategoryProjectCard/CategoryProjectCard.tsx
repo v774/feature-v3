@@ -1,4 +1,4 @@
-﻿import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
+﻿import { useEffect, useRef, useState } from 'react'
 import { motion } from 'motion/react'
 import type { CategoryProject as Project } from '../../content/portfolioContent'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
@@ -6,183 +6,73 @@ import { siteContent } from '../../content/siteContent'
 import { premiumEase } from '../../utils/motionConfig'
 import styles from './CategoryProjectCard.module.css'
 
-type ProjectCardProps = {
-  project: Project
-  index: number
-  activePreviewId: string | null
-  setActivePreviewId: (id: string | null) => void
-  onWatch: (project: Project, opener: HTMLElement | null) => void
-}
-
-export function CategoryProjectCard({
-  project,
-  index,
-  activePreviewId,
-  setActivePreviewId,
-  onWatch,
-}: ProjectCardProps) {
-  const prefersReducedMotion = useReducedMotion()
+export function CategoryProjectCard({ project, index, activePreviewId, setActivePreviewId, onWatch }: any) {
+  const reduced = useReducedMotion()
   const cardRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
-  const freezeTimerRef = useRef<number | null>(null)
-  const [isDesktop, setIsDesktop] = useState(() => typeof window !== 'undefined' && window.matchMedia('(min-width: 1025px)').matches)
-  const [isPreviewing, setIsPreviewing] = useState(false)
-  const [isFrozen, setIsFrozen] = useState(false)
-  const isActivePreview = activePreviewId === project.id
+  const timer = useRef<number>(0)
+  
+  const [isDesktop, setIsDesktop] = useState(true)
+  const [state, setState] = useState({ previewing: false, frozen: false })
+  
+  const isActive = activePreviewId === project.id
   const hasVideo = project.videoPath.trim().length > 0
 
-  const clearPreviewTimer = () => {
-    if (freezeTimerRef.current !== null) {
-      window.clearTimeout(freezeTimerRef.current)
-      freezeTimerRef.current = null
-    }
+  const resetVideo = () => {
+    window.clearTimeout(timer.current)
+    if (videoRef.current) { videoRef.current.pause(); videoRef.current.currentTime = 0 }
   }
-
-  const pauseVideo = (reset = false) => {
-    const video = videoRef.current
-    if (!video) return
-    video.pause()
-    if (reset) video.currentTime = 0
-  }
-
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(min-width: 1025px)')
-    const handleViewportChange = () => {
-      setIsDesktop(mediaQuery.matches)
-      setActivePreviewId(null)
-      clearPreviewTimer()
-      const video = videoRef.current
-      if (video) {
-        video.pause()
-        video.currentTime = 0
-      }
-      setIsPreviewing(false)
-      setIsFrozen(false)
-    }
-
-    mediaQuery.addEventListener('change', handleViewportChange)
-    return () => mediaQuery.removeEventListener('change', handleViewportChange)
+    const mq = window.matchMedia('(min-width: 1025px)')
+    const onChange = () => { setIsDesktop(mq.matches); setActivePreviewId(null); resetVideo(); setState({ previewing: false, frozen: false }) }
+    onChange()
+    mq.addEventListener('change', onChange)
+    return () => { mq.removeEventListener('change', onChange); resetVideo() }
   }, [setActivePreviewId])
 
-  useEffect(() => () => {
-    clearPreviewTimer()
-    pauseVideo(false)
-  }, [])
+  useEffect(() => {
+    if (!isActive) { resetVideo(); setState({ previewing: false, frozen: false }) }
+  }, [isActive])
 
   useEffect(() => {
-    if (isActivePreview) return undefined
-    const timeoutId = window.setTimeout(() => {
-      clearPreviewTimer()
-      videoRef.current?.pause()
-      setIsPreviewing(false)
-      setIsFrozen(false)
-    }, 0)
-    return () => window.clearTimeout(timeoutId)
-  }, [isActivePreview])
-
-  useEffect(() => {
-    const element = cardRef.current
-    if (!element || !isDesktop) return undefined
-
-    const observer = new IntersectionObserver(([entry]) => {
-      if (!entry.isIntersecting && activePreviewId === project.id) {
-        setActivePreviewId(null)
-      }
-    }, { threshold: 0.05 })
-
-    observer.observe(element)
-    return () => observer.disconnect()
+    if (!cardRef.current || !isDesktop) return
+    const obs = new IntersectionObserver(([e]) => !e.isIntersecting && activePreviewId === project.id && setActivePreviewId(null), { threshold: 0.05 })
+    obs.observe(cardRef.current)
+    return () => obs.disconnect()
   }, [activePreviewId, isDesktop, project.id, setActivePreviewId])
 
-  const handleMouseEnter = () => {
-    if (!isDesktop || !hasVideo) return
-    const video = videoRef.current
-    if (!video) return
-
-    clearPreviewTimer()
+  const onEnter = () => {
+    if (!isDesktop || !hasVideo || !videoRef.current) return
+    resetVideo()
     setActivePreviewId(project.id)
-    setIsFrozen(false)
-    setIsPreviewing(true)
-    video.currentTime = 0
-    void video.play().catch(() => undefined)
-
-    freezeTimerRef.current = window.setTimeout(() => {
-      video.pause()
-      setIsFrozen(true)
-      setIsPreviewing(true)
-      freezeTimerRef.current = null
+    setState({ previewing: true, frozen: false })
+    void videoRef.current.play().catch(() => {})
+    
+    timer.current = window.setTimeout(() => {
+      videoRef.current?.pause()
+      setState({ previewing: true, frozen: true })
     }, 3000)
   }
 
-  const handleMouseLeave = () => {
-    if (!isDesktop) return
-    if (isFrozen) return
-    clearPreviewTimer()
-    pauseVideo(false)
-    setIsPreviewing(false)
-    if (activePreviewId === project.id) setActivePreviewId(null)
-  }
-
-  const handleVideoError = () => {
-    if (import.meta.env.DEV) {
-      console.warn(`[ProjectCard] Unable to load video for "${project.title}": ${project.videoPath}`)
-    }
-  }
-
-  const openProject = () => {
-    setActivePreviewId(null)
-    onWatch(project, cardRef.current)
-  }
-
-  const handleCardKeyDown = (event: KeyboardEvent<HTMLElement>) => {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault()
-      openProject()
-    }
+  const onLeave = () => {
+    if (!isDesktop || state.frozen) return
+    resetVideo()
+    setState({ previewing: false, frozen: false })
+    if (isActive) setActivePreviewId(null)
   }
 
   return (
-    <motion.div
-      ref={cardRef}
-      className={`${styles.card} ${isPreviewing ? styles.previewing : ''} ${isFrozen ? styles.frozen : ''}`}
-      initial={prefersReducedMotion ? false : { opacity: 0, y: 24, scale: 0.985 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ duration: prefersReducedMotion ? 0 : 0.48, delay: prefersReducedMotion ? 0 : index * 0.06, ease: premiumEase }}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      onClick={openProject}
-      onKeyDown={handleCardKeyDown}
-      role="button"
-      tabIndex={0}
-      aria-label={`${siteContent.modalLabels.watchProject}: ${project.title}`}
-    >
+    <motion.div ref={cardRef} className={`${styles.card} ${state.previewing ? styles.previewing : ''} ${state.frozen ? styles.frozen : ''}`.trim()} initial={reduced ? false : { opacity: 0, y: 24, scale: 0.985 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: reduced ? 0 : 0.48, delay: reduced ? 0 : index * 0.06, ease: premiumEase }} onMouseEnter={onEnter} onMouseLeave={onLeave} onClick={() => onWatch(project, cardRef.current)} onKeyDown={(e) => ['Enter', ' '].includes(e.key) && (e.preventDefault(), onWatch(project, cardRef.current))} role="button" tabIndex={0} aria-label={`${siteContent.modalLabels.watchProject}: ${project.title}`}>
       <div className={styles.cardSurface}>
         <div className={styles.media}>
           <img className={styles.poster} src={project.previewImage} alt="" loading="lazy" decoding="async" />
-          {isDesktop && hasVideo && (
-            <video
-              ref={videoRef}
-              className={styles.video}
-              src={project.videoPath}
-              poster={project.previewImage}
-              muted
-              playsInline
-              preload="metadata"
-              onError={handleVideoError}
-            />
-          )}
+          {isDesktop && hasVideo && <video ref={videoRef} className={styles.video} src={project.videoPath} poster={project.previewImage} muted playsInline preload="metadata" />}
           <span className={styles.shade} aria-hidden="true" />
           {hasVideo && <span className={styles.watchFull} aria-hidden="true">Watch Full</span>}
           <div className={styles.infoLayer}>
-            <div className={styles.infoTop}>
-              <span className={styles.format}><span className={styles.formatDot} aria-hidden="true" />1920x1080</span>
-              <span>30FPS</span>
-            </div>
-            <div className={styles.infoBottom}>
-              <span className={styles.software}>{project.software.replaceAll(', ', ' - ').toUpperCase()}</span>
-              <h2>{project.title}</h2>
-            </div>
+            <div className={styles.infoTop}><span className={styles.format}><span className={styles.formatDot} aria-hidden="true" />1920x1080</span><span>30FPS</span></div>
+            <div className={styles.infoBottom}><span className={styles.software}>{project.software.replaceAll(', ', ' - ').toUpperCase()}</span><h2>{project.title}</h2></div>
           </div>
         </div>
       </div>

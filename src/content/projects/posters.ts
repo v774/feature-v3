@@ -21,21 +21,22 @@ export const posterProjects: PortfolioProject[] = [
   {
       id: "placeholder-night-shift",
       slug: "night-shift",
-      title: "Night Shift Poster",
-      category: "posters",
+      title: "Night Jazz Poster",
+      category: "posters", 
       description: "A bold animated poster concept for a late-night music event and social campaign.",
   
       /* Картинка картки. */
-      thumbnail: "/images/projects/4.webp",
+      thumbnail: "/images/prewiew/poster/Jazz.webp",
   
+
       /* Встав сюди шлях, коли відео буде готове. */
-      video: "",
+      video: "/videos/animation/poster/jazz_reels.webm",
   
       /* Заставка відео. */
-      poster: "/images/projects/4.webp",
+      poster: "/videos/animation/poster/jazz_reels.webm",
   
       /* true = показувати у рухомій стрічці. */
-      showInMarquee: false,
+      showInMarquee: true,
   
       /* true = показувати картку на сайті. */
       published: true,
@@ -58,18 +59,18 @@ export const posterProjects: PortfolioProject[] = [
   {
       id: "placeholder-echo-event",
       slug: "echo-event",
-      title: "Echo Event Visual",
+      title: "Luxary car Reels",
       category: "posters",
       description: "An energetic event visual designed for venue screens, stories and promotional posts.",
   
       /* Картинка картки. */
-      thumbnail: "/images/projects/1.webp",
+      thumbnail: "/images/prewiew/poster/car_reels.webp",
   
       /* Встав сюди шлях, коли відео буде готове. */
-      video: "",
+      video: "/videos/animation/poster/car_reels.webm",
   
       /* Заставка відео. */
-      poster: "/images/projects/1.webp",
+      poster: "/videos/animation/poster/car_reels.webm",
   
       /* true = показувати у рухомій стрічці. */
       showInMarquee: false,
@@ -95,18 +96,18 @@ export const posterProjects: PortfolioProject[] = [
   {
       id: "placeholder-afterglow",
       slug: "afterglow",
-      title: "Afterglow Campaign Poster",
+      title: "Rozetka Reels",
       category: "posters",
       description: "A flexible animated campaign poster with strong typography and atmospheric motion.",
   
       /* Картинка картки. */
-      thumbnail: "/images/projects/3.webp",
+      thumbnail: "/images/prewiew/poster/rozetka_reels.webp",
   
       /* Встав сюди шлях, коли відео буде готове. */
-      video: "",
+      video: "/videos/animation/poster/rozetka_reels.webm",
   
       /* Заставка відео. */
-      poster: "/images/projects/3.webp",
+      poster: "/videos/animation/poster/rozetka_reels.webm",
   
       /* true = показувати у рухомій стрічці. */
       showInMarquee: false,

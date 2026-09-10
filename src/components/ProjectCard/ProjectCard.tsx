@@ -1,84 +1,41 @@
-import { type CSSProperties, type KeyboardEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import type { FeaturedHomepageProject } from "../../content/portfolioContent";
 import "./ProjectCard.css";
 
-type ProjectCardProps = {
-  project: FeaturedHomepageProject;
-  index: number;
-  activeIndex: number;
-  totalCards: number;
-  onPrevious: () => void;
-  onNext: () => void;
-};
-
-function getRelativeIndex(index: number, activeIndex: number, totalCards: number) {
+export function ProjectCard({ project, index, activeIndex, totalCards, onPrevious, onNext }: any) {
+  const navigate = useNavigate();
+  
   let relative = index - activeIndex;
-
   if (relative > totalCards / 2) relative -= totalCards;
   if (relative < -totalCards / 2) relative += totalCards;
 
-  return relative;
-}
+  const dist = Math.abs(relative);
+  const isActive = relative === 0;
+  const isVisible = dist <= 2;
+  const side = relative < 0 ? "left" : relative > 0 ? "right" : "center";
 
-export function ProjectCard({ project, index, activeIndex, totalCards, onPrevious, onNext }: ProjectCardProps) {
-  const navigate = useNavigate();
-  const relativeIndex = getRelativeIndex(index, activeIndex, totalCards);
-  const distance = Math.abs(relativeIndex);
-  const isActive = relativeIndex === 0;
-  const isVisible = distance <= 2;
-  const side = relativeIndex < 0 ? "left" : relativeIndex > 0 ? "right" : "center";
-  const translateX = relativeIndex * 220;
-  const translateZ = -distance * 240;
-  const rotateY = -relativeIndex * 12;
-  const rotateZ = relativeIndex * 5;
-  const scale = Math.max(0.64, 1 - distance * 0.15);
-  const dimOpacity = isActive ? 0 : Math.min(0.62, 0.28 + distance * 0.18);
-  const zIndex = isActive ? 30 : Math.max(1, 20 - distance);
-
-  const openProject = () => {
-    if (isActive) {
-      navigate(project.href);
-      return;
-    }
-
-    if (relativeIndex < 0) {
-      onPrevious();
-      return;
-    }
-
-    onNext();
-  };
-
-  const handleKeyDown = (event: KeyboardEvent<HTMLElement>) => {
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      openProject();
-    }
-  };
+  const openProject = () => isActive ? navigate(project.href) : (relative < 0 ? onPrevious() : onNext());
 
   return (
     <article
-      className={`project-card${isActive ? " is-active" : ""}${isVisible ? " is-visible" : ""}`}
+      className={`project-card ${isActive ? "is-active" : ""} ${isVisible ? "is-visible" : ""}`.trim()}
       style={{
-        "--project-translate-x": `${translateX}px`,
-        "--project-translate-z": `${translateZ}px`,
-        "--project-rotate-y": `${rotateY}deg`,
-        "--project-rotate-z": `${rotateZ}deg`,
-        "--project-scale": scale,
-        "--project-dim-opacity": dimOpacity,
-        zIndex,
-      } as CSSProperties}
+        "--project-translate-x": `${relative * 220}px`,
+        "--project-translate-z": `${-dist * 240}px`,
+        "--project-rotate-y": `${-relative * 12}deg`,
+        "--project-rotate-z": `${relative * 5}deg`,
+        "--project-scale": Math.max(0.64, 1 - dist * 0.15),
+        "--project-dim-opacity": isActive ? 0 : Math.min(0.62, 0.28 + dist * 0.18),
+        zIndex: isActive ? 30 : Math.max(1, 20 - dist),
+      } as React.CSSProperties}
       role="button"
       tabIndex={isVisible ? 0 : -1}
       data-side={side}
-      aria-label={isActive ? `Open ${project.name}` : side === "left" ? "Show previous project" : "Show next project"}
       aria-hidden={!isVisible}
       onClick={openProject}
-      onKeyDown={handleKeyDown}
+      onKeyDown={(e) => ["Enter", " "].includes(e.key) && (e.preventDefault(), openProject())}
     >
       <div className="project-card-media">
-        <img src={project.images.right} alt={`${project.name} featured visual`} draggable={false} loading="eager" decoding="async" />
+        <img src={project.images.right} alt={project.name} draggable={false} loading="eager" decoding="async" />
         <span className="project-card-shade" aria-hidden="true" />
         <span className="project-card-dim" aria-hidden="true" />
       </div>

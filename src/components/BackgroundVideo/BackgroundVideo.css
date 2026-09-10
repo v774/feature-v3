@@ -13,28 +13,29 @@
 .background-video-sequence {
   position: absolute;
   inset: 0;
-  display: block;
   width: 100%;
   height: 100%;
+  object-fit: cover;
   filter: saturate(1.12) contrast(1.08);
 }
 
 .background-video-media {
-  object-fit: cover;
+  display: block;
   object-position: 62% center;
+  z-index: 1;
 }
 
 .background-video-sequence {
   display: none;
-  z-index: 1;
+  z-index: 2;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1200px) {
   .background-video-media {
-    display: none;
+    display: none !important;
   }
 
   .background-video-sequence {
-    display: block;
+    display: block !important;
   }
 }

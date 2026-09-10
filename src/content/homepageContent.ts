@@ -5,7 +5,7 @@ import { siteContent } from "./siteContent";
  * Тут задається локальний файл відео першого екрана.
  * Шлях імпорту залишай у такому форматі.
  */
-const heroVideoSrc = new URL("../assets/videos/hero/neon-lama.mp4", import.meta.url).href;
+const heroVideoSrc = new URL("/videos/hero/neon-lama.mp4", import.meta.url).href;
 
 /*
  * ТИПИ ДАНИХ
