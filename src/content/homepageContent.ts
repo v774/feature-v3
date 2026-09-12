@@ -172,26 +172,26 @@ export const homepageContent: HomepageContent = {
         number: "01",
         title: "Logo Animation",
         description:
-          "Custom logo reveals, intros and outros designed to make your brand feel polished, memorable and alive.",
+          "Custom logo reveals, intros and outros that make your brand feel polished, memorable and alive.",
       },
  
       {
         number: "02",
         title: "Lottie & UI",
         description:
-          "Lightweight interface animations, micro-interactions and animated elements for apps, websites and digital products.",
+          "Lightweight UI animations and micro-interactions that make apps, websites and digital products feel more engaging.",
       },
       {
         number: "03",
         title: "Animated Icons",
         description:
-          "Smooth animated icon sets created for interfaces, presentations, products and social media.",
+          "Smooth animated icon sets for interfaces, apps, presentations and digital products.",
       },
       {
         number: "04",
-        title: "Animated Posters",
+        title: "Social & Promo",
         description:
-          "Bold animated posters for music, events, campaigns and social platforms.",
+          "Dynamic motion content designed to grab attention across social media, events and campaigns.",
       },
     ],
   },
