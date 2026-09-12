@@ -94,22 +94,21 @@ export function Contact() {
     const Icon = item.icon !== '@' ? SocialIcons[item.icon as keyof typeof SocialIcons] : null
 
     return (
-      <article className="contact-section-wrapper__detail-card" key={item.label}>
+      <a 
+        className="contact-section-wrapper__detail-card" 
+        key={item.label}
+        href={item.href} 
+        target={item.icon !== '@' ? '_blank' : undefined} 
+        rel={item.icon !== '@' ? 'noopener noreferrer' : undefined}
+      >
         <span className="contact-section-wrapper__icon-box" aria-hidden="true">
           {Icon ? <Icon style={{ width: '22px', height: '22px' }} /> : item.icon}
         </span>
         <div className="contact-section-wrapper__card-text">
           <p className="contact-section-wrapper__card-label">{item.label}</p>
-          <a 
-            href={item.href} 
-            target={item.icon !== '@' ? '_blank' : undefined} 
-            rel={item.icon !== '@' ? 'noopener noreferrer' : undefined}
-          >
-            {item.val}
-          </a>
         </div>
         <span className="contact-section-wrapper__card-arrow" aria-hidden="true" />
-      </article>
+      </a>
     )
   })}
 </div>

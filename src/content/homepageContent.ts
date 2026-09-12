@@ -130,8 +130,8 @@ export const homepageContent: HomepageContent = {
     eyebrow: "",
     heading: "ABOUT ME",
     text:
-      "I’m Valentyn, a motion designer creating polished logo animations, brand motion, animated icons, Lottie interactions and social content. I focus on clear ideas, precise timing and visuals that help brands feel more memorable.",
-    cta: "LET’S WORK TOGETHER",
+      "Hi, I’m Valentyn, a motion designer helping brands turn ideas into engaging visuals. I create logo animations, brand motion, animated icons, Lottie and social content. Need to make your brand stand out, explain a product or bring an idea to life? ",
+    cta: "LET’S MAKE IT MOVE.",
     /*
      * Декоративні картинки секції About.
      * src — шлях до картинки.
