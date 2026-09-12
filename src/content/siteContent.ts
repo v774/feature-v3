@@ -102,11 +102,11 @@ export const siteContent: SiteContent = {
    * Нове посилання додається окремим об'єктом у цей масив.
    */
   socialLinks: [
-    { label: 'Fiverr', href: 'https://fiverr.com/твій_профіль' },
-    { label: 'Upwork', href: 'https://upwork.com/freelancers/твій_профіль' },
-    { label: 'Instagram', href: 'https://instagram.com/твій_профіль' },
-    { label: 'TikTok', href: 'https://tiktok.com/@valentyn_motion' },
-    { label: 'Telegram', href: 'https://t.me/твій_юзернейм' },
+    { label: 'Fiverr', href: 'https://www.fiverr.com/design_by_vl' },
+    { label: 'Upwork', href: 'https://www.upwork.com/freelancers/~01de24a72809cbfcb0?mp_source=share' },
+    { label: 'Instagram', href: 'https://www.instagram.com/valentyn.motion' },
+    { label: 'TikTok', href: 'https://www.tiktok.com/@valentyn.motion' },
+    { label: 'Telegram', href: 'https://t.me/valentyn_motion' },
     { label: "Email", href: "mailto:valentyn.lvrk@gmail.com", shortLabel: "Mail" },
   ],
   /* Тексти сторінок категорій. */

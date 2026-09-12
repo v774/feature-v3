@@ -189,7 +189,7 @@ export const homepageContent: HomepageContent = {
       },
       {
         number: "04",
-        title: "Animated Posterssdfdfsdf",
+        title: "Animated Posters",
         description:
           "Bold animated posters for music, events, campaigns and social platforms.",
       },
