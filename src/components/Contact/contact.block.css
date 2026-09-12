@@ -29,7 +29,7 @@
     radial-gradient(ellipse at 50% 100%, rgba(255, 36, 88, 0.035), transparent 42%),
     #050505;
   font-family: var(--font-interface);
-  scroll-margin-top: 96px;
+  scroll-margin-top:196px;
   isolation: isolate;
 }
 
@@ -250,13 +250,14 @@
 }
 
 .contact-section-wrapper__card-label {
-  margin: 0;
+  margin: 0 0 2px;
   color: #fff;
-  font-size: 15px; /* Збільшено для кращого вигляду */
+  font-size: 13px;
   font-weight: 800;
-  line-height: 1;
+  line-height: 1.15;
   letter-spacing: -0.015em;
 }
+
 .contact-section-wrapper__detail-card a,
 .contact-section-wrapper__detail-card p:not(.contact-section-wrapper__card-label) {
   margin: 0;

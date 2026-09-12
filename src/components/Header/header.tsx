@@ -11,6 +11,7 @@ export function Header() {
   const homePath = getHomepagePath(pathname);
   const isHome = isHomepagePath(pathname);
 
+  // Обробка прокрутки для ховання/показу шапки
   useEffect(() => {
     let prev = window.scrollY;
     const onScroll = () => {
@@ -22,14 +23,24 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Відстеження активної секції (Scroll Spy)
   useEffect(() => {
     if (!isHome) return;
+    
     const observer = new IntersectionObserver(
       (entries) => {
-        const visible = entries.filter(e => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if (visible) setState(s => ({ ...s, activeId: visible.target.id }));
+        const visibleSections = entries.filter(e => e.isIntersecting);
+        
+        if (visibleSections.length > 0) {
+          // Шукаємо секцію з найбільшим відсотком видимості
+          const mostVisible = visibleSections.reduce((prev, current) => 
+            (prev.intersectionRatio > current.intersectionRatio) ? prev : current
+          );
+          setState(s => ({ ...s, activeId: mostVisible.target.id }));
+        }
       },
-      { rootMargin: "-35% 0px -45% 0px", threshold: [0.18, 0.35, 0.5] }
+      // Відступи для визначення "активної" зони екрана
+      { rootMargin: "-30% 0px -50% 0px", threshold: [0, 0.25, 0.5, 0.75, 1] }
     );
     
     siteContent.navigation.forEach(({ id }) => {
@@ -54,7 +65,12 @@ export function Header() {
           </Link>
           <nav className="header-component-wrapper__navigation">
             {siteContent.navigation.map(({ id, label }) => (
-              <Link key={id} className={`header-component-wrapper__navigation-link ${isHome && state.activeId === id ? "header-component-wrapper__navigation-link--active" : ""}`.trim()} to={homePath} onClick={(e) => navClick(e, id)}>
+              <Link 
+                key={id} 
+                className={`header-component-wrapper__navigation-link ${isHome && state.activeId === id ? "header-component-wrapper__navigation-link--active" : ""}`.trim()} 
+                to={homePath} 
+                onClick={(e) => navClick(e, id)}
+              >
                 {label}
               </Link>
             ))}

@@ -6,7 +6,7 @@ import "./ContactButton.css";
 export function ContactButton({ label = siteContent.contactButtonLabel }: { label?: string }) {
   return (
     <Magnet strength={5} padding={60}>
-      <button className="contact-button" type="button" onClick={() => scrollToHomepageSection("contact-form")}>
+      <button className="contact-button" type="button" onClick={() => scrollToHomepageSection("contact")}>
         {label}
       </button>
     </Magnet>
