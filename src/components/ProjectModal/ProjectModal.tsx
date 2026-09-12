@@ -10,9 +10,12 @@ type ProjectModalProps = {
   returnFocusElement?: HTMLElement | null
 }
 
-function MetaIcon({ type }: { type: 'format' | 'software' | 'delivery' }) {
+function MetaIcon({ type }: { type: 'format' | 'software' | 'delivery' | 'duration' | 'client' | 'year' }) {
   if (type === 'format') return <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M8 22h8M12 19v3" /></svg>
   if (type === 'software') return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 5 5 5M4 20l3.5-1 10-10a2.12 2.12 0 0 0-3-3l-10 10L4 20ZM13 18h7M4 14h4" /></svg>
+  if (type === 'delivery') return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" /><polyline points="3.27 6.96 12 12.01 20.73 6.96" /><line x1="12" y1="22.08" x2="12" y2="12" /></svg>
+  if (type === 'client') return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
+  if (type === 'year') return <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>
   return <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>
 }
 
@@ -149,6 +152,13 @@ export function ProjectModal({ project, onClose, returnFocusElement }: ProjectMo
             <span className={styles.metaItem}><b><MetaIcon type="format" />{labels.format}</b><strong>{project.format}</strong></span>
             <span className={styles.metaItem}><b><MetaIcon type="software" />{labels.software}</b><strong>{project.software.split(',').map((tool) => <span className={styles.valueLine} key={tool}>{tool.trim()}</span>)}</strong></span>
             <span className={styles.metaItem}><b><MetaIcon type="delivery" />{labels.delivery}</b><strong>{project.delivery}</strong></span>
+            <span className={styles.metaItem}><b><MetaIcon type="duration" />{labels.duration}</b><strong>{project.duration}</strong></span>
+            {project.client && (
+              <span className={styles.metaItem}><b><MetaIcon type="client" />Client</b><strong>{project.client}</strong></span>
+            )}
+            {project.year && (
+              <span className={styles.metaItem}><b><MetaIcon type="year" />Year</b><strong>{project.year}</strong></span>
+            )}
           </div>
         </div>
       </div>

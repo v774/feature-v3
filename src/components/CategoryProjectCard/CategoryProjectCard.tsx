@@ -176,11 +176,12 @@ export function CategoryProjectCard({
           {hasVideo && <span className={styles.watchFull} aria-hidden="true">Watch Full</span>}
           <div className={styles.infoLayer}>
             <div className={styles.infoTop}>
-              <span className={styles.format}><span className={styles.formatDot} aria-hidden="true" />1920x1080</span>
+           {/*<span className={styles.format}><span className={styles.formatDot} aria-hidden="true" />1920x1080</span>
               <span>30FPS</span>
+            </div> --це буде показуватись на превю відео */} 
             </div>
             <div className={styles.infoBottom}>
-              <span className={styles.software}>{project.software.replaceAll(', ', ' - ').toUpperCase()}</span>
+             {/*  <span className={styles.software}>{project.software.replaceAll(', ', ' - ').toUpperCase()}</span>--- надпис after efect на превю*/} 
               <h2>{project.title}</h2>
             </div>
           </div>

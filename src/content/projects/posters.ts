@@ -48,9 +48,9 @@ export const posterProjects: PortfolioProject[] = [
       year: "2026",
       tools: ["After Effects"],
       tags: ["Future project"],
-      format: "MP4 / Story",
+      format: "1080x1920 / MP4  ",
       delivery: "Social campaign",
-      duration: "TBD",
+      duration: "18 sec",
   
       seoTitle: "Night Shift Poster | VL Motion",
       seoDescription: "A bold animated poster concept for a late-night music event and social campaign.",
@@ -59,7 +59,7 @@ export const posterProjects: PortfolioProject[] = [
   {
       id: "placeholder-echo-event",
       slug: "echo-event",
-      title: "Luxary car Reels",
+      title: "Luxury car Reels",
       category: "posters",
       description: "An energetic event visual designed for venue screens, stories and promotional posts.",
   

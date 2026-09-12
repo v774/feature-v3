@@ -45,7 +45,7 @@ export interface PortfolioProject {
   tags: string[];
   format: string;
   delivery: string;
-  duration: string;
+  duration: number | string;
   seoTitle: string;
   seoDescription: string;
 }
@@ -61,7 +61,9 @@ export interface CategoryProject {
   format: string;
   software: string;
   delivery: string;
-  duration: string;
+  duration: number | string;
+  client?: string;
+  year?: string;
   enabled: boolean;
 }
 

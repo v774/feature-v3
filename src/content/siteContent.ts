@@ -41,6 +41,7 @@ export interface SiteContent {
   heroStatusPhrases: string[];
   /* Підписи у модальному вікні роботи. */
   modalLabels: {
+    duration: string;
     format: string;
     software: string;
     delivery: string;
@@ -117,6 +118,7 @@ export const siteContent: SiteContent = {
   ],
   /* Підписи у модальному вікні роботи. */
   modalLabels: {
+    duration: "Duration",
     format: "Format",
     software: "Software",
     delivery: "Delivery",
