@@ -37,6 +37,7 @@ export interface SiteContent {
     work: string;
     projects: string;
     categoriesAriaLabel: string;
+    
   };
   heroStatusPhrases: string[];
   /* Підписи у модальному вікні роботи. */
@@ -80,6 +81,7 @@ export const siteContent: SiteContent = {
     { id: "projects", label: "Work" },
     { id: "contact", label: "Contact" },
   ],
+  
   /* Нижня мобільна навігація. */
   bottomNavigation: [
     { id: "home", label: "Home", icon: "home" },
@@ -88,6 +90,7 @@ export const siteContent: SiteContent = {
     { id: "services", label: "Services", icon: "process" },
     { id: "contact", label: "Contact", icon: "contact" },
   ],
+  
   contactCta: "Let's talk",
   contactButtonLabel: "Contact Me",
   footerTagline: "Logo animation · Brand motion · Lottie UI",
@@ -99,6 +102,11 @@ export const siteContent: SiteContent = {
    * Нове посилання додається окремим об'єктом у цей масив.
    */
   socialLinks: [
+    { label: 'Fiverr', href: 'https://fiverr.com/твій_профіль' },
+    { label: 'Upwork', href: 'https://upwork.com/freelancers/твій_профіль' },
+    { label: 'Instagram', href: 'https://instagram.com/твій_профіль' },
+    { label: 'TikTok', href: 'https://tiktok.com/@valentyn_motion' },
+    { label: 'Telegram', href: 'https://t.me/твій_юзернейм' },
     { label: "Email", href: "mailto:valentyn.lvrk@gmail.com", shortLabel: "Mail" },
   ],
   /* Тексти сторінок категорій. */

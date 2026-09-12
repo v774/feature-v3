@@ -62,7 +62,7 @@ export const contactContent: ContactContent = {
   connect: "Connect",
   emailCardLabel: "Email us",
   locationLabel: "Our location",
-  location: "Ukraine / Remote",
+  location: "Location: Poland / Remote",
   availabilityLabel: "Availability",
   availability: "Available worldwide",
   socialLinksLabel: "Social links",

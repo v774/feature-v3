@@ -45,7 +45,7 @@ export const lottieUiProjects: PortfolioProject[] = [
   
       client: "Personal project",
       year: "2026",
-      tools: ["After Effects"],
+      tools: ["After Effects, Illustrator, Photoshop"],
       tags: ["Future project"],
       format: "Lottie JSON",
       delivery: "App interaction",
@@ -82,7 +82,7 @@ export const lottieUiProjects: PortfolioProject[] = [
   
       client: "Personal project",
       year: "2026",
-      tools: ["After Effects"],
+      tools: ["After Effects, Illustrator, Photoshop"],
       tags: ["Future project"],
       format: "Lottie JSON",
       delivery: "Product UI",
@@ -119,7 +119,7 @@ export const lottieUiProjects: PortfolioProject[] = [
   
       client: "Personal project",
       year: "2026",
-      tools: ["After Effects"],
+      tools: ["After Effects, Illustrator, Photoshop"],
       tags: ["Future project"],
       format: "Lottie JSON",
       delivery: "Mobile app",

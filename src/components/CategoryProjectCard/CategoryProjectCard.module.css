@@ -155,7 +155,7 @@
   font-size: clamp(1.15rem, 1.65vw, 1.65rem);
   font-weight: 700;
   letter-spacing: 0;
-  line-height: 1.12;
+  line-height: 0.12;
   text-wrap: balance;
   overflow-wrap: anywhere;
   word-break: normal;

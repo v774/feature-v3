@@ -21,9 +21,9 @@ export const posterProjects: PortfolioProject[] = [
   {
       id: "placeholder-night-shift",
       slug: "night-shift",
-      title: "Night Jazz Poster",
+      title: "Night Jazz Flyer",
       category: "posters", 
-      description: "A bold animated poster concept for a late-night music event and social campaign.",
+      description: "Animated social promo for a live jazz event.",
   
       /* Картинка картки. */
       thumbnail: "/images/prewiew/poster/Jazz.webp",
@@ -46,9 +46,9 @@ export const posterProjects: PortfolioProject[] = [
   
       client: "Personal project",
       year: "2026",
-      tools: ["After Effects"],
+      tools: ["After Effects, Illustrator, Photoshop"],
       tags: ["Future project"],
-      format: "1080x1920 / MP4  ",
+      format: "1080x1920 / MP4 ",
       delivery: "Social campaign",
       duration: "18 sec",
   
@@ -61,7 +61,7 @@ export const posterProjects: PortfolioProject[] = [
       slug: "echo-event",
       title: "Luxury car Reels",
       category: "posters",
-      description: "An energetic event visual designed for venue screens, stories and promotional posts.",
+      description: "Dynamic vertical reel created for luxury car rental promotion.",
   
       /* Картинка картки. */
       thumbnail: "/images/prewiew/poster/car_reels.webp",
@@ -83,11 +83,11 @@ export const posterProjects: PortfolioProject[] = [
   
       client: "Personal project",
       year: "2026",
-      tools: ["After Effects"],
+      tools: ["After Effects, Illustrator, Photoshop"],
       tags: ["Future project"],
-      format: "MP4 / Story",
+      format: "1080x1920 / MP4 ",
       delivery: "Event media",
-      duration: "TBD",
+      duration: "12 sec",
   
       seoTitle: "Echo Event Visual | VL Motion",
       seoDescription: "An energetic event visual designed for venue screens, stories and promotional posts.",
@@ -98,7 +98,7 @@ export const posterProjects: PortfolioProject[] = [
       slug: "afterglow",
       title: "Rozetka Reels",
       category: "posters",
-      description: "A flexible animated campaign poster with strong typography and atmospheric motion.",
+      description: "Black Friday promotional animation for social media.",
   
       /* Картинка картки. */
       thumbnail: "/images/prewiew/poster/rozetka_reels.webp",
@@ -120,11 +120,11 @@ export const posterProjects: PortfolioProject[] = [
   
       client: "Personal project",
       year: "2026",
-      tools: ["After Effects"],
+      tools: ["After Effects, Illustrator, Photoshop"],
       tags: ["Future project"],
-      format: "MP4 / Story",
+      format: "1080x1920 / MP4 ",
       delivery: "Campaign assets",
-      duration: "TBD",
+      duration: "12 sec",
   
       seoTitle: "Afterglow Campaign Poster | VL Motion",
       seoDescription: "A flexible animated campaign poster with strong typography and atmospheric motion.",

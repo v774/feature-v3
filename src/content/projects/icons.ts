@@ -45,7 +45,7 @@ export const iconProjects: PortfolioProject[] = [
   
       client: "Personal project",
       year: "2026",
-      tools: ["After Effects"],
+      tools: ["After Effects, Illustrator, Photoshop"],
       tags: ["Future project"],
       format: "Lottie / SVG",
       delivery: "Interface assets",
@@ -82,7 +82,7 @@ export const iconProjects: PortfolioProject[] = [
   
       client: "Personal project",
       year: "2026",
-      tools: ["After Effects"],
+      tools: ["After Effects, Illustrator, Photoshop"],
       tags: ["Future project"],
       format: "Lottie / SVG",
       delivery: "Product UI",
@@ -119,7 +119,7 @@ export const iconProjects: PortfolioProject[] = [
   
       client: "Personal project",
       year: "2026",
-      tools: ["After Effects"],
+      tools: ["After Effects, Illustrator, Photoshop"],
       tags: ["Future project"],
       format: "Lottie / SVG",
       delivery: "Web and app",

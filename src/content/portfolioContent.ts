@@ -131,9 +131,9 @@ export const portfolioCategories: PortfolioCategory[] = [
   },
   {
     slug: "posters",
-    label: "Posters",
+    label: " Social & Promo",
     description:
-      "Animated posters created for music, events, campaigns and social content.",
+      "Dynamic animations for social media, events, and advertising campaigns.",
     enabled: true,
     size: "wide",
     order: 4,
@@ -160,7 +160,7 @@ export const showreelProject: CategoryProject = {
   videoPath: "/videos/showreel/main-showreel.webm",
   previewImage: "",
   format: "WEBM",
-  software: "After Effects",
+  software: "After Effects, Illustrator, Photoshop",
   delivery: "Digital",
   duration: "01:28",
   enabled: true,

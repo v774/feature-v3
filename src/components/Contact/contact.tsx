@@ -1,9 +1,11 @@
 import { type FormEvent, useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { contactContent as copy } from '../../content/contactContent'
+import { siteContent } from '../../content/siteContent'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
 import { useSectionAnimation } from '../../hooks/useSectionAnimation'
 import { premiumEase } from '../../utils/motionConfig'
+import { SocialIcons } from '../common/SocialIcons'
 import './contact.block.css'
 
 declare const process: any
@@ -17,7 +19,6 @@ export function Contact() {
   const { setRef, controls, initial } = useSectionAnimation<HTMLElement>({ activationThreshold: 0.4, resetThreshold: 0.08, minCycleMs: 1400 })
   
   const [{ name, email, project_type, budget, message }, setForm] = useState({ name: '', email: '', project_type: '', budget: '', message: '' })
-  // Додано resetCount, щоб відстежувати повторні відкриття форми
   const [status, setStatus] = useState({ submitting: false, submitted: false, message: '', resetCount: 0 })
   const textRef = useRef<HTMLTextAreaElement>(null)
 
@@ -62,6 +63,7 @@ export function Contact() {
   }
 
   const groupVars = { hidden: { opacity: 0, y: 34, scale: 0.99 }, visible: { opacity: 1, y: 0, scale: 1 } }
+  
 
   return (
     <section className="contact-section-wrapper" id="contact" aria-labelledby="contact-title" ref={setRef}>
@@ -78,21 +80,40 @@ export function Contact() {
             <p className="contact-section-wrapper__section-description">{copy.description}</p>
             
             <div className="contact-section-wrapper__cards">
-              {[
-                { icon: '@', label: copy.emailCardLabel, val: copy.emailAddress, href: `mailto:${copy.emailAddress}` },
-                { icon: 'AV', label: copy.availabilityLabel, val: copy.availability },
-                { icon: 'LO', label: copy.locationLabel, val: copy.location }
-              ].map(item => (
-                <article className="contact-section-wrapper__detail-card" key={item.label}>
-                  <span className="contact-section-wrapper__icon-box" aria-hidden="true">{item.icon}</span>
-                  <div>
-                    <p className="contact-section-wrapper__card-label">{item.label}</p>
-                    {item.href ? <a href={item.href}>{item.val}</a> : <p>{item.val}</p>}
-                  </div>
-                  <span className="contact-section-wrapper__card-arrow" aria-hidden="true" />
-                </article>
-              ))}
-            </div>
+  {[
+    { icon: '@', label: copy.emailCardLabel, val: copy.emailAddress, href: `mailto:${copy.emailAddress}` },
+    ...siteContent.socialLinks
+      .filter(link => link.label.toLowerCase() !== 'email')
+      .map(link => ({
+        icon: link.label,
+        label: link.label,
+        val: link.href.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, ''),
+        href: link.href
+      }))
+  ].map(item => {
+    const Icon = item.icon !== '@' ? SocialIcons[item.icon as keyof typeof SocialIcons] : null
+
+    return (
+      <article className="contact-section-wrapper__detail-card" key={item.label}>
+        <span className="contact-section-wrapper__icon-box" aria-hidden="true">
+          {Icon ? <Icon style={{ width: '22px', height: '22px' }} /> : item.icon}
+        </span>
+        <div className="contact-section-wrapper__card-text">
+          <p className="contact-section-wrapper__card-label">{item.label}</p>
+          <a 
+            href={item.href} 
+            target={item.icon !== '@' ? '_blank' : undefined} 
+            rel={item.icon !== '@' ? 'noopener noreferrer' : undefined}
+          >
+            {item.val}
+          </a>
+        </div>
+        <span className="contact-section-wrapper__card-arrow" aria-hidden="true" />
+      </article>
+    )
+  })}
+</div>
+        
           </motion.div>
 
           <AnimatePresence mode="wait">

@@ -1,9 +1,9 @@
 import { motion } from 'motion/react'
-import { contactContent } from '../../content/contactContent'
 import { siteContent } from '../../content/siteContent'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
 import { useSectionAnimation } from '../../hooks/useSectionAnimation'
 import { premiumEase } from '../../utils/motionConfig'
+import { SocialIcons } from '../common/SocialIcons'
 import './footer.block.css'
 
 const SHAPES = ['star', 'dots', 'arch', 'circle', 'slash', 'discs', 'triangles', 'donut']
@@ -11,7 +11,12 @@ const SHAPES = ['star', 'dots', 'arch', 'circle', 'slash', 'discs', 'triangles',
 export function Footer() {
   const reduced = useReducedMotion()
   const { setRef, controls, initial } = useSectionAnimation<HTMLElement>({ activationThreshold: 0.35, resetThreshold: 0.06 })
-  const socials = siteContent.socialLinks.filter(l => l.label.toLowerCase() !== 'email')
+  
+  // Примусовий порядок соцмереж
+  const order = ['Fiverr', 'Upwork', 'Telegram', 'Instagram', 'TikTok']
+  const socials = siteContent.socialLinks
+    .filter(l => l.label.toLowerCase() !== 'email')
+    .sort((a, b) => order.indexOf(a.label) - order.indexOf(b.label))
 
   return (
     <motion.footer
@@ -23,24 +28,31 @@ export function Footer() {
       transition={{ duration: reduced ? 0 : 0.8, ease: premiumEase }}
     >
       <div className="footer-card">
-        <div className="footer-top-grid" data-has-socials={socials.length > 0}>
+        <div className="footer-top-grid">
+          
           <a className="footer-brand-lockup" href="/" aria-label={siteContent.homeAriaLabel}>
             <span>{siteContent.brandShortName}</span><span>{siteContent.brandSuffix}</span>
           </a>
           
-          {socials.length > 0 && (
-            <nav className="footer-link-group">
-              <p>Social</p>
-              {socials.map(({ href, label }) => <a href={href} key={label}>{label}</a>)}
-            </nav>
-          )}
-          
           <address className="footer-link-group footer-contact-group">
-            <p>Contact</p>
-            <a href={`mailto:${siteContent.email}`}>{siteContent.email}</a>
-            <span>{contactContent.availability}</span>
-            <span>{contactContent.location}</span>
+            <p>Contact & Social</p>
+            <div className="footer-contact-links">
+              <a href={`mailto:${siteContent.email}`} className="footer-social-link">
+                <span className="footer-social-icon text-icon" aria-hidden="true">@</span>
+                <span>{siteContent.email}</span>
+              </a>
+              {socials.map(({ href, label }) => {
+                const Icon = SocialIcons[label as keyof typeof SocialIcons]
+                return (
+                  <a href={href} key={label} target="_blank" rel="noopener noreferrer" className="footer-social-link">
+                    {Icon ? <Icon className="footer-social-icon" /> : <span className="footer-social-icon text-icon">{label[0]}</span>}
+                    <span>{label}</span>
+                  </a>
+                )
+              })}
+            </div>
           </address>
+
         </div>
 
         <div className="footer-shape-row" aria-hidden="true">
