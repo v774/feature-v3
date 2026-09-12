@@ -34,7 +34,7 @@ export function ProjectsSection() {
     inputLockedRef.current = true;
     window.setTimeout(() => {
       inputLockedRef.current = false;
-    }, prefersReducedMotion ? 0 : 620);
+    }, prefersReducedMotion ? 0 : 100);
   }, [prefersReducedMotion]);
 
   const stepCard = useCallback((direction: number) => {
