@@ -117,10 +117,14 @@ export function CategoryProjectCard({
 
   const handleMouseLeave = () => {
     if (!isDesktop) return
-    if (isFrozen) return
+    
+    // Видалено: if (isFrozen) return 
+    
     clearPreviewTimer()
     pauseVideo(false)
     setIsPreviewing(false)
+    setIsFrozen(false) // Додано: одразу скидаємо стан "Watch Full"
+    
     if (activePreviewId === project.id) setActivePreviewId(null)
   }
 
@@ -168,7 +172,7 @@ export function CategoryProjectCard({
               poster={project.previewImage}
               muted
               playsInline
-              preload="metadata"
+              preload="auto"
               onError={handleVideoError}
             />
           )}
