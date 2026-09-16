@@ -1,77 +1,33 @@
-/*
- * LOGO ANIMATION
- *
- * Тут тільки роботи цієї категорії.
- *
- * Для додавання відео зазвичай змінюєш:
- * - thumbnail — картинка картки;
- * - video — шлях до відео;
- * - poster — заставка відео;
- * - showInMarquee — показ у рухомій стрічці;
- * - published — показ роботи на сайті;
- * - order — порядок у цій категорії: 1, 2, 3...
- *
- * Картинка великої секції PROJECT задається окремо
- * у portfolioContent.ts в налаштуваннях категорій.
- * 
- * {
-      id: "placeholder-orbit-logo",
-      slug: "orbit-logo",
-      title: "Orbit Logo Motion",
-      category: "logo-animation",
-      description: "A compact logo animation concept built around orbital movement and a precise final lockup.",
-  
-       Картинка картки. 
-      thumbnail: "/images/projects/3.webp",
-  
-      Встав сюди шлях, коли відео буде готове. 
-      video: "",
-  
-       Заставка відео. 
-      poster: "/images/projects/4.webp",
-  
-       true = показувати у рухомій стрічці. 
-      showInMarquee: false,
-  
-      true = показувати картку на сайті. 
-      published: true,
-  
-       Порядок усередині цієї категорії. 
-      order: 2,
-  
-      client: "Personal project",
-      year: "2026",
-      tools: ["After Effects, Illustrator, Photoshop"],
-      tags: ["Future project"],
-      format: "MP4 / WEBM",
-      delivery: "Logo package",
-      duration: "TBD",
-  
-      seoTitle: "Orbit Logo Motion | VL Motion",
-      seoDescription: "A compact logo animation concept built around orbital movement and a precise final lockup.",
-    }
-
-*/
 import type { PortfolioProject } from "../portfolioContent";
 
-export const logoAnimationProjects: PortfolioProject[] = [
+/*
+ * LOGO ANIMATION - АДМІНКА
+ * Тут тільки роботи категорії logo-animation
+ * Щоб додати нову - скопіюй шаблон внизу
+ */
 
-  
+export const logoAnimationProjects: PortfolioProject[] = [
   {
-    id: "techlogo-motion",
-    slug: "techlogo-motion",
-    title: "Techlogo",
-    category: "logo-animation",
-    description: "Dynamic particle transformation into an interconnected tech symbol, completing with a sleek typographic reveal.",
-    
-    thumbnail: "/images/prewiew/logo/techlogo.webp",
-    video: "/videos/animation/logo/techlogo.webm",
-    poster: "/images/projects/techlogo.webp",
-    
-    showInMarquee: true,
-    published: true,
-    order: 1,
-    
+    // --- ТЕХНІЧНЕ ---
+    id: "techlogo-motion", // 🚫 Унікальний ID
+    slug: "techlogo-motion", // 🚫 Слаг URL
+    category: "logo-animation", // 🚫 Має бути logo-animation
+
+    // --- КОНТЕНТ ---
+    title: "Techlogo", // ✅ Назва
+    description: "Dynamic particle transformation into an interconnected tech symbol, completing with a sleek typographic reveal.", // ✅ Опис
+
+    // --- МЕДІА (найчастіше міняєш тут) ---
+    thumbnail: "/images/prewiew/logo/techlogo.webp", // ✅ Картинка картки
+    video: "/videos/animation/logo/techlogo.webm", // ✅ Відео
+    poster: "/images/projects/techlogo.webp", // ✅ Постер
+
+    // --- ПОКАЗ ---
+    showInMarquee: true, // ✅ true = в бігучій стрічці
+    published: true, // ✅ true = на сайті
+    order: 1, // ✅ Порядок 1,2,3...
+
+    // --- МОДАЛКА ---
     client: "Personal project",
     year: "2026",
     tools: ["After Effects, Illustrator, Photoshop"],
@@ -79,25 +35,21 @@ export const logoAnimationProjects: PortfolioProject[] = [
     format: "WEBM / MP4",
     delivery: "Logo package",
     duration: "0:06",
-    
     seoTitle: "Techlogo Motion Reveal | VL Motion",
     seoDescription: "Dynamic particle transformation into an interconnected tech symbol, completing with a sleek typographic reveal.",
   },
   {
     id: "animation-designs-logo",
-    slug: "animation-designs-logo",
-    title: "Animation Designs ",
+    slug: "Sahoo design",
     category: "logo-animation",
+    title: "Sahoo_design",
     description: "Minimalist line dynamics leading into an infinity loop symbol with clean typography reveal.",
-    
     thumbnail: "/images/prewiew/logo/animation-designs.webp",
     video: "/videos/animation/logo/animation-designs.webm",
     poster: "/images/prewiew/projects/3.webp",
-    
     showInMarquee: true,
     published: true,
     order: 2,
-    
     client: "Personal project",
     year: "2026",
     tools: ["After Effects, Illustrator, Photoshop"],
@@ -105,22 +57,21 @@ export const logoAnimationProjects: PortfolioProject[] = [
     format: "WEBM / MP4",
     delivery: "Logo package",
     duration: "0:05",
-    
     seoTitle: "Animation Designs Logo | VL Motion",
     seoDescription: "Minimalist line dynamics leading into an infinity loop symbol with clean typography reveal.",
   },
   {
     id: "pycha-kebs-logo",
     slug: "pycha-kebs-logo",
-    title: "Pycha Kebs ",
     category: "logo-animation",
+    title: "Pycha Kebs",
     description: "Dynamic animation of a vertical spit and chef's knife forming a classic street food emblem with bold typography.",
     thumbnail: "/images/prewiew/logo/pycha.webp",
     video: "/videos/animation/logo/pycha.webm",
     poster: "/videos/animation/logo/pycha.webp",
     showInMarquee: true,
     published: true,
-    order: 1,
+    order: 3,
     client: "Personal project",
     year: "2026",
     tools: ["After Effects, Illustrator, Photoshop"],
@@ -134,15 +85,15 @@ export const logoAnimationProjects: PortfolioProject[] = [
   {
     id: "coolinart-logo",
     slug: "coolinart-logo",
-    title: "Coolinart ",
     category: "logo-animation",
+    title: "Coolinart",
     description: "Playful character-driven animation featuring a chef's hat and eyes that seamlessly transition into custom typography.",
     thumbnail: "/images/prewiew/logo/coolinart.webp",
     video: "/videos/animation/logo/coolinart.webm",
     poster: "/images/projects/coolinart.webp",
     showInMarquee: true,
     published: true,
-    order: 2,
+    order: 4,
     client: "Personal project",
     year: "2026",
     tools: ["After Effects, Illustrator, Photoshop"],
@@ -156,15 +107,15 @@ export const logoAnimationProjects: PortfolioProject[] = [
   {
     id: "foodtalk-logo",
     slug: "foodtalk-logo",
-    title: "Food Talk ",
     category: "logo-animation",
+    title: "Food Talk",
     description: "Minimalist animation starting with messaging indicators that morph into a speech bubble with integrated cutlery icons.",
     thumbnail: "/images/prewiew/logo/foodtalk.webp",
     video: "/videos/animation/logo/foodtalk.webm",
     poster: "/images/projects/foodtalk.webp",
     showInMarquee: true,
     published: true,
-    order: 3,
+    order: 5,
     client: "Personal project",
     year: "2026",
     tools: ["After Effects, Illustrator, Photoshop"],
@@ -178,15 +129,15 @@ export const logoAnimationProjects: PortfolioProject[] = [
   {
     id: "enigma-logo",
     slug: "enigma-logo",
-    title: "Enigma ",
     category: "logo-animation",
+    title: "Enigma",
     description: "Geometric transformation of intersecting layers evolving into a complex, elegant pattern and luxury emblem.",
     thumbnail: "/images/prewiew/logo/enigma.webp",
     video: "/videos/animation/logo/enigma.webm",
     poster: "/images/projects/enigma.webp",
     showInMarquee: true,
     published: true,
-    order: 4,
+    order: 6,
     client: "Personal project",
     year: "2026",
     tools: ["After Effects, Illustrator, Photoshop"],
@@ -200,15 +151,15 @@ export const logoAnimationProjects: PortfolioProject[] = [
   {
     id: "bbq-restaurant-logo",
     slug: "bbq-restaurant-logo",
-    title: "Barbecue Restaurant ",
     category: "logo-animation",
+    title: "Barbecue Restaurant",
     description: "Constructivist geometric transitions resolving into a detailed vintage-style beef cattle logo badge.",
     thumbnail: "/images/prewiew/logo/bbq.webp",
     video: "/videos/animation/logo/bbq.webm",
     poster: "/images/projects/bbq.webp",
     showInMarquee: true,
     published: true,
-    order: 5,
+    order: 7,
     client: "Personal project",
     year: "2026",
     tools: ["After Effects, Illustrator, Photoshop"],
@@ -222,15 +173,15 @@ export const logoAnimationProjects: PortfolioProject[] = [
   {
     id: "frame-logo-motion",
     slug: "frame-logo-motion",
-    title: "Frame ",
     category: "logo-animation",
+    title: "Frame",
     description: "Camera focusing animation with green viewfinder corners revealing dynamic modern typography.",
     thumbnail: "/images/prewiew/logo/frame.webp",
     video: "/videos/animation/logo/frame.webm",
     poster: "/images/projects/frame.webp",
     showInMarquee: true,
     published: true,
-    order: 6,
+    order: 8,
     client: "Personal project",
     year: "2026",
     tools: ["After Effects, Illustrator, Photoshop"],
@@ -244,15 +195,15 @@ export const logoAnimationProjects: PortfolioProject[] = [
   {
     id: "grant-heating-cooling",
     slug: "grant-heating-cooling",
-    title: "Grant Industrial ",
     category: "logo-animation",
+    title: "Grant Industrial",
     description: "Sleek fluid motion and dynamic swirl transitions revealing a corporate HVAC brand emblem.",
     thumbnail: "/images/prewiew/logo/grant.webp",
     video: "/videos/animation/logo/grant.webm",
     poster: "/images/projects/grant.webp",
     showInMarquee: false,
     published: true,
-    order: 7,
+    order: 9,
     client: "Personal project",
     year: "2026",
     tools: ["After Effects, Illustrator, Photoshop"],
@@ -266,15 +217,15 @@ export const logoAnimationProjects: PortfolioProject[] = [
   {
     id: "gotoken-app-logo",
     slug: "gotoken-app-logo",
-    title: "Go Token ",
     category: "logo-animation",
+    title: "Go Token",
     description: "Expressive mascot face animation transitioning smoothly into a modern app icon and brand lockup.",
     thumbnail: "/images/prewiew/logo/token.webp",
     video: "/videos/animation/logo/token.webm",
     poster: "/images/projects/token.webp",
     showInMarquee: true,
     published: true,
-    order: 8,
+    order: 10,
     client: "Personal project",
     year: "2026",
     tools: ["After Effects, Illustrator, Photoshop"],
@@ -288,15 +239,15 @@ export const logoAnimationProjects: PortfolioProject[] = [
   {
     id: "palm-logo-reveal",
     slug: "palm-logo-reveal",
-    title: "Palm ",
     category: "logo-animation",
+    title: "Palm",
     description: "Minimalist glowing strokes constructing a typographic wordmark that blooms into a palm icon.",
     thumbnail: "/images/prewiew/logo/palm.webp",
     video: "/videos/animation/logo/palm.webm",
     poster: "/images/projects/palm.webp",
     showInMarquee: false,
     published: true,
-    order: 9,
+    order: 11,
     client: "Personal project",
     year: "2026",
     tools: ["After Effects, Illustrator, Photoshop"],
@@ -310,15 +261,15 @@ export const logoAnimationProjects: PortfolioProject[] = [
   {
     id: "nexara-agency-logo",
     slug: "nexara-agency-logo",
-    title: "Nexara Agency",
     category: "logo-animation",
+    title: "Nexara Agency",
     description: "Dynamic particle burst converging into a precise geometric grid and digital agency brand mark.",
     thumbnail: "/images/prewiew/logo/nexara.webp",
     video: "/videos/animation/logo/nexara.webm",
     poster: "/images/projects/nexara.webp",
     showInMarquee: false,
     published: true,
-    order: 10,
+    order: 12,
     client: "Personal project",
     year: "2026",
     tools: ["After Effects, Illustrator, Photoshop"],
@@ -328,6 +279,54 @@ export const logoAnimationProjects: PortfolioProject[] = [
     duration: "0:06",
     seoTitle: "Nexara Agency Motion | VL Motion",
     seoDescription: "Dynamic particle burst converging into a precise geometric grid and digital agency brand mark.",
-  }
-
+  },
+  {
+  id: "paradise-found-logo",
+  slug: "paradise-found",
+  category: "logo-animation",
+  title: "Paradise Found",
+  description: "Smooth 2D vector logo animation featuring stroke reveals and retro typography.",
+  thumbnail: "/images/prewiew/logo/paradise_found.webp",
+  video: "/videos/animation/logo/paradise_found.webm",
+  poster: "/images/projects/paradise_found.webp",
+  showInMarquee: false,
+  published: true,
+  order: 6,
+  client: "Personal project",
+  year: "2026",
+  tools: ["After Effects, Illustrator"],
+  tags: ["Logo Animation", "Vector Graphics"],
+  format: "1920x1080 / MP4",
+  delivery: "Social Media / Web",
+  duration: "9 sec",
+  seoTitle: "Paradise Found Logo Animation | VL Motion",
+  seoDescription: "A clean 2D vector logo animation featuring smooth stroke reveals and a retro aesthetic."
+}
 ];
+
+/*
+ * ШАБЛОН ДЛЯ НОВОЇ РОБОТИ - скопіюй це в кінець масиву:
+ * 
+ * {
+ *   id: "my-new-logo", // Унікальний ID
+ *   slug: "my-new-logo", // Слаг URL
+ *   category: "logo-animation",
+ *   title: "My New Logo",
+ *   description: "Опис",
+ *   thumbnail: "/images/prewiew/logo/my-new-logo.webp",
+ *   video: "/videos/animation/logo/my-new-logo.webm",
+ *   poster: "/images/prewiew/logo/my-new-logo.webp",
+ *   showInMarquee: true,
+ *   published: true,
+ *   order: 13,
+ *   client: "Personal project",
+ *   year: "2026",
+ *   tools: ["After Effects"],
+ *   tags: ["Logo"],
+ *   format: "WEBM / MP4",
+ *   delivery: "Logo package",
+ *   duration: "0:05",
+ *   seoTitle: "My New Logo | VL Motion",
+ *   seoDescription: "Опис для Google",
+ * },
+ */

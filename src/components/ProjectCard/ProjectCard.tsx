@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import "./ProjectCard.css";
+import { portfolioCategories } from "../../content/portfolioContent";
 
 export function ProjectCard({ project, index, activeIndex, totalCards, onPrevious, onNext }: any) {
   const navigate = useNavigate();
@@ -14,6 +15,9 @@ export function ProjectCard({ project, index, activeIndex, totalCards, onPreviou
   const side = relative < 0 ? "left" : relative > 0 ? "right" : "center";
 
   const openProject = () => isActive ? navigate(project.href) : (relative < 0 ? onPrevious() : onNext());
+
+  // берем красивий label замість slug
+  const categoryLabel = portfolioCategories.find(c => c.slug === project.category)?.label || project.category;
 
   return (
     <article
@@ -40,7 +44,7 @@ export function ProjectCard({ project, index, activeIndex, totalCards, onPreviou
         <span className="project-card-dim" aria-hidden="true" />
       </div>
       <div className="project-card-caption">
-        <span>{project.category}</span>
+        <span>{categoryLabel}</span>
         <strong>{project.name}</strong>
       </div>
     </article>

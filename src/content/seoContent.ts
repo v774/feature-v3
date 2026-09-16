@@ -1,10 +1,10 @@
 import { portfolioCategories, portfolioProjects } from "./portfolioContent";
 import { siteContent } from "./siteContent";
 
-/*
- * ТИПИ SEO
- * Технічна частина. Структуру не змінювати.
- */
+/* ==========================================================================
+   🚫 НЕ ЧІПАТИ - ТИПИ SEO
+   Структура для Google. Назви не міняти
+   ========================================================================== */
 export interface RouteSeoContent {
   title: string;
   description: string;
@@ -20,10 +20,6 @@ export interface SeoContent {
   defaultDescription: string;
   keywords: string[];
   themeColor: string;
-  /*
-   * Прев'ю посилання у соцмережах і месенджерах.
-   * Файл повинен лежати у public/og-preview.jpg.
-   */
   openGraph: {
     type: string;
     image: string;
@@ -38,30 +34,26 @@ export interface SeoContent {
   routes: Record<string, RouteSeoContent>;
 }
 
-/*
- * ГОЛОВНИЙ ДОМЕН САЙТУ
- * Після підключення власного домену змінюється тільки цей рядок.
- */
-const baseUrl = "https://vportfolio-flame.vercel.app";
+/* ==========================================================================
+   ✅ АДМІНКА - ГОЛОВНИЙ ДОМЕН
+   Після підключення свого домену міняєш ТІЛЬКИ цей рядок
+   ========================================================================== */
+const baseUrl = "https://vportfolio-flame.vercel.app"; // ✅ ТУТ ТВІЙ ДОМЕН (без / в кінці)
 
-/*
- * SEO-АДМІНКА
- *
- * Тут змінюються:
- * - title і description;
- * - ключові слова;
- * - колір браузера;
- * - OG-картинка;
- * - SEO окремих маршрутів.
- */
+/* ==========================================================================
+   ✅ АДМІНКА - SEO
+   Тут міняєш те що бачить Google і прев'ю в Telegram/FB
+   ========================================================================== */
 export const seoContent: SeoContent = {
-  siteName: siteContent.siteName,
-  author: "Valentyn Lavryk",
-  canonicalUrl: baseUrl,
-  defaultTitle: "VL Motion | Motion Designer & Logo Animation",
-  defaultDescription:
-    "Motion designer creating premium logo animations, brand motion systems, Lottie animations and animated posters.",
-  keywords: [
+  siteName: siteContent.siteName, // 🚫 НЕ ЧІПАТИ - тягнеться з siteContent
+  author: "Valentyn Lavryk", // ✅ Автор (для Google)
+
+  canonicalUrl: baseUrl, // 🚫 НЕ ЧІПАТИ - підставляється автоматично
+
+  // --- Головні SEO ---
+  defaultTitle: "VL Motion | Motion Designer & Logo Animation", // ✅ Title в браузері (головна)
+  defaultDescription: "Motion designer creating premium logo animations, brand motion systems, Lottie animations and animated posters.", // ✅ Description для Google (150 символів)
+  keywords: [ // ✅ Ключові слова для Google
     "motion designer",
     "logo animation",
     "brand motion",
@@ -69,33 +61,33 @@ export const seoContent: SeoContent = {
     "animated posters",
     "VL Motion",
   ],
-  themeColor: "#08080a",
-  /*
-   * Прев'ю посилання у соцмережах і месенджерах.
-   * Файл повинен лежати у public/og-preview.jpg.
-   */
+  themeColor: "#08080a", // ✅ Колір браузера на мобілці (темний)
+
+  // --- Прев'ю посилання (коли кидаєш сайт в ТГ/FB) ---
   openGraph: {
-    type: "website",
-    image: `${baseUrl}/og-preview.jpg`,
-    imageWidth: "1200",
-    imageHeight: "630",
-    imageAlt: "VL Motion portfolio preview",
+    type: "website", // 🚫 НЕ ЧІПАТИ
+    image: `${baseUrl}/og-preview.jpg`, // ✅ Картинка прев'ю - має лежати в public/og-preview.jpg (1200x630)
+    imageWidth: "1200", // 🚫 НЕ ЧІПАТИ
+    imageHeight: "630", // 🚫 НЕ ЧІПАТИ
+    imageAlt: "VL Motion portfolio preview", // ✅ Опис картинки
   },
   twitter: {
-    card: "summary_large_image",
-    image: `${baseUrl}/og-preview.jpg`,
+    card: "summary_large_image", // 🚫 НЕ ЧІПАТИ
+    image: `${baseUrl}/og-preview.jpg`, // ✅ Та сама картинка
   },
-  /*
-   * SEO головної та сторінок категорій.
-   * Категорії формуються автоматично з portfolioContent.ts.
-   */
+
+  /* ==========================================================================
+     🚫 НЕ ЧІПАТИ - SEO ОКРЕМИХ СТОРІНОК
+     Генерується автоматично з portfolioContent.ts
+     Хочеш поміняти SEO категорії - міняй в portfolioCategories
+     ========================================================================== */
   routes: {
     "/": {
       title: "VL Motion | Motion Designer & Logo Animation",
-      description:
-        "Premium logo animation, brand motion systems, Lottie animations and visual content for modern brands.",
+      description: "Premium logo animation, brand motion systems, Lottie animations and visual content for modern brands.",
       canonicalPath: "/",
     },
+    // Автоматично створює /work/logo-animation, /work/icon-motion і тд
     ...Object.fromEntries(
       portfolioCategories.map((category) => {
         const project = portfolioProjects.find((item) => item.category === category.slug);

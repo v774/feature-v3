@@ -16,7 +16,17 @@ const sanitize = (v: string) => String(v).replace(/\r\n?/g, '\n').replace(/\\/g,
 
 export function Contact() {
   const reduced = useReducedMotion()
-  const { setRef, controls, initial } = useSectionAnimation<HTMLElement>({ activationThreshold: 0.4, resetThreshold: 0.08, minCycleMs: 1400 })
+  
+  /* ==========================================================================
+     ✅ ФІКС АНІМАЦІЇ - тепер з'являється раніше і не пропадає
+     activationThreshold: 0.15 = тригериться коли 15% секції видно (було 40%)
+     once: true = після появи більше не ховається
+     ========================================================================== */
+  const { setRef, controls, initial } = useSectionAnimation<HTMLElement>({ 
+    activationThreshold: 0.15, 
+    rootMargin: "0px 0px -12% 0px",
+    once: true
+  })
   
   const [{ name, email, project_type, budget, message }, setForm] = useState({ name: '', email: '', project_type: '', budget: '', message: '' })
   const [status, setStatus] = useState({ submitting: false, submitted: false, message: '', resetCount: 0 })
@@ -62,19 +72,40 @@ export function Contact() {
     }
   }
 
-  const groupVars = { hidden: { opacity: 0, y: 34, scale: 0.99 }, visible: { opacity: 1, y: 0, scale: 1 } }
+  /* 💡 ФІКС: Швидша анімація + без scale (легше для браузера) */
+  const groupVars = { 
+    hidden: { opacity: 0, y: 24 }, // БУЛО y:34, scale:0.99 - прибрав scale щоб швидше
+    visible: { opacity: 1, y: 0 } 
+  }
   
 
   return (
     <section className="contact-section-wrapper" id="contact" aria-labelledby="contact-title" ref={setRef}>
-      <motion.div className="contact-section-wrapper__watermark" aria-hidden="true" initial={initial} animate={controls} variants={{ hidden: { opacity: 0, y: 34, scaleY: 0.92 }, visible: { opacity: 1, y: 0, scaleY: 1 } }} transition={{ duration: reduced ? 0 : 0.95, ease: premiumEase }}>
+      {/* Watermark - з'являється першим */}
+      <motion.div 
+        className="contact-section-wrapper__watermark" 
+        aria-hidden="true" 
+        initial={initial} 
+        animate={controls} 
+        variants={{ 
+          hidden: { opacity: 0, y: 24 }, 
+          visible: { opacity: 1, y: 0 } 
+        }} 
+        transition={{ duration: reduced ? 0 : 0.55, ease: premiumEase }} // БУЛО 0.95 - тепер 0.55 швидше
+      >
         <span>CONTACT</span>
-        <motion.span className="contact-section-wrapper__watermark-sweep" variants={{ hidden: { opacity: 0, x: '-80%' }, visible: { opacity: [0, 0.34, 0], x: ['-80%', '160%', '360%'] } }} transition={{ duration: reduced ? 0 : 1.25, delay: reduced ? 0 : 0.78, ease: premiumEase }} />
       </motion.div>
 
       <div className="contact-section-wrapper__container">
         <div className="contact-section-wrapper__workspace">
-          <motion.div className="contact-section-wrapper__content" initial={initial} animate={controls} variants={groupVars} transition={{ duration: reduced ? 0 : 0.72, ease: premiumEase }}>
+          {/* Ліва колонка - з'являється з затримкою 0.1s */}
+          <motion.div 
+            className="contact-section-wrapper__content" 
+            initial={initial} 
+            animate={controls} 
+            variants={groupVars} 
+            transition={{ duration: reduced ? 0 : 0.5, delay: reduced ? 0 : 0.08, ease: premiumEase }} // БУЛО 0.72 - тепер 0.5
+          >
             <p className="contact-section-wrapper__section-eyebrow">{copy.eyebrow}</p>
             <h2 id="contact-title">{copy.heading}</h2>
             <p className="contact-section-wrapper__section-description">{copy.description}</p>
@@ -121,9 +152,9 @@ export function Contact() {
                 key="success"
                 className="contact-section-wrapper__form contact-success-wrapper" 
                 role="status" 
-                initial={reduced ? false : { opacity: 0, y: 12, scale: 0.98 }} 
-                animate={{ opacity: 1, y: 0, scale: 1 }} 
-                exit={reduced ? undefined : { opacity: 0, y: 12, scale: 0.98 }} 
+                initial={reduced ? false : { opacity: 0, y: 12 }} 
+                animate={{ opacity: 1, y: 0 }} 
+                exit={reduced ? undefined : { opacity: 0, y: 12 }} 
                 transition={{ duration: reduced ? 0 : 0.35, ease: premiumEase }}
               >
                 <div className="contact-success-icon" aria-hidden="true">OK</div>
@@ -148,7 +179,7 @@ export function Contact() {
                 animate={status.resetCount > 0 ? "visible" : controls} 
                 exit="hidden"
                 variants={groupVars} 
-                transition={{ duration: reduced ? 0 : 0.76, delay: reduced ? 0 : 0.12, ease: premiumEase }}
+                transition={{ duration: reduced ? 0 : 0.5, delay: reduced ? 0 : 0.16, ease: premiumEase }} // БУЛО 0.76 + 0.12 - тепер 0.5 + 0.16
               >
                 <input type="hidden" name="access_key" value={formKey} />
                 <label className="contact-section-wrapper__field">

@@ -1,37 +1,27 @@
-/*
- * НАЛАШТУВАННЯ ТА ЗБИРАЧ ПОРТФОЛІО
- *
- * Тут редагуються:
- * - назви й описи категорій;
- * - порядок категорій;
- * - одна картинка категорії для секції PROJECT;
- * - showreel.
- *
- * Самі роботи лежать у папці projects.
- */
-
 import { logoAnimationProjects } from "./projects/logoAnimations";
 import { iconProjects } from "./projects/icons";
 import { lottieUiProjects } from "./projects/lottieUi";
 import { posterProjects } from "./projects/posters";
 
+/* ==========================================================================
+   🚫 НЕ ЧІПАТИ - ТИПИ КАТЕГОРІЙ І ПРОЄКТІВ
+   Це структура. Зміна назв зламає сторінку Work
+   ========================================================================== */
 export interface PortfolioCategory {
-  slug: string;
-  label: string;
-  description: string;
-  enabled: boolean;
-  size: "large" | "small" | "wide";
-  order: number;
-
-  /* Одна картинка категорії у великій секції PROJECT. */
-  featuredImage: string;
+  slug: string;            // 🚫 НЕ ЧІПАТИ - ID категорії (використовується в URL /work/slug)
+  label: string;           // ✅ МОЖНА - назва категорії для клієнта
+  description: string;     // ✅ МОЖНА - опис категорії
+  enabled: boolean;        // ✅ МОЖНА - true = показувати, false = сховати
+  size: "large" | "small" | "wide"; // ⚠️ ОБЕРЕЖНО - розмір картки в сітці
+  order: number;           // ✅ МОЖНА - порядок (1 = перша)
+  featuredImage: string;   // ✅ МОЖНА - одна картинка категорії в секції PROJECT
 }
 
 export interface PortfolioProject {
-  id: string;
-  slug: string;
-  title: string;
-  category: string;
+  id: string;              // 🚫 НЕ ЧІПАТИ
+  slug: string;            // 🚫 НЕ ЧІПАТИ
+  title: string;           // ✅ МОЖНА (але краще міняти в projects/*.ts)
+  category: string;        // 🚫 НЕ ЧІПАТИ
   description: string;
   thumbnail: string;
   video: string;
@@ -67,10 +57,6 @@ export interface CategoryProject {
   enabled: boolean;
 }
 
-/*
- * Цей формат залишено тільки для сумісності
- * з чинним компонентом ProjectsSection.
- */
 export interface PortfolioProjectImages {
   leftTop: string;
   leftBottom: string;
@@ -97,43 +83,42 @@ export interface MarqueeProject {
   alt: string;
 }
 
-/* ================= НАЛАШТУВАННЯ КАТЕГОРІЙ ================= */
+/* ==========================================================================
+   ✅ АДМІНКА - КАТЕГОРІЇ
+   Тут міняєш назви, описи, картинки і порядок категорій
+   ========================================================================== */
 export const portfolioCategories: PortfolioCategory[] = [
   {
-    slug: "logo-animation",
-    label: "Logo Animation",
-    description:
-      "Custom logo reveals, intros and brand animations built around the character of each identity.",
-    enabled: true,
-    size: "large",
-    order: 1,
-    featuredImage: "/images/projects/logo_animation.webp",
+    slug: "logo-animation", // 🚫 НЕ МІНЯЙ - це URL /work/logo-animation
+    label: "Logo Animation", // ✅ Назва на сайті
+    description: "Custom logo reveals, intros and brand animations built around the character of each identity.", // ✅ Опис
+    enabled: true, // ✅ true = показувати
+    size: "large", // ⚠️ large = велика картка
+    order: 1, // ✅ 1 = перша
+    featuredImage: "/images/projects/logo_animation.webp", // ✅ Картинка в секції PROJECT (одна на категорію)
   },
   {
-    slug: "icons",
-    label: "Icons",
-    description:
-      "Animated icon sets crafted for interfaces, brands and visual communication.",
-    enabled: true,
+    slug: "icon-motion",
+    label: "Icon Motion",
+    description: "Animated icon sets crafted for interfaces, brands and visual communication.",
+    enabled: false,
     size: "small",
     order: 2,
     featuredImage: "/images/projects/3.webp",
   },
   {
     slug: "lottie-ui",
-    label: "Lottie UI",
-    description:
-      "Lightweight interface motion and micro-interactions designed for apps, websites and digital products.",
-    enabled: true,
+    label: "Lottie & UI",
+    description: "Lightweight interface motion and micro-interactions designed for apps, websites and digital products.",
+    enabled: false,
     size: "small",
     order: 3,
     featuredImage: "/images/projects/4.webp",
   },
   {
-    slug: "posters",
-    label: " Social & Promo",
-    description:
-      "Dynamic animations for social media, events, and advertising campaigns.",
+    slug: "social-promo",
+    label: "Social & Promo",
+    description: "Dynamic animations for social media, events, and advertising campaigns.",
     enabled: true,
     size: "wide",
     order: 4,
@@ -141,7 +126,11 @@ export const portfolioCategories: PortfolioCategory[] = [
   },
 ];
 
-/* Усі роботи з чотирьох окремих файлів. */
+/* ==========================================================================
+   🚫 НЕ ЧІПАТИ - ЗБИРАЧ ВСІХ РОБІТ
+   Роботи додаються в папці /content/projects/*.ts
+   Тут вони тільки збираються в один масив
+   ========================================================================== */
 export const portfolioProjects: PortfolioProject[] = [
   ...logoAnimationProjects,
   ...iconProjects,
@@ -149,30 +138,36 @@ export const portfolioProjects: PortfolioProject[] = [
   ...posterProjects,
 ];
 
-/* ================= SHOWREEL ================= */
+/* ==========================================================================
+   ✅ АДМІНКА - SHOWREEL (головне відео)
+   ========================================================================== */
 export const showreelProject: CategoryProject = {
-  id: "showreel",
-  title: "Brand motion showreel",
-  categorySlug: "showreel",
-  description:
-    "A selection of logo animation, brand motion systems and visual content.",
-  tags: ["Showreel", "Motion Design"],
-  videoPath: "/videos/showreel/main-showreel.webm",
-  previewImage: "",
+  id: "showreel", // 🚫 НЕ ЧІПАТИ
+  title: "Brand motion showreel", // ✅ Назва шоурилу
+  categorySlug: "showreel", // 🚫 НЕ ЧІПАТИ
+  description: "A selection of logo animation, brand motion systems and visual content.", // ✅ Опис
+  tags: ["Showreel", "Motion Design"], // ✅ Теги
+  videoPath: "/videos/showreel/main-showreel.webm", // ✅ Шлях до відео шоурилу
+  previewImage: "", // ✅ Постер (може бути пустим)
   format: "WEBM",
-  software: "After Effects, Illustrator, Photoshop",
+  software: "After Effects, Illustrator, Photoshop", // ✅ Софт
   delivery: "Digital",
-  duration: "01:28",
-  enabled: true,
+  duration: "01:28", // ✅ Тривалість
+  enabled: true, // ✅ Показувати чи ні
 };
 
-/* ================= ТЕХНІЧНІ ЗБИРАЧІ ================= */
+/* ==========================================================================
+   🚫 НЕ ЧІПАТИ - ТЕХНІЧНІ ЗБИРАЧІ ДЛЯ КОМПОНЕНТІВ
+   Це магія для ProjectsSection і Marquee. Не чіпай якщо не впевнений
+   ========================================================================== */
 
+// Для сітки категорій на головній
 export const categories = portfolioCategories
   .filter((category) => category.enabled)
   .sort((a, b) => a.order - b.order)
   .map(({ slug, enabled, size }) => ({ slug, enabled, size }));
 
+// Для модалок і сторінок категорій
 export const projects: CategoryProject[] = portfolioProjects
   .filter((project) => project.published)
   .sort((a, b) => a.order - b.order)
@@ -191,10 +186,7 @@ export const projects: CategoryProject[] = portfolioProjects
     enabled: project.published,
   }));
 
-/*
- * Для адмінки в категорії задається одна featuredImage.
- * Старому компоненту автоматично віддається сумісний images-об'єкт.
- */
+// Для секції PROJECT (великі картки)
 export const featuredHomepageProjects: FeaturedHomepageProject[] =
   portfolioCategories
     .filter((category) => category.enabled)
@@ -212,11 +204,7 @@ export const featuredHomepageProjects: FeaturedHomepageProject[] =
       },
     }));
 
-/*
- * Один проєкт створює один елемент стрічки:
- * є video — показуємо відео;
- * video порожнє — показуємо thumbnail.
- */
+// Для бігучої стрічки (marquee)
 export const marqueeProjects: MarqueeProject[] = portfolioProjects
   .filter((project) => project.published && project.showInMarquee)
   .sort((a, b) => a.order - b.order)
@@ -233,7 +221,6 @@ export const marqueeProjects: MarqueeProject[] = portfolioProjects
         alt: `${project.title} motion preview`,
       };
     }
-
     return {
       id: `${project.id}-poster`,
       title: project.title,

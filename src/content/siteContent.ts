@@ -1,17 +1,17 @@
-/*
- * ТИПИ ГЛОБАЛЬНИХ ДАНИХ
- * Технічна частина. Назви полів не змінювати.
- */
+/* ==========================================================================
+   🚫 НЕ ЧІПАТИ - ТИПИ ГЛОБАЛЬНИХ ДАНИХ
+   Це структура. Зміна назв зламає меню і футер
+   ========================================================================== */
 export interface NavigationItemContent {
-  id: string;
-  label: string;
-  icon?: string;
+  id: string;       // 🚫 НЕ ЧІПАТИ - має збігатися з id секції (home, about...)
+  label: string;    // ✅ МОЖНА - назва в меню
+  icon?: string;    // ⚠️ ОБЕРЕЖНО - іконка для мобільної навігації
 }
 
 export interface SocialLinkContent {
-  label: string;
-  href: string;
-  shortLabel?: string;
+  label: string;       // ✅ МОЖНА - назва соцмережі
+  href: string;        // ✅ МОЖНА - посилання
+  shortLabel?: string; // ✅ МОЖНА - коротка назва (напр. Mail)
 }
 
 export interface SiteContent {
@@ -31,16 +31,13 @@ export interface SiteContent {
   footerCopyright: string;
   email: string;
   socialLinks: SocialLinkContent[];
-  /* Тексти сторінок категорій. */
   categoryPage: {
     back: string;
     work: string;
     projects: string;
     categoriesAriaLabel: string;
-    
   };
   heroStatusPhrases: string[];
-  /* Підписи у модальному вікні роботи. */
   modalLabels: {
     duration: string;
     format: string;
@@ -52,71 +49,81 @@ export interface SiteContent {
   };
 }
 
-/*
- * ГЛОБАЛЬНА АДМІНКА САЙТУ
- *
- * Тут змінюються:
- * - назва бренду;
- * - меню;
- * - мобільна навігація;
- * - кнопки;
- * - footer;
- * - email;
- * - соціальні посилання;
- * - тексти модалки.
- */
+/* ==========================================================================
+   ✅ ГОЛОВНА АДМІНКА САЙТУ - ТУТ 90% ВСЬОГО ЩО МІНЯЄШ
+   ========================================================================== */
 export const siteContent: SiteContent = {
-  siteName: "VL Motion",
-  brandName: "VL Motion",
-  brandShortName: "VL",
-  brandSuffix: "motion",
+  
+  // [STRIPPED 68 bytes] ✅ БРЕНД
+  // [STRIPPED 70 bytes] --------------------------------------------------------------------------------
+  siteName: "VL Motion", // ✅ Назва сайту в SEO і заголовках
+  brandName: "VL Motion", // ✅ Назва в хедері
+  brandShortName: "VL", // ✅ Коротка в лого (VL)
+  brandSuffix: "motion", // ✅ Суфікс лого (motion)
+
+  // [STRIPPED 68 bytes] 🚫 НЕ ЧІПАТИ - ДЛЯ ДОСТУПНОСТІ (скрінрідери)
+  // [STRIPPED 70 bytes] --------------------------------------------------------------------------------
   homeAriaLabel: "VL Motion home",
   navigationAriaLabel: "Main navigation",
   sectionNavigationAriaLabel: "Section navigation",
-  /* Меню у верхній навігації. id має збігатися з id секції. */
+
+  // [STRIPPED 68 bytes] ✅ ВЕРХНЄ МЕНЮ (ДЕСКТОП)
+  // [STRIPPED 70 bytes] --------------------------------------------------------------------------------
+  // id має збігатися з id секції на головній: home, about, services, projects, contact
   navigation: [
-    { id: "home", label: "Home" },
+    { id: "home", label: "Home" }, // ✅ Міняй label, id не чіпай
     { id: "about", label: "About" },
     { id: "services", label: "Services" },
     { id: "projects", label: "Work" },
     { id: "contact", label: "Contact" },
   ],
   
-  /* Нижня мобільна навігація. */
+  // [STRIPPED 68 bytes] ✅ НИЖНЄ МЕНЮ (МОБІЛКА)
+  // [STRIPPED 70 bytes] --------------------------------------------------------------------------------
   bottomNavigation: [
-    { id: "home", label: "Home", icon: "home" },
+    { id: "home", label: "Home", icon: "home" }, // icon: home, work, about, process, contact
     { id: "projects", label: "Work", icon: "work" },
     { id: "about", label: "About", icon: "about" },
     { id: "services", label: "Services", icon: "process" },
     { id: "contact", label: "Contact", icon: "contact" },
   ],
   
-  contactCta: "Let's talk",
-  contactButtonLabel: "Contact Me",
-  footerTagline: "Logo animation · Brand motion · Lottie UI",
-  footerSocialLabel: "Social links",
-  footerCopyright: "© 2026 VALENTYN LAVRYK · MOTION DESIGNER",
-  email: "valentyn.lvrk@gmail.com",
-  /*
-   * Соціальні посилання.
-   * Нове посилання додається окремим об'єктом у цей масив.
-   */
+  // [STRIPPED 68 bytes] ✅ КНОПКИ
+  // [STRIPPED 70 bytes] --------------------------------------------------------------------------------
+  contactCta: "Let's talk", // ✅ Кнопка в хедері
+  contactButtonLabel: "Contact Me", // ✅ Магнітна кнопка на головній
+
+  // [STRIPPED 68 bytes] ✅ ФУТЕР
+  // [STRIPPED 70 bytes] --------------------------------------------------------------------------------
+  footerTagline: "Logo animation · Brand motion · Lottie UI", // ✅ Під лого в футері
+  footerSocialLabel: "Social links", // ✅ Заголовок соцмереж
+  footerCopyright: "© 2026 VALENTYN LAVRYK · MOTION DESIGNER", // ✅ Копірайт
+
+  // [STRIPPED 68 bytes] ✅ КОНТАКТИ
+  // [STRIPPED 70 bytes] --------------------------------------------------------------------------------
+  email: "valentyn.lvrk@gmail.com", // ✅ Головна пошта (тягнеться в contactContent)
+
+  // Соцмережі - додаєш новий об'єкт в масив
   socialLinks: [
-    { label: 'Fiverr', href: 'https://www.fiverr.com/design_by_vl' },
+    { label: 'Fiverr', href: 'https://www.fiverr.com/design_by_vl' }, // ✅ label = назва, href = лінк
     { label: 'Upwork', href: 'https://www.upwork.com/freelancers/~01de24a72809cbfcb0?mp_source=share' },
     { label: 'Instagram', href: 'https://www.instagram.com/valentyn.motion' },
     { label: 'TikTok', href: 'https://www.tiktok.com/@valentyn.motion' },
     { label: 'Telegram', href: 'https://t.me/valentyn_motion' },
     { label: "Email", href: "mailto:valentyn.lvrk@gmail.com", shortLabel: "Mail" },
   ],
-  /* Тексти сторінок категорій. */
+
+  // [STRIPPED 68 bytes] ✅ СТОРІНКИ КАТЕГОРІЙ (/work/...)
+  // [STRIPPED 70 bytes] --------------------------------------------------------------------------------
   categoryPage: {
-    back: "Back",
+    back: "Back", // ✅ Кнопка назад
     work: "Work",
     projects: "projects",
-    categoriesAriaLabel: "Work categories",
+    categoriesAriaLabel: "Work categories", // 🚫 НЕ ЧІПАТИ
   },
-  /* Фрази статусу у Hero. */
+
+  // [STRIPPED 68 bytes] ✅ HERO - ФРАЗИ СТАТУСУ (що бігають)
+  // [STRIPPED 70 bytes] --------------------------------------------------------------------------------
   heroStatusPhrases: [
     "VL MOTION",
     "MOTION DESIGNER",
@@ -124,9 +131,11 @@ export const siteContent: SiteContent = {
     "NEW PROJECTS OPEN",
     "READY_",
   ],
-  /* Підписи у модальному вікні роботи. */
+
+  // [STRIPPED 68 bytes] ✅ МОДАЛКА ПРОЄКТУ (підписи)
+  // [STRIPPED 70 bytes] --------------------------------------------------------------------------------
   modalLabels: {
-    duration: "Duration",
+    duration: "Duration", // ✅
     format: "Format",
     software: "Software",
     delivery: "Delivery",

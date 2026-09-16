@@ -56,31 +56,35 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transform: scale(1) translateZ(0);
-  will-change: transform, opacity, filter;
-  transition:
-    filter 460ms ease,
-    opacity 350ms ease,
-    transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+  transform: translateZ(0);
+  will-change: filter, opacity;
+  transition: opacity 350ms ease;
 }
 
 .video {
   z-index: 1;
   opacity: 0;
+  /* Єдина структура фільтру для відео у всіх станах */
+  filter: blur(0px) brightness(1) saturate(1);
+  transition:
+    filter 700ms ease,
+    opacity 350ms ease;
 }
 
 .previewing .video {
   opacity: 1;
+  filter: blur(0px) brightness(1) saturate(1);
 }
 
 .frozen .video {
   opacity: 1;
-  filter: blur(5px) brightness(0.66) saturate(1.08);
-  transform: scale(1.025) translateZ(0);
+  filter: blur(14px) brightness(0.55) saturate(1.1);
+  transition: filter 700ms ease;
 }
 
 .frozen .poster {
   opacity: 0;
+  transition: opacity 300ms ease;
 }
 
 .shade {
@@ -166,7 +170,7 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  z-index: 8;
+  z-index: 12;
   display: inline-flex;
   min-height: 46px;
   align-items: center;
@@ -190,12 +194,10 @@
   text-transform: uppercase;
   opacity: 0;
   pointer-events: none;
-  transform: translate(-50%, -42%) scale(0.94);
+  transform: translate(-50%, -50%) scale(0.92);
   transition:
-    opacity 420ms ease,
-    border-color 420ms ease,
-    box-shadow 420ms ease,
-    transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+    opacity 400ms ease 100ms,
+    transform 400ms ease 100ms;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -214,25 +216,21 @@
     transform: translate3d(0, -4px, 0);
   }
 
+  /* Постер залишається без змін */
   .card:hover .poster,
-  .card:hover .video,
-  .card:focus-visible .poster,
-  .card:focus-visible .video {
+  .card:focus-visible .poster {
     filter: brightness(1.06);
-    transform: scale(1.015) translateZ(0);
   }
 
-  .card:hover .infoTop,
-  .card:hover .software,
-  .card:focus-visible .infoTop,
-  .card:focus-visible .software {
-    opacity: 0.92;
+  /* Для відео використовуємо повну структуру фільтру */
+  .card:hover .video,
+  .card:focus-visible .video {
+    filter: blur(0px) brightness(1.06) saturate(1);
   }
 
   .card.frozen:hover .video,
   .card.frozen:focus-visible .video {
-    filter: blur(5px) brightness(0.66) saturate(1.08);
-    transform: scale(1.025) translateZ(0);
+    filter: blur(14px) brightness(0.55) saturate(1.1);
   }
 
   .frozen .watchFull,
@@ -280,7 +278,8 @@
   .card::before,
   .cardSurface,
   .poster,
-  .video {
+  .video,
+  .watchFull {
     transition: none;
   }
 }
